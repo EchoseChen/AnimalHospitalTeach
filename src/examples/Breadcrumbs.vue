@@ -14,7 +14,7 @@
         >
         <a v-else 
         :class="this.$store.state.isNavFixed ? 'text-dark' : 'text-white'"
-         class="opacity-8" href="#">Pages</a>
+         class="opacity-70" href="#">虚拟宠物医院学习软件</a>
       </li>
       <li
         class="text-sm breadcrumb-item active"

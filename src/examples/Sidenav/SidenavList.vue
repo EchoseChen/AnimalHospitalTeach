@@ -4,6 +4,20 @@
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
+
+      <li class="nav-item">
+        <sidenav-item
+          url="/HospitalGuide"
+          :class="getRoute() === 'HospitalGuide' ? 'active' : ''"
+          :navText="'医院导览'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+
+
       <li class="nav-item">
         <sidenav-item
           url="/dashboard-default"
@@ -133,7 +147,7 @@ export default {
   },
   data() {
     return {
-      title: "Argon Dashboard 2",
+      title: "虚拟宠物医院学习软件",
       controls: "dashboardsExamples",
       isActive: "active"
     };

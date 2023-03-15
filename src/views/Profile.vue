@@ -309,6 +309,7 @@ export default {
     };
   },
   components: { ProfileCard, ArgonInput, ArgonButton },
+  // components: { ArgonInput, ArgonButton },
 
   mounted() {
     this.$store.state.isAbsolute = true;

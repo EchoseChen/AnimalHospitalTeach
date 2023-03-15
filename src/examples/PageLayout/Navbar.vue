@@ -1,5 +1,5 @@
 <template>
-  <!-- Navbar -->
+  <!-- Navbar上面的title，这个要去掉 -->
   <nav
     class="navbar navbar-expand-lg top-0 z-index-3 position-absolute mt-4"
     :class="isBlur ? isBlur : 'shadow-none my-2 navbar-transparent w-100'"
@@ -42,6 +42,7 @@
               Dashboard
             </router-link>
           </li>
+
           <li class="nav-item">
             <router-link class="nav-link me-2" to="/profile">
               <i
@@ -52,6 +53,7 @@
               Profile
             </router-link>
           </li>
+
           <li class="nav-item">
             <router-link class="nav-link me-2" to="/signup">
               <i

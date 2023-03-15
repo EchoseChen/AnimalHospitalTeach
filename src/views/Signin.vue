@@ -18,16 +18,19 @@
             <div class="mx-auto col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0">
               <div class="card card-plain">
                 <div class="pb-0 card-header text-start">
-                  <h4 class="font-weight-bolder">Sign In</h4>
-                  <p class="mb-0">Enter your email and password to sign in</p>
+                  <!-- <h4 class="font-weight-bolder">Sign In</h4> -->
+                  <h4 class="font-weight-bolder">登录</h4>
+                  <!-- <p class="mb-0">Enter your email and password to sign in</p> -->
+                  <p class="mb-0">请输入您的用户名和密码</p>
                 </div>
                 <div class="card-body">
                   <form role="form">
                     <div class="mb-3">
-                      <argon-input type="email" placeholder="Email" name="email" size="lg" />
+                      <!-- <argon-input type="email" placeholder="Email" name="email" size="lg" /> -->
+                      <argon-input type="name" placeholder="用户名" name="name" size="lg" />
                     </div>
                     <div class="mb-3">
-                      <argon-input type="password" placeholder="Password" name="password" size="lg" />
+                      <argon-input type="password" placeholder="密码" name="password" size="lg" />
                     </div>
                     <argon-switch id="rememberMe">Remember me</argon-switch>
 
@@ -38,17 +41,17 @@
                         color="success"
                         fullWidth
                         size="lg"
-                      >Sign in</argon-button>
+                      >登录</argon-button>
                     </div>
                   </form>
                 </div>
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
-                    Don't have an account?
+                    还没有账号?
                     <a
                       href="javascript:;"
                       class="text-success text-gradient font-weight-bold"
-                    >Sign up</a>
+                    > 注册</a>
                   </p>
                 </div>
               </div>
