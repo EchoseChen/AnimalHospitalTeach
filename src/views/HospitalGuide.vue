@@ -12,7 +12,7 @@
   import HospitalGuideCard from "./components/HospitalGuideCard.vue";
   
   export default {
-    name: "tables",
+    name: "HospitalGuide",
     components: {
       HospitalGuideCard
     },
