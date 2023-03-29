@@ -1,6 +1,6 @@
 <template>
-  <div class="container top-0 position-sticky z-index-sticky">
-    <div class="row">
+  <!-- <div class="container top-0 position-sticky z-index-sticky">
+    <div class="row"> -->
       <!-- <div class="col-12">
         <navbar
           isBlur="blur  border-radius-lg my-3 py-2 start-0 end-0 mx-4 shadow"
@@ -8,8 +8,8 @@
           isBtn="bg-gradient-success"
         /> -->
       <!-- </div> -->
-    </div>
-  </div>
+    <!-- </div>
+  </div> -->
   <main class="mt-0 main-content">
     <section>
       <div class="page-header min-vh-100">
@@ -27,7 +27,7 @@
                   <form role="form">
                     <div class="mb-3">
                       <!-- <argon-input type="email" placeholder="Email" name="email" size="lg" /> -->
-                      <argon-input type="name" placeholder="用户名" name="name" size="lg" />
+                      <argon-input type="email" placeholder="邮箱" name="email" size="lg" />
                     </div>
                     <div class="mb-3">
                       <argon-input type="password" placeholder="密码" name="password" size="lg" />
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import Navbar from "@/examples/PageLayout/Navbar.vue";
+// import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
@@ -89,7 +89,7 @@ const body = document.getElementsByTagName("body")[0];
 export default {
   name: "signin",
   components: {
-    Navbar,
+    // Navbar,
     ArgonInput,
     ArgonSwitch,
     ArgonButton,
@@ -103,9 +103,9 @@ export default {
   },
   beforeUnmount() {
     this.$store.state.hideConfigButton = false;
-    this.$store.state.showNavbar = true;
-    this.$store.state.showSidenav = true;
-    this.$store.state.showFooter = true;
+    this.$store.state.showNavbar = false;
+    this.$store.state.showSidenav = false;
+    this.$store.state.showFooter = false;
     body.classList.add("bg-gray-100");
   },
 };
