@@ -1,13 +1,13 @@
 <template>
   <div class="container top-0 position-sticky z-index-sticky">
     <div class="row">
-      <div class="col-12">
+      <!-- <div class="col-12">
         <navbar
           isBlur="blur  border-radius-lg my-3 py-2 start-0 end-0 mx-4 shadow"
           v-bind:darkMode="true"
           isBtn="bg-gradient-success"
-        />
-      </div>
+        /> -->
+      <!-- </div> -->
     </div>
   </div>
   <main class="mt-0 main-content">
@@ -38,7 +38,7 @@
                       <argon-button
                         class="mt-4"
                         variant="gradient"
-                        color="success"
+                        color="secondary"
                         fullWidth
                         size="lg"
                       >登录</argon-button>
@@ -48,10 +48,9 @@
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
                     还没有账号?
-                    <a
-                      href="javascript:;"
-                      class="text-success text-gradient font-weight-bold"
-                    > 注册</a>
+                    <router-link to="/Signup">
+                    <a class="text-primary text-gradient font-weight-bold"> 注册</a>
+                    </router-link>
                   </p>
                 </div>
               </div>
@@ -61,16 +60,16 @@
             >
               <div
                 class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
-                style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg');
-          background-size: cover;"
+                style="background-image: url('https://cdn.pixabay.com/photo/2018/05/07/10/49/husky-3380550__480.jpg');
+          background-size: cover; background-position: 80%;"
               >
-                <span class="mask bg-gradient-success opacity-6"></span>
-                <h4
+                <span class="mask bg-gradient-secondary opacity-6"></span>
+                <h2
                   class="mt-5 text-white font-weight-bolder position-relative"
-                >"Attention is the new currency"</h4>
-                <p
+                >虚拟宠物医院学习系统</h2>
+                <h5
                   class="text-white position-relative"
-                >The more effortless the writing looks, the more effort the writer actually put into the process.</p>
+                >开启您的虚拟宠物医院学习之旅</h5>
               </div>
             </div>
           </div>
