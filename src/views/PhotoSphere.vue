@@ -1,10 +1,50 @@
 <template>
   <div id="viewer" style="position:absolute;top:8%; left:2%; width:100%; height: 80%;"></div>
   <img src="../assets/image/doctor.png" style="position:absolute;top:72%; left:2%; width:10%; height: 12%;">
-  <div class="trapezoid" style="position:absolute;top:11%;left:2%;"><h2 style="color: white; text-align: center;">{{ this.text }}</h2></div>
+  <div style = "z-index:10;position:absolute;top:80%;left:12.5%;"><h2 style="color: white">{{ this. doctor}}</h2></div>
+  <div class="trapezoid" style="position:absolute;top:11%;left:2%;"><h2 style="color: white; text-align: center;">{{ this.room }}</h2></div>
   <router-link to="/HospitalGuide">
-  <div class="trapezoid" style="position:absolute;top:11%;right:3%;"><h2 style="color: white; text-align: center;">退出</h2></div>
+  <div class="trapezoid" style="position:absolute;top:11%;right:3%;z-index:5555"><h3 style="color: white; text-align: center;">退出</h3></div>
   </router-link>
+  <div id = "show">
+    <div class="itemfunc" style="position:absolute;top:71%;left:53.25%;z-index: 10;"><h3 style="color: white; text-align: center;">{{ this.item }}</h3></div>
+    <div style="background-color: rgba(255, 150, 0, 0.8); width: 43.72%; height: 9%;position:absolute;top:75%;right:3%;z-index: 10;"></div>
+    <div class="box" style="position:absolute;top:77.5%;left:55%;z-index: 10;" v-on:click="toggleFunc()"><h3 style="color: white; text-align: center;" >功能说明</h3></div>
+    <div class="box" style="position:absolute;top:77.5%;left:70%;z-index: 10;" v-on:click="toggleOperator()"><h3 style="color: white; text-align: center;">操作流程</h3></div>
+    <div class="box" style="position:absolute;top:77.5%;left:85%;z-index: 10;" ><h3 style="color: white; text-align: center;" v-on:click="toggleVideo()">演示动画</h3></div>
+  </div>
+  <div id = "show-video" style="display: inline-block;  position:absolute;left:60%; top:30%;z-index: 5555; width:50%">
+  <video controls >
+    <source src="https://www.w3school.com.cn/example/html5/mov_bbb.mp4" type="video/mp4" >
+    Your browser does not support the video tag.image.png
+  </video>
+  
+  <!-- <div id = "show-operator" class="showfunc">
+    <h2>操作流程:</h2>
+ <h3>{{ this.func }}</h3> -->
+  <!-- <h3>bbb</h3> -->
+  <!-- </div> --> 
+
+ </div>
+
+ <div id = "show-func" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
+  <h2>功能说明:</h2>
+  <!-- <h3>{{ this.func }}</h3> -->
+<p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+  </div>
+
+  <div id = "show-operator" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
+  <h2>操作流程:</h2>
+  <!-- <h3>{{ this.func }}</h3> -->
+<p>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p>
+  </div>
+
+
+
+
+  
+
+
 
 </template>
 <script>
@@ -17,9 +57,19 @@
             return{
                 viewer:'',
                 markersPlugin: '',
-                text:'',
+                room:'',
+                doctor:'',
+                item:'手术操作台',
                 image: require('../assets/image/arrow.png'),
-                txts: ["免疫室", "化验室", "档案室","诊室","处置室","手术室","病例剖检室","药房","手术准备室","专科检查室","影像室","注射室","前台","住院部"],
+                rooms: ["免疫室", "化验室", "档案室","诊室","处置室","手术室","病例剖检室","药房","手术准备室","专科检查室","影像室","注射室","前台","住院部"],
+                doctors: ["助理 兽医", "助理 兽医", "前台","兽医","助理 兽医","兽医","兽医","助理 兽医","助理 兽医","兽医","助理 兽医","助理 兽医","前台","住院兽医或助理兽医"],
+                show:'',
+                showVideo:'',
+                showFunc:'',
+                showOperator:'',
+                func:"bbb",
+                operator:"aaa",
+                video:"https://www.w3school.com.cn/example/html5/mov_bbb.mp4",
                 imageArr: [
                   {
                     img: require('../assets/image/1.jpg'),
@@ -72,7 +122,7 @@
                         markers: [
                             {   
                                 id:'circle1',
-                                tooltip:'circle1',
+                                // tooltip:'circle1',
                                 // html: '<div class="arrow">Hover over me</div>',
                                 // circle:30,
                                 // svgStyle : {
@@ -91,20 +141,39 @@
                                 angle: -45,  
                             },
                             {
-                                id:'circle2',
-                                tooltip:'circle2',
+                                id:'手术操作台222',
+                                // tooltip:'circle2',
                                 // circle:30,
                                 // svgStyle : {
                                 //     fill:'rgba(255,255,0,0.3)',
                                 //     stroke:'red',
                                 //     strokeWidth:'2px',
                                 // },
-                                html: '<div class="bubble">Hello, world!</div>',
+                                html: '<div class="bubble">手术操作台222</div>',
                                 longitude: -2.5,
                                 latitude: -0.28,
                                 anchor: 'center right',
+                                jump: false,
+                                video: 'https://www.w3school.com.cn/example/html5/mov_bbb.mp4',
+                                func:'aaaaaaa',
+                                operator: 'bbbbbbbb',
+                            },
+                            {
+                                id:'手术操作台333',
+                                // tooltip:'circle2',
+                                // circle:30,
+                                // svgStyle : {
+                                //     fill:'rgba(255,255,0,0.3)',
+                                //     stroke:'red',
+                                //     strokeWidth:'2px',
+                                // },
+                                html: '<div class="bubble">手术操作台333!</div>',
+                                longitude: -2.5,
+                                latitude: -1.0,
+                                anchor: 'center right',
                                 jump: false   
                             }
+
                         ],
                     },
                     {
@@ -239,8 +308,7 @@
                 ],
                 });
 
-                this.markersPlugin = this.viewer.getPlugin(MarkersPlugin)
-                
+                this.markersPlugin = this.viewer.getPlugin(MarkersPlugin);
                 this.viewer.on('click', (e, data) => {
                      console.log(`${data.rightclick?'right ':''}clicked at longitude: ${data.longitude} latitude: ${data.latitude}`);
                 });
@@ -256,22 +324,68 @@
                     {if(marker.config.jump){
                         this.index = marker.config.target
                         this.setViewer(this.imageArr[this.index].img)
+                    }else{
+                      this.item = marker.config.id;
+                      this.show.style.display = "block";
+                      this.showVideo.style.display = "none";
+                      this.showFunc.style.display = "none";
+                      this.showOperator.style.display= "none";
                     }
                   }
                 )
             });
+            this.markersPlugin.on('unselect-marker', (e, marker) => {
+                this.show.style.display = "none";
+                this.showVideo.style.display = "none";
+                this.showFunc.style.display = "none";
+                this.showOperator.style.display= "none";
+                console.log(`unClicked on marker ${marker.config.id}`);
+            });
             },
+
+            toggleVideo(){
+              this.showVideo.style.display = "block";
+              this.showFunc.style.display = "none";
+              this.showOperator.style.display = "none";
+              console.log('video');
+            },
+
+            toggleFunc(){
+              this.showVideo.style.display = "none";
+              this.showFunc.style.display = "block";
+              this.showOperator.style.display = "none";
+              console.log('func');
+            },
+
+            toggleOperator(){
+              this.showVideo.style.display = "none";
+              this.showFunc.style.display = "none";
+              this.showOperator.style.display = "block";
+              console.log('operator');
+            },
+        },
             
+        mounted(){
+            this.show = document.getElementById("show"),
+            this.showVideo = document.getElementById("show-video"),
+            this.showFunc = document.getElementById("show-func"),
+            this.showOperator = document.getElementById("show-operator"),
+            this.show.style.display = "none";
+            this.showVideo.style.display = "none";
+            this.showFunc.style.display = "none";
+            this.showOperator.style.display= "none";
+            this.setViewer(this.imageArr[this.index].img);
+            this.room = this.rooms[this.index];
+            this.doctor = this.doctors[this.index];   
         },
 
-        mounted(){
-            this.setViewer(this.imageArr[this.index].img);
-            this.text = this.txts[this.index];
-        }
+        
     }
 //     function changeColor(element) {
 //   element.classList.toggle('clicked');
 // }
+
+  
 
 </script>
 
@@ -303,7 +417,7 @@
   cursor: pointer;
 }
 .bubble:hover::before {
-    content: "";
+  content: "";
   position: absolute;
   width: 0;
   height: 0;
@@ -325,7 +439,7 @@
 		  background-color: black; /* 背景颜色为黑色 */
 		  opacity: 0.6; /* 设置透明度为50% */
 		  position: relative; /* 设置定位为相对定位 */
-		}
+}
 		/* .trapezoid p {
 		  color: white; /* 设置文字颜色为白色 */
 		  /* position: absolute; 设置绝对定位 */
@@ -334,7 +448,34 @@
       /* size: 5px; */
 		  /* z-index: 1; 将文字置于上层 */
 		/* } */ 
+.itemfunc{
+  display: inline-block;
+  padding: 3px 30px;
+  background-color: rgb(255, 149, 0);
+  opacity: 0.86;
+  position: relative;
+}    
 
+.box {
+			border: 3px solid white; /* 设置2像素宽的白色边框 */
+			border-radius: 10px; /* 设置圆角为10像素 */
+			padding: 3px 15px; /* 设置内边距为10像素，使文本离边框有一定的间隙 */
+			display: inline-block;
+}
+
+.showfunc{
+  position: absolute;
+  width: 15%; 
+  height: 10%; 
+  word-wrap: break-word;
+  background-color: white;
+  border-radius: 10px; 
+	padding: 3px 15px; 
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height:10%; 
+
+}
 
 
 </style>
