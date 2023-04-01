@@ -27,23 +27,32 @@
                   <form role="form">
                     <div class="mb-3">
                       <!-- <argon-input type="email" placeholder="Email" name="email" size="lg" /> -->
-                      <argon-input type="email" placeholder="邮箱" name="email" size="lg" />
+                      <argon-input type="email" placeholder="邮箱" size="lg" v-model="loginRuleForm.userId"/>
                     </div>
                     <div class="mb-3">
-                      <argon-input type="password" placeholder="密码" name="password" size="lg" />
+                      <argon-input type="password" placeholder="密码" size="lg" v-model="loginRuleForm.password"/>
                     </div>
                     <argon-switch id="rememberMe">Remember me</argon-switch>
 
-                    <div class="text-center">
+                    <!-- <div class="text-center" >
                       <argon-button
                         class="mt-4"
                         variant="gradient"
                         color="secondary"
                         fullWidth
-                        size="lg"
+                        size="lg" v-on:click="login1()"
+                      >登录</argon-button>
+                    </div> -->
+                  </form>
+                  <div class="text-center" >
+                      <argon-button
+                        class="mt-4"
+                        variant="gradient"
+                        color="secondary"
+                        fullWidth
+                        size="lg" v-on:click="login()"
                       >登录</argon-button>
                     </div>
-                  </form>
                 </div>
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
@@ -79,11 +88,17 @@
   </main>
 </template>
 
+<!-- <script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+
 <script>
 // import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+// import API from "../axios";
+// import axios from 'axios';
+// import { response } from "express";
 const body = document.getElementsByTagName("body")[0];
 
 export default {
@@ -94,6 +109,73 @@ export default {
     ArgonSwitch,
     ArgonButton,
   },
+  data(){
+    return{
+      loginRuleForm: {
+          userId: '',
+          password: '',
+        },
+      data: '',
+    }
+  },
+  methods:{
+    login(){
+      
+      this.$axios.get('/user', {
+        params: {
+          userId: this.loginRuleForm.userId
+        }
+      })
+      .then((res) => {
+          console.log(res);
+          this.data = res.data;
+          if(this.data.password == this.loginRuleForm.password){
+            this.$router.push("/dashboard-default");
+          }else{
+            alert("请输入正确的邮箱和密码")
+          }
+      }).catch(err =>{
+          console.log(err);
+      });
+
+      
+      // console.log(this.loginRuleForm.userId);
+      // console.log(this.loginRuleForm.password);
+      // alert(this.loginRuleForm.password+this.loginRuleForm.userId);s
+      // API({
+      //   URL:'/user/',
+      //   method:'get'
+      // }).then((res)=>{
+      //           // alert('请求成功!');
+      //           alert(res);
+      //       });
+
+      // this.$axios.
+      //           get('http://1.116.1.85:8080/api/user', {
+      //               params: {'userId': this.loginRuleForm.userId}
+      //           }).then((res) => {
+      //               console.log(res.data)
+      //               if(res.data.passward == this.loginRuleForm.password){
+      //                 this.$router.push("/dashboard-default")
+      //               }
+      //           }).catch(err => {
+      //               console.log(err)
+      //           })
+    },
+    login1(){
+      console.log("你好");
+      if(this.loginRuleForm.password == "123") {
+        this.$router.push("/dashboard-default")
+      } else {
+        alert(this.loginRuleForm.password)
+      }
+      // this.$router.push("/dashboard-default")
+      // console.log(this.loginRuleForm.userId);
+      // console.log(this.loginRuleForm.password);
+    }
+  },
+  
+  
   created() {
     this.$store.state.hideConfigButton = true;
     this.$store.state.showNavbar = false;
