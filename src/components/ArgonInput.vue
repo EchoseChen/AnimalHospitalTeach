@@ -10,9 +10,10 @@
         :class="getClasses(size, valid)"
         :name="name"
         :id="id"
-        :value="value"
+        :value="modelValue"
         :placeholder="placeholder"
         :isRequired="isRequired"
+        @input="iptChange"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">
         <i :class="getIcon(icon)"></i>
@@ -37,7 +38,7 @@ export default {
     iconDir: String,
     name: String,
     id: String,
-    value: String,
+    modelValue: String,
     placeholder: String,
     type: String,
     isRequired: Boolean,
@@ -55,5 +56,14 @@ export default {
     getIcon: (icon) => (icon ? icon : null),
     hasIcon: (icon) => (icon ? "input-group" : null),
   },
+  setup(props, ctx) {
+        function iptChange(e) {
+        	// ctx 这里通过emit来修改父组件中v-model的数据
+            ctx.emit('update:modelValue', e.target.value)
+        }
+        return {
+            iptChange
+        }
+    }
 };
 </script>

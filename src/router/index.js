@@ -7,6 +7,8 @@ import RTL from "../views/Rtl.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
+import HospitalGuide from "../views/HospitalGuide.vue";
+import PhotoSphere from "../views/PhotoSphere.vue";
 
 const routes = [
   {
@@ -54,7 +56,16 @@ const routes = [
     name: "Signup",
     component: Signup,
   },
-  
+  {
+    path: "/HospitalGuide",
+    name: "医院导览",
+    component: HospitalGuide,
+  },
+  {
+    path: "/photoSphere",
+    name: "PhotoSphere",
+    component: PhotoSphere,
+  }
 ];
 
 const router = createRouter({
