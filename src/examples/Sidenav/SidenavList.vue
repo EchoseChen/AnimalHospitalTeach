@@ -90,14 +90,14 @@
           class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
         >
-          ACCOUNT PAGES
+          用户页面
         </h6>
       </li>
       <li class="nav-item">
         <sidenav-item
           url="/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'حساب تعريفي' : 'Profile'"
+          :navText="this.$store.state.isRTL ? 'حساب تعريفي' : '用户管理'"
         >
           <template v-slot:icon>
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
