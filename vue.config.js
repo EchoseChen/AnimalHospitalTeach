@@ -1,15 +1,14 @@
 module.exports={
     devServer:{
         proxy:{
-            ["/api"]:{
-            target:'http://1.116.1.85:8080/api',
-              changeOrigin:true,
+            "/api":{
+                target:'http://123.60.184.136:10010/api',
+                changeOrigin:true,
                 pathRewrite: {
                     // ["^/api"]: ""
                     '^/api':''//重写路径
                 }
-            }
+            },
         }
-
     }
 }

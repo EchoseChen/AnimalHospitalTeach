@@ -121,19 +121,30 @@ export default {
   methods:{
     login(){
       
-      this.$axios.get('/user', {
-        params: {
-          userId: this.loginRuleForm.userId
-        }
+      this.$axios.post('api/user/judge', {
+          userId: this.loginRuleForm.userId,
+          password: this.loginRuleForm.password,
       })
       .then((res) => {
-          console.log(res);
-          this.data = res.data;
-          if(this.data.password == this.loginRuleForm.password){
-            this.$router.push("/dashboard-default");
-          }else{
+        // alert("success");
+          // console.log(res);
+          // alert("success");
+          if(res.status == 200){
+            // alert("success");
+            if(res.data===""){
+            console.log(res);
             alert("请输入正确的邮箱和密码")
+            }else{
+              this.$router.push("/dashboard-default");
           }
+          }
+          // this.data = res.data;
+          // if(this.data.password == this.loginRuleForm.password){
+          //   this.$router.push("/dashboard-default");
+          // }else{
+          //   alert("请输入正确的邮箱和密码")
+          // }
+          
       }).catch(err =>{
           console.log(err);
       });
