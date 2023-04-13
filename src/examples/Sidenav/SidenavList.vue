@@ -16,6 +16,28 @@
           </template>
         </sidenav-item>
       </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/Cosplay"
+          :class="getRoute() === 'Cosplay' ? 'active' : ''"
+          :navText="'角色扮演'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/ZhinengStudy"
+          :class="getRoute() === 'ZhinengStudy' ? 'active' : ''"
+          :navText="'职能学习'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
 
 
       <li class="nav-item">
@@ -123,6 +145,19 @@
         >
           <template v-slot:icon>
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/admin"
+          :class="getRoute() === 'admin' ? 'active' : ''"
+          :navText="this.$store.state.isRTL ? 'الجداول' : '管理员'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>

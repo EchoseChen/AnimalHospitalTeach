@@ -126,7 +126,7 @@ export default {
         }
     },
     signup(){
-      this.$axios.post('api/user', {
+      this.$axios.post('user', {
           userId: this.signupRuleForm.userId,
           password: this.signupRuleForm.password,
           username: this.signupRuleForm.username,
@@ -198,7 +198,7 @@ export default {
   beforeUnmount() {
     this.$store.state.hideConfigButton = false;
     this.$store.state.showNavbar = false;
-    this.$store.state.showSidenav = false;
+    this.$store.state.showSidenav = true;
     this.$store.state.showFooter = false;
     body.classList.add("bg-gray-100");
   },

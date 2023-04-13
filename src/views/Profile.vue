@@ -16,8 +16,18 @@
           <div class="row gx-4">
             <div class="col-auto">
               <div class="avatar avatar-xl position-relative">
-                <img
-                  src="../assets/img/team-1.jpg"
+                <img v-if="Identity == '老师'"
+                  src="../assets/img/teacher.png"
+                  alt="profile_image"
+                  class="shadow-sm w-100 border-radius-lg"
+                />
+                <img v-else-if="Identity == '学生'"
+                  src="../assets/img/student.png"
+                  alt="profile_image"
+                  class="shadow-sm w-100 border-radius-lg"
+                />
+                <img v-else
+                  src="../assets/img/instructor.png"
                   alt="profile_image"
                   class="shadow-sm w-100 border-radius-lg"
                 />
@@ -92,9 +102,9 @@ export default {
   data() {
     return {
       showMenu: false,
-      Name:"",
+      Name: VueElement.prototype.username,
       Email:"",
-      Password:"",
+      Password:VueElement.prototype.password,
       Identity:"",
       newPassword:"",
       newName:"",
@@ -114,7 +124,8 @@ export default {
             this.Identity = "管理员";
           }else if(VueElement.prototype.Identity == "student"){
             this.Identity = "学生";
-          }else if(VueElement.prototype.Identity == "student"){
+          }else{
+            console.log("yes");
             this.Identity = "老师";
           }
           
@@ -123,10 +134,16 @@ export default {
           this.getPlaceholder();
       },
       updateInformation(){
-        this.$axios.put('api/user', {
+        if(this.newPassword == ""){
+            this.newPassword = this.Password;
+        }
+        if(this.newName == ""){
+          this.newName = this.Name;
+        }
+        this.$axios.put('user', {
           userId: this.Email,
           password: this.newPassword,
-          identity:VueElement.prototype.Identity,
+          identity: VueElement.prototype.Identity,
           username: this.newName,
       })
       .then((res) => {
@@ -135,6 +152,8 @@ export default {
             alert("修改成功！");
             this.Name = this.newName;
             this.Password = this.newPassword;
+            VueElement.prototype.username = this.Name;
+            VueElement.prototype.password = this.Password;
             this.getPlaceholder();
             
           }
@@ -148,8 +167,6 @@ export default {
   mounted() {
     this.$store.state.isAbsolute = true;
     this.getInformation();
-   
-
   },
   beforeMount() {
     this.$store.state.imageLayout = "profile-overview";
