@@ -96,6 +96,8 @@
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+// import Vue from 'vue';
+import { VueElement } from "vue";
 // import API from "../axios";
 // import axios from 'axios';
 // import { response } from "express";
@@ -121,57 +123,28 @@ export default {
   methods:{
     login(){
       
-      this.$axios.post('api/user/judge', {
+      this.$axios.post('user/judge', {
           userId: this.loginRuleForm.userId,
           password: this.loginRuleForm.password,
       })
       .then((res) => {
-        // alert("success");
-          // console.log(res);
-          // alert("success");
           if(res.status == 200){
-            // alert("success");
             if(res.data===""){
             console.log(res);
             alert("请输入正确的邮箱和密码")
             }else{
+              VueElement.prototype.Identity = res.data.identity;
+              VueElement.prototype.Email = res.data.userId;
+              VueElement.prototype.password = res.data.password;
+              VueElement.prototype.username = res.data.username;
+              console.log(VueElement.prototype.Identity);
               this.$router.push("/dashboard-default");
           }
           }
-          // this.data = res.data;
-          // if(this.data.password == this.loginRuleForm.password){
-          //   this.$router.push("/dashboard-default");
-          // }else{
-          //   alert("请输入正确的邮箱和密码")
-          // }
           
       }).catch(err =>{
           console.log(err);
       });
-
-      
-      // console.log(this.loginRuleForm.userId);
-      // console.log(this.loginRuleForm.password);
-      // alert(this.loginRuleForm.password+this.loginRuleForm.userId);s
-      // API({
-      //   URL:'/user/',
-      //   method:'get'
-      // }).then((res)=>{
-      //           // alert('请求成功!');
-      //           alert(res);
-      //       });
-
-      // this.$axios.
-      //           get('http://1.116.1.85:8080/api/user', {
-      //               params: {'userId': this.loginRuleForm.userId}
-      //           }).then((res) => {
-      //               console.log(res.data)
-      //               if(res.data.passward == this.loginRuleForm.password){
-      //                 this.$router.push("/dashboard-default")
-      //               }
-      //           }).catch(err => {
-      //               console.log(err)
-      //           })
     },
     login1(){
       console.log("你好");
@@ -197,9 +170,10 @@ export default {
   beforeUnmount() {
     this.$store.state.hideConfigButton = false;
     this.$store.state.showNavbar = false;
-    this.$store.state.showSidenav = false;
+    this.$store.state.showSidenav = true;
     this.$store.state.showFooter = false;
     body.classList.add("bg-gray-100");
   },
+  
 };
 </script>

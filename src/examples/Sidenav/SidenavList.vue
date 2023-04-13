@@ -16,6 +16,28 @@
           </template>
         </sidenav-item>
       </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/Cosplay"
+          :class="getRoute() === 'Cosplay' ? 'active' : ''"
+          :navText="'角色扮演'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/ZhinengStudy"
+          :class="getRoute() === 'ZhinengStudy' ? 'active' : ''"
+          :navText="'职能学习'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
 
 
       <li class="nav-item">
@@ -90,14 +112,14 @@
           class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'"
         >
-          ACCOUNT PAGES
+          用户页面
         </h6>
       </li>
       <li class="nav-item">
         <sidenav-item
           url="/profile"
           :class="getRoute() === 'profile' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'حساب تعريفي' : 'Profile'"
+          :navText="this.$store.state.isRTL ? 'حساب تعريفي' : '用户管理'"
         >
           <template v-slot:icon>
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
@@ -123,6 +145,19 @@
         >
           <template v-slot:icon>
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/admin"
+          :class="getRoute() === 'admin' ? 'active' : ''"
+          :navText="this.$store.state.isRTL ? 'الجداول' : '管理员'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+            ></i>
           </template>
         </sidenav-item>
       </li>

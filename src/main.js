@@ -15,5 +15,6 @@ appInstance.use(store);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);
 appInstance.mount("#app");
+axios.defaults.baseURL="/api";
 appInstance.config.globalProperties.$axios = axios;
 
