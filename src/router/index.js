@@ -99,7 +99,7 @@ const routes = [
     component: ZhinengStudy,
   },
   {
-    path:"/ZhinengStudy/case",
+    path:"/case",
     name: "病例详情",
     component: BingliShow,
   },

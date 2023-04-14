@@ -22,7 +22,7 @@
 
     <div v-for="item in disease1 " :key="item.diseaseName">
     <div class=" col-md-4 col-sm-4 text-center mh-100">
-        <button class="btn btn-success block-center"><router-link :to="`/ZhinengStudy/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+        <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
 </button>
 </div>
    

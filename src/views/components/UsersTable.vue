@@ -82,7 +82,7 @@
     },
     methods: {
       deleted(id){
-        this.$axios.delete('user', {
+        this.$axios.delete('/api/user', {
         params: {
           userId: id,
         }
@@ -97,7 +97,7 @@
         });
       },
       getTableData(){
-        this.$axios.get('user/')
+        this.$axios.get('api/user/')
         .then((res) => {
             if(res.status == 200){
             this.users = res.data;
