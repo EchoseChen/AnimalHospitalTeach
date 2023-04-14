@@ -6,7 +6,10 @@ import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
 
+import Toaster from "@meforma/vue-toaster";
+
 const appInstance = createApp(App);
+appInstance.use(Toaster);
 appInstance.use(store);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);

@@ -63,6 +63,39 @@
           </template>
         </sidenav-item>
       </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/my-questions"
+          :class="getRoute() === 'my-questions' ? 'active' : ''"
+          :navText="'我的问题'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-tag text-success text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/my-papers"
+          :class="getRoute() === 'my-papers' ? 'active' : ''"
+          :navText="'我的试卷'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-badge text-info text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/my-exams"
+          :class="getRoute() === 'my-exams' ? 'active' : ''"
+          :navText="'我的考试'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-send text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
       <li class="mt-3 nav-item">
         <h6
           v-if="this.$store.state.isRTL"
