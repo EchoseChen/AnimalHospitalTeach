@@ -294,7 +294,7 @@ export default {
     },
     mounted() {
         this.getQuestions()//
-        this.init('p')//{t:测试},{p:组卷},{e:考卷},{r:答卷},{w:审批};0-3，单、多、短、长
+        this.init('w')//{t:测试},{p:组卷},{e:考卷},{r:答卷},{w:审批};0-3，单、多、短、长
     },
     computed: {//不能有参数
 

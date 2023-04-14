@@ -14,6 +14,9 @@ import MyExams from "../views3/MyExams.vue";
 
 import NewQuestion from "../views3/NewQuestion";
 import Paper from "../views3/Paper";
+import Exam from "../views3/Exam";
+import Result from "../views3/Result";
+import Watch from "../views3/Watch";
 import NewPaper from "../views3/NewPaper";
 
 //for test
@@ -22,6 +25,7 @@ import QuestionCard from "../views3/component/QuestionCard"
 import QuestionInfoCard from "../views3/component/QuestionInfoCard"
 import QuestionActCard from "../views3/component/QuestionActCard"
 import QuestionInfoCardList from "../views3/component/QuestionInfoCardList"
+import QuestionActCardList from "../views3/component/QuestionActCardList"
 import HttpTest from "../views2/component/HttpTest"
 import ModalTest from "../views2/component/ModalTest"
 import TestCard from "../views2/component/TestCard"
@@ -62,6 +66,21 @@ const routes = [
     path:"/paper",
     name:"Paper",
     component:Paper
+  },
+  {
+    path:"/exam",
+    name:"Exam",
+    component:Exam,
+  },
+  {
+    path:"/result",
+    name:"Result",
+    component:Result,
+  },
+  {
+    path:"/watch",
+    name:"Watch",
+    component:Watch,
   },
   {
     path:"/new-paper",
@@ -112,6 +131,11 @@ const routes = [
     path:"/question-info-card-list",
     name:"Question Info Card List",
     component:QuestionInfoCardList,
+  },
+  {
+    path:"/question-act-card-list",
+    name:"Question Act Card List",
+    component:QuestionActCardList,
   },
   {
     path:"/http-test",

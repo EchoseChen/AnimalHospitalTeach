@@ -2,10 +2,10 @@
     <div>
         <div class="card mb-2 me-3 ms-3 pe-4 ps-4 pt-3 pb-3">
             <div v-if="!isActive" class="row mb-3">
-                <div  class="col-2">
+                <div v-if="isResult" class="col-2">
+                    <argon-badge v-if="waiting" class="col-12" color="warning" variant="gradient">待评审</argon-badge>
                     <argon-badge v-if="correct" class="col-12" color="success" variant="gradient">正确</argon-badge>
                     <argon-badge v-if="wrong" class="col-12" color="danger" variant="gradient">错误</argon-badge>
-                    <argon-badge v-if="waiting" class="col-12" color="warning" variant="gradient">待评审</argon-badge>
                 </div>
                 <div class="col"></div>
                 <!-- <div class="col-4"> -->
@@ -13,7 +13,7 @@
                     <div class="d-flex align-items-center">
                         <div class="col"></div>
                         <div class="col-4">
-                            <input v-model="question.uScore" placeholder="得分" class="form-control text-end">
+                            <input @change="question.status = 'done'" v-model="question.uScore" placeholder="得分" class="form-control text-end">
                         </div>
                         <!-- <argon-badge class="col-6" color="info" variant="gradient" size="lg">{{ question.score }}分</argon-badge> -->
                         <span class="col-4 text-start ps-1">/{{ question.score }}分</span>
@@ -24,8 +24,8 @@
                         <input v-model="question.score" placeholder="分数" class="form-control text-end">
                     </div>
                     <div v-else>
-                        <argon-badge class="col-12" color="info" variant="gradient" size="lg">{{ question.uScore ?
-                            question.uScore + ` / ` : question.uScore }} {{ question.score }}分</argon-badge>
+                        <argon-badge class="col-12" color="info" variant="gradient" size="lg">{{ question.status=='todo' ?
+                            '' : question.uScore + ` / `  }} {{ question.score }}分</argon-badge>
                     </div>
                 </div>
             </div>
@@ -128,14 +128,21 @@ export default {
             // showModal: false,
             hidden: false,
             // modify: true,
-            question: '',
+            question: {},
             status: 'undo',//完成考试状态'undo','todo','done'
             isActive: false,//如果是交互的则为true，否则为false.[只有学生操作是true,老师编辑试卷、批改试卷，学生查看试卷都是false]
+            isResult: false,//用来展示题目的正状态：正确、错误、待评审
             // forCheck: false,//是否支持选择；可能需要改checkbox绑定
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
-            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            showTest: true, //用来看Test结果的，正式发布的时候设置为false
         }
+    },
+    props:{
+        // question:{
+        //     type:Object,
+        //     required:true
+        // }
     },
     components: {
         ArgonBadge,
@@ -145,33 +152,40 @@ export default {
     },
     methods: {
         showHidden() {
-            if(this.isActive){
+            if (this.isActive) {
                 this.hidden = false
-            }else{
+            } else {
                 this.hidden = !this.hidden
             }
         },
-        init(mode,idx) {
-            switch(mode){
+        init(mode) {
+            switch (mode) {
                 case 't'://test 测试
                     this.showTest = true
                     break;
-                case 's'://student exam  学生考试
-                    this.isActive = true
-                    break;
                 case 'p'://teacher paper 老师组卷
+                    this.question.uAnswer = []//used
                     this.editScore = true
                     break;
+                case 'e'://student exam  学生考试
+                    this.isActive = true
+                    break;
                 case 'r'://student result 学生答卷
+                    this.isResult = true
                     break;
                 case 'w'://teacher watch 审批
                     this.editUScore = true
+                    this.isResult = true
                     break;
                 default:
+                    this.editUScore = false
+                    this.editScore = false
+                    this.isActive = false
+                    this.isResult = false
                     break;
             }
-            this.showTest = true
-
+        },
+        getQuestion(idx) {//0,1,2,3分别是单选、多选、填空、简答
             if (this.showTest) {
                 let questions = [
                     {
@@ -188,7 +202,7 @@ export default {
                             content: '3'
                         }],
                         answer: 2,
-                        uAnswer: '',
+                        uAnswer: 3,
                         type: 'single',
                         category: 'A',
                         disease: 'A1',
@@ -253,7 +267,11 @@ export default {
                         score: 30
                     }
                 ]
-                this.question = questions[idx]
+                this.question = questions[idx]//used
+                console.log("question: ",this.question)
+            }
+
+            if (this.showTest) {//修改题目信息
                 // this.question.uAnswer = '11111'
                 // this.question.answer = [1,2,3]
                 // this.question.uScore = 100
@@ -285,7 +303,7 @@ export default {
                 return l1 == l2
             }
         },
-        getUScore() {//提交试卷的时候调用
+        getUScore() {//提交试卷的时候调用//used
             //todo:还没调用
             this.question.status = 'done'
             if (this.question.type == 'single') {
@@ -301,7 +319,8 @@ export default {
         }
     },
     mounted() {
-        this.init('s',1)//t,测试；s，学生；p，组卷；r，答卷；w，审批；0-3，单、多、短、长
+        this.getQuestion(3)//
+        this.init('w')//{t:测试},{p:组卷},{e:考卷},{r:答卷},{w:审批};0-3，单、多、短、长
         this.getUScore()//todo 其实不再这里掉用
     },
     computed: {
@@ -327,16 +346,20 @@ export default {
             return this.question.status == 'todo'
         },
         correct() {
-            return this.question.uScore == this.question.score
+            if(this.question.status == 'done'){
+                return this.question.uScore == this.question.score
+            }
+            return false
         },
         wrong() {
-            if(this.question.uScore == null || this.question.score ==''){
-                return false
+            if (this.question.status == 'done') {
+                return this.question.uScore != this.question.score
+                
             }
-            return this.question.uScore != this.question.score
+            return false
         },
         waiting() {
-            return this.question.status=='todo'
+            return this.question.status == 'todo'
         }
 
     }

@@ -224,7 +224,7 @@ export default {
             showModal: false,
             forOptions: true,//是否支持删除，修改操作
             forCheck: false,//是否支持选择；可能需要改checkbox绑定
-            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            showTest: true, //用来看Test结果的，正式发布的时候设置为false
         }
     },
     components: {
