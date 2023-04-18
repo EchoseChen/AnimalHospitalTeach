@@ -10,26 +10,26 @@
     <div class="row">
     <div class="col-lg-3 mt-2">
         <div class="card text-center">
-            <h5>caseId:{{ this.Bingli[0].caseId }}</h5>
-            <h5>病种分类：{{ this.Bingli[0].categoryName }}</h5>
-            <h5>{{ this.Bingli[0].medicineId }}</h5>
+            <h5>caseId:{{ this.Case.caseId }}</h5>
+            <h5>病种分类：{{ this.Case.categoryName }}</h5>
+            <h5>{{ this.Case.medicineId }}</h5>
             
         </div>
     </div>
     <div class="col-lg-3 mt-2">
         <div class="card text-center">
-            <h5>病情详述：<br>{{ this.Bingli[0].admissionDescription}}</h5>
+            <h5>病情详述：<br>{{ this.Case.admissionDescription}}</h5>
         </div>
     </div>
 
     <div class="col-lg-3 mt-2">
         <div class="card">
-            <h5>检查结果:<br>{{ this.Bingli[0].resultDescription}}</h5>
+            <h5>检查结果:<br>{{ this.Case.resultDescription}}</h5>
         </div>
     </div>
     <div class="col-lg-3 mt-2">
         <div class="card">
-            <h5>治疗方法:<br>{{ this.Bingli[0].therapyDescription}}</h5>
+            <h5>治疗方法:<br>{{ this.Case.therapyDescription}}</h5>
         </div>
     </div>
 </div>
@@ -74,7 +74,7 @@
         };
       },
       mounted(){
-        this.$axios.get('case/disease', {
+        this.$axios.get('api/case/disease', {
         params: {
           diseaseName: this.Case.diseaseName,
         }
@@ -84,7 +84,13 @@
                 console.log(res);
                 this.Bingli = res.data;
                 console.log(this.Bingli);
-                console.log(this.Bingli[0]);
+                this.Case.caseId = this.Bingli[0].caseId;
+                this.Case.categoryName = this.Bingli[0].categoryName;
+                this.Case.medicineId = this.Bingli[0].medicineId;
+                this.Case.admissionDescription = this.Bingli[0].admissionDescription;
+                this.Case.resultDescription = this.Bingli[0].resultDescription;
+                this.Case.therapyDescription = this.Bingli[0].therapyDescription;
+                // console.log(this.Bingli[0]);
             }
           
       }).catch(err =>{

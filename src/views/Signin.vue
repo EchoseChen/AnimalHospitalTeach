@@ -123,7 +123,7 @@ export default {
   methods:{
     login(){
       
-      this.$axios.post('user/judge', {
+      this.$axios.post('api/user/judge', {
           userId: this.loginRuleForm.userId,
           password: this.loginRuleForm.password,
       })
