@@ -126,7 +126,7 @@ export default {
         }
     },
     signup(){
-      this.$axios.post('user', {
+      this.$axios.post('/api/user', {
           userId: this.signupRuleForm.userId,
           password: this.signupRuleForm.password,
           username: this.signupRuleForm.username,

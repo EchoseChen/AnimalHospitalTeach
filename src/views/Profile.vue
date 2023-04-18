@@ -140,7 +140,7 @@ export default {
         if(this.newName == ""){
           this.newName = this.Name;
         }
-        this.$axios.put('user', {
+        this.$axios.put('/api/user', {
           userId: this.Email,
           password: this.newPassword,
           identity: VueElement.prototype.Identity,
