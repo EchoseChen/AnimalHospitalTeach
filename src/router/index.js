@@ -16,7 +16,7 @@ import yishi from "../views/yishi.vue";
 import ZhinengStudy from "../views/ZhinengStudy.vue";
 import BingliShow from "../views/BingliShow.vue";
 import Admin from "../views/Admin.vue";
-
+import CaseList from "../views/components/CaseList.vue";
 const routes = [
   {
     path: "/",
@@ -107,6 +107,11 @@ const routes = [
     path:"/admin",
     name: "管理员",
     component: Admin,
+  },
+  {
+    path:"/caselist",
+    name: "搜索结果",
+    component: CaseList,
   },
 
 ];
