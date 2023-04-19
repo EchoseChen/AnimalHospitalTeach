@@ -69,6 +69,10 @@
                     <dd><small>- 手术人员手臂消毒后,取出高压灭菌的手术衣自己穿好,小心手臂不可接触未经消毒的其他部位。由助手协助在其背后,将衣带或腰带系好。穿灭菌手术衣时应避免其他任何部分(主要指衣服的外表面)触及未经灭菌的物件,尤其要注意保护手术衣前面的前胸部分,严格防止受到污染,应保持无菌状态。如果有必要还可考虑加穿消毒过的橡胶或塑料围裙。</small></dd>
                         
                 </dl>   
+                <video controls style="width:100%">
+    <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" >
+    
+  </video>
             </div>
             </div>
             <div class="col-lg-6">
