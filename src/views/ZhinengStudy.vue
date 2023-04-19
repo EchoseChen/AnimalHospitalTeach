@@ -1,6 +1,7 @@
 <template>
 <div class="py-4 container-fluid">
     <div class="row">
+        
      <BingliTable />
     </div>
 </div>
