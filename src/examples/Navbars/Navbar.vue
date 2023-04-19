@@ -20,18 +20,7 @@
           class="pe-md-3 d-flex align-items-center"
           :class="this.$store.state.isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
-          <div class="input-group">
-            <span class="input-group-text text-body">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </span>
-            <input
-              type="text"
-              class="form-control"
-              :placeholder="
-                this.$store.state.isRTL ? 'أكتب هنا...' : 'Type here...'
-              "
-            />
-          </div>
+          
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
