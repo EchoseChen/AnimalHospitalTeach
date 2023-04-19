@@ -35,7 +35,7 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold me-2">Argon Dashboard 2</span>
+        <span class="ms-2 font-weight-bold me-2">虚拟宠物医院学习系统</span>
       </router-link>
     </div>
     <hr class="mt-0 horizontal dark" />
@@ -44,8 +44,8 @@
 </template>
 <script>
 import SidenavList from "./SidenavList.vue";
-import logo from "@/assets/img/logo-ct-dark.png";
-import logoWhite from "@/assets/img/logo-ct.png";
+import logo from "@/assets/img/pet.png";
+import logoWhite from "@/assets/img/pet.png";
 
 export default {
   name: "index",

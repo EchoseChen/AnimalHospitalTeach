@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div
     v-show="this.$store.state.layout !== 'landing'"
     class="card card-plain shadow-none"
@@ -26,7 +26,7 @@
       class="mb-3 btn btn-dark btn-sm w-100"
       >توثيق</a
     >
-    <a
+   <a
       v-else
       href="https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/"
       target="_blank"
@@ -39,16 +39,16 @@
       target="_blank"
       class="mb-3 btn btn-success btn-sm w-100"
       >التطور للاحترافية</a
-    >
+    > -->
 
-    <a
+    <!-- <a
       v-else
       href="https://www.creative-tim.com/product/vue-argon-dashboard-pro"
       target="_blank"
       class="mb-3 btn btn-success btn-sm w-100"
       >Upgrade to pro</a
-    >
-  </div>
+    > -->
+  <!-- </div>
 </template>
 <script>
 import img from "../../assets/img/illustrations/icon-documentation.svg";
@@ -62,4 +62,4 @@ export default {
     };
   }
 };
-</script>
+</script> --> 
