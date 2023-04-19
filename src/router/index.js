@@ -21,33 +21,33 @@ const routes = [
   {
     path: "/",
     name: "/",
-    redirect: "/dashboard-default",
+    redirect: "/signin",
   },
-  {
-    path: "/dashboard-default",
-    name: "Dashboard",
-    component: Dashboard,
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    component: Tables,
-  },
-  {
-    path: "/billing",
-    name: "Billing",
-    component: Billing,
-  },
-  {
-    path: "/virtual-reality",
-    name: "Virtual Reality",
-    component: VirtualReality,
-  },
-  {
-    path: "/rtl-page",
-    name: "RTL",
-    component: RTL,
-  },
+  // {
+  //   path: "/dashboard-default",
+  //   name: "Dashboard",
+  //   component: Dashboard,
+  // },
+  // {
+  //   path: "/tables",
+  //   name: "Tables",
+  //   component: Tables,
+  // },
+  // {
+  //   path: "/billing",
+  //   name: "Billing",
+  //   component: Billing,
+  // },
+  // {
+  //   path: "/virtual-reality",
+  //   name: "Virtual Reality",
+  //   component: VirtualReality,
+  // },
+  // {
+  //   path: "/rtl-page",
+  //   name: "RTL",
+  //   component: RTL,
+  // },
   {
     path: "/profile",
     name: "Profile",

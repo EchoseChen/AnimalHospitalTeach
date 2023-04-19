@@ -9,7 +9,7 @@
         class="navbar-brand font-weight-bolder ms-lg-0 ms-3"
         :class="darkMode ? 'text-black' : 'text-white'"
         to="/"
-        >Argon Dashboard 2</router-link
+        >signin</router-link
       >
       <button
         class="shadow-none navbar-toggler ms-2"
@@ -28,7 +28,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navigation">
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <router-link
               class="nav-link d-flex align-items-center me-2 active"
               aria-current="page"
@@ -41,7 +41,7 @@
               ></i>
               Dashboard
             </router-link>
-          </li>
+          </li> -->
 
           <li class="nav-item">
             <router-link class="nav-link me-2" to="/profile">
@@ -73,16 +73,6 @@
               ></i>
               Sign In
             </router-link>
-          </li>
-        </ul>
-        <ul class="navbar-nav d-lg-block d-none">
-          <li class="nav-item">
-            <a
-              href="https://www.creative-tim.com/product/vue-argon-dashboard"
-              class="btn btn-sm mb-0 me-1"
-              :class="isBtn"
-              >Free download</a
-            >
           </li>
         </ul>
       </div>
