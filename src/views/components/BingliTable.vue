@@ -208,7 +208,7 @@
         },
         methods:{
             caseSearch(){
-                this.$router.replace('/case?diseaseName='+this.diseaseName);
+                this.$router.replace('/caselist?diseaseName='+this.diseaseName);
             }
         }
     
