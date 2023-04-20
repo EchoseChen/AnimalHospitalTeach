@@ -19,14 +19,15 @@
                     <label v-if="showTest" for="check">选择 {{ paper.checked }}</label>
                 </div>
                 <div class="col-1 text-center">
-                    <img class="icon icon-md " src="https://img.icons8.com/ios/512/signing-a-document.png">
+                    <img class="icon icon-md " src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/512/external-exam-online-learning-vitaliy-gorbachev-lineal-color-vitaly-gorbachev-1.png">
                 </div>
                 <div class="col ps-4">
                     <h6>{{ paper.name }}</h6>
                     <div class="col">
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.id }}</argon-badge>
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.num }}道题</argon-badge>
-                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.time.hours }} 小时 {{ paper.time.mins }} 分钟</argon-badge>
+                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.time.hours }} 小时 {{
+                            paper.time.mins }} 分钟</argon-badge>
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.permission }}</argon-badge>
                     </div>
                 </div>
@@ -50,7 +51,7 @@
                             <h6>提示</h6>
                         </div>
                         <div class="col-6 text-center">
-                            <argon-badge variant="gradient">试卷ID:  {{ this.papers[toDeleteIndex].id }}</argon-badge>
+                            <argon-badge variant="gradient">试卷ID: {{ this.papers[toDeleteIndex].id }}</argon-badge>
                         </div>
                     </div>
                 </template>
@@ -60,8 +61,7 @@
                 <template #footer>
                     <div class="row">
                         <div class="col-6 text-center">
-                            <argon-button @click="myDelete" color="danger"
-                                variant="gradient">确定</argon-button>
+                            <argon-button @click="myDelete" color="danger" variant="gradient">确定</argon-button>
                         </div>
                         <div class="col-6 text-center">
                             <argon-button @click="cancelDelete" color="info" variant="gradient">取消</argon-button>
@@ -103,42 +103,9 @@ export default {
                 checked: false
             },
             papers: [
-                {
-                    id: 'p1',
-                    name: '数学试卷',
-                    num: 3,//可能要改
-                    permission: 'public',
-                    time: {
-                        hours:2,
-                        mins:30
-                    },
-                    checked: false,
-                },
-                {
-                    id: 'p2',
-                    name: '语文试卷',
-                    num: 5,//可能要改
-                    permission: 'public',
-                    time:{
-                        hours:1,
-                        mins:30,
-                    },
-                    checked: false,
-                },
-                {
-                    id: 'p3',
-                    name: '英语试卷',
-                    num: 7,//可能要改
-                    permission: 'public',
-                    time: {
-                        hours:3,
-                        mins:2,
-                    },
-                    checked: false,
-                }
             ],
             forCheck: false,//选试卷用的
-            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            showTest: true, //用来看Test结果的，正式发布的时候设置为false
         }
     },
     components: {
@@ -148,13 +115,55 @@ export default {
         Modal
     },
     methods: {
+        async getPapers() {
+            if (!this.showTest) {
+                const url = `${API_URL}/`
+                this.papers = await (await fetch(url)).json()
+            }
+            if (this.showTest) {
+                this.papers = [{
+                    id: 'p1',
+                    name: '数学试卷',
+                    num: 3,//可能要改
+                    permission: 'public',
+                    time: {
+                        hours: 2,
+                        mins: 30
+                    },
+                    checked: false,
+                },
+                {
+                    id: 'p2',
+                    name: '语文试卷',
+                    num: 5,//可能要改
+                    permission: 'public',
+                    time: {
+                        hours: 1,
+                        mins: 30,
+                    },
+                    checked: false,
+                },
+                {
+                    id: 'p3',
+                    name: '英语试卷',
+                    num: 7,//可能要改
+                    permission: 'public',
+                    time: {
+                        hours: 3,
+                        mins: 2,
+                    },
+                    checked: false,
+                }
+                ]
+            }
+        },
         newPaper() {
             //to check
             this.$router.push('/new-paper')
         },
         myWatch(index) {
             //todo: 跳转到试卷详细信息页
-            this.$router.push({name:'Paper',params:{id:this.papers[index].id}})
+            this.$router.push({ name: 'Watch Paper', params: { id: this.papers[index].id } })
         },
         async myDelete() {
             //todo:HTTP Delete Test
@@ -168,14 +177,17 @@ export default {
             console.log(result)
             if (this.showTest || result.ok) { //showTest状态默认都是成功的
                 // this.showAlert = 1
-                this.$toast.success(`${p.id}删除成功`,{
-                    duration:4000,
+                this.$toast.success(`${p.id}删除成功`, {
+                    duration: 4000,
                     // position:"top",
                 })
+                if(this.showTest){
+                    this.papers = this.papers.filter((paper)=>paper.id!=p.id)
+                }
             } else {
                 // this.showAlert = -1
-                this.$toast.warning("删除失败，请重试",{
-                    duration:4000,
+                this.$toast.warning("删除失败，请重试", {
+                    duration: 4000,
                     // position:"top",
                 })
             }
@@ -183,7 +195,7 @@ export default {
         },
         myEdit(index) {
             //todo：跳转到试卷信息修改页
-            this.$router.push({name:'EditPaper',params:{id:this.papers[index].id}})
+            this.$router.push({ name: 'Edit Paper', params: { id: this.papers[index].id } })
         },
         checkPaper() {
             //todo: 选择paper
@@ -200,6 +212,9 @@ export default {
         // closeAlert() {
         //     this.showAlert = 0
         // },
+    },
+    mounted() {
+        this.getPapers()
     }
 }
 </script>

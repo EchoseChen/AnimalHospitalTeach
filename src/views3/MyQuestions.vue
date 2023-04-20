@@ -224,7 +224,7 @@ export default {
             showModal: false,
             forOptions: true,//是否支持删除，修改操作
             forCheck: false,//是否支持选择；可能需要改checkbox绑定
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            showTest: false //用来看Test结果的，正式发布的时候设置为false
         }
     },
     components: {
@@ -538,6 +538,9 @@ export default {
                     duration: 4000,
                     // position:"top"
                 })
+                if(this.showTest){
+                    this.questions = this.questions.filter((q)=> q.id!=this.questions[index].id)
+                }
             } else {
                 // this.questions[index].showAlert = -1
                 this.$toast.error("删除失败，请重试！", {

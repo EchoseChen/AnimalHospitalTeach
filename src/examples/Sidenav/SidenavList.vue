@@ -85,11 +85,33 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item
           url="/my-exams"
           :class="getRoute() === 'my-exams' ? 'active' : ''"
           :navText="'我的考试'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-send text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li> -->
+      <li class="nav-item">
+        <sidenav-item
+          url="/my-exams-teacher"
+          :class="getRoute() === 'my-exams-teacher' ? 'active' : ''"
+          :navText="'老师|我的考试'"
+        >
+          <template v-slot:icon>
+            <i class="ni ni-send text-primary text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item">
+        <sidenav-item
+          url="/my-exams-student"
+          :class="getRoute() === 'my-exams-student' ? 'active' : ''"
+          :navText="'学生|我的考试'"
         >
           <template v-slot:icon>
             <i class="ni ni-send text-primary text-sm opacity-10"></i>

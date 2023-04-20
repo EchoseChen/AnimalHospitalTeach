@@ -10,17 +10,31 @@ import Signin from "../views/Signin.vue";
 
 import MyQuestions from "../views3/MyQuestions.vue";
 import MyPapers from "../views3/MyPapers.vue";
-import MyExams from "../views3/MyExams.vue";
+import MyExamsTeacher from "../views3/MyExamsTeacher.vue";
+import MyExamsStudent from "../views3/MyExamsStudent.vue";
 
 import NewQuestion from "../views3/NewQuestion";
-import Paper from "../views3/Paper";
-import Exam from "../views3/Exam";
-import Result from "../views3/Result";
-import Watch from "../views3/Watch";
+
 import NewPaper from "../views3/NewPaper";
+import EditPaper from "../views3/EditPaper";
+import WatchPaper from "../views3/WatchPaper";
+import TakeExam from "../views3/TakeExam";
+import WatchResultStudent from "../views3/WatchResultStudent";
+import WatchResultTeacher from "../views3/WatchResultTeacher";
+import NewExam from "../views3/NewExam";
+import WatchExam from "../views3/WatchExam";
+import EditExam from "../views3/EditExam";
+
+//deprecated
+import MyExams from "../views2/MyExams.vue";
+import Exam from "../views2/Exam";
+import Result from "../views2/Result";
+import Watch from "../views2/Watch";
 
 //for test
 import PaperInfoCard from "../views3/component/PaperInfoCard"
+import StudentExamCard from "../views3/component/StudentExamCard"
+import ExamInfoCard from "../views3/component/ExamInfoCard"
 import QuestionCard from "../views3/component/QuestionCard"
 import QuestionInfoCard from "../views3/component/QuestionInfoCard"
 import QuestionActCard from "../views3/component/QuestionActCard"
@@ -48,6 +62,11 @@ const routes = [
     ]
   },
   {
+    path:"/exam-info-card",
+    name:"Exam Info Card",
+    component:ExamInfoCard
+  },
+  {
     path:"/my-questions",
     name:"My Questions",
     component:MyQuestions,
@@ -59,13 +78,33 @@ const routes = [
   },
   {
     path:"/new-question",
-    name:" New Question",
+    name:"New Question",
     component:NewQuestion,
   },
   {
-    path:"/paper",
-    name:"Paper",
-    component:Paper
+    path:"/new-exam",
+    name:"New Exam",
+    component:NewExam,
+  },
+  {
+    path:"/watch-exam",
+    name:"Watch Exam",
+    component:WatchExam,
+  },
+  {
+    path:"/edit-exam",
+    name:"Edit Exam",
+    component:EditExam,
+  },
+  {
+    path:"/watch-result-student",
+    name:"Watch Result Student",
+    component:WatchResultStudent,
+  },
+  {
+    path:"/watch-result-teacher",
+    name:"Watch Result Teacher",
+    component:WatchResultTeacher,
   },
   {
     path:"/exam",
@@ -84,8 +123,23 @@ const routes = [
   },
   {
     path:"/new-paper",
-    name:" New Paper",
+    name:"New Paper",
     component:NewPaper,
+  },
+  {
+    path:"/edit-paper",
+    name:"Edit Paper",
+    component:EditPaper,
+  },
+  {
+    path:"/watch-paper",
+    name:"Watch Paper",
+    component:WatchPaper,
+  },
+  {
+    path:"/take-exam",
+    name:"Take Exam",
+    component:TakeExam,
   },
   {
     path:"/test-card",
@@ -98,9 +152,24 @@ const routes = [
     component:MyExams,
   },
   {
+    path:"/my-exams-student",
+    name:"My Exams Student",
+    component:MyExamsStudent,
+  },
+  {
+    path:"/my-exams-teacher",
+    name:"My Exams Teacher",
+    component:MyExamsTeacher,
+  },
+  {
     path:"/question-card",
     name:"Question Card",
     component:QuestionCard,
+  },
+  {
+    path:"/student-exam-card",
+    name:"Student Exam Card",
+    component:StudentExamCard
   },
   {
     path:"/parent",

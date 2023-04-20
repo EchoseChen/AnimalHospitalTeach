@@ -3,34 +3,18 @@
         <div class="col-1"></div>
         <div class="col">
             <div class="card p-4">
-                <input class="form-control" placeholder="试卷名称" v-model="paper.name">
-                <div class="row mt-3">
+                <h2 class="ms-3">{{ exam.name }}</h2>
+                <div class="row mt-3 ms-2">
                     <div class="col-6 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">时长</argon-badge>
-                        <select v-model="paper.time.hours">
-                            <option disabled value="">小时</option>
-                            <option v-for="(h, index) in hours" :key="hours[index]">{{ h }}</option>
-                        </select>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">小时</argon-badge>
-                        <select v-model="paper.time.mins">
-                            <option disabled value="">分钟</option>
-                            <option v-for="(m, index) in mins" :key="mins[index]">{{ m }}</option>
-                        </select>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">分钟</argon-badge>
-                    </div>
-                    <div class="col-6">
-                        <argon-badge class="me-3" size="md" color="info" variant="gradient">权限</argon-badge>
-                        <select v-model="paper.permission">
-                            <!-- <option disabled value="">权限</option> -->
-                            <option value="public">公开</option>
-                            <option value="private">私有</option>
-                            <option v-for="c of categories" :key="c.key">{{ c }}</option>
-                        </select>
+                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.paper.time.hours
+                        }}
+                            小时
+                            {{ exam.paper.time.mins }} 分钟</argon-badge>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <div v-for="(question, idx) in paper.questions" :key="idx">
-                        <!-- <pre>{{ question }}</pre> -->
+                    <div v-for="(question, idx) in exam.paper.questions" :key="idx">
                         <div>
                             <div class="card mb-2 me-3 ms-3 pe-4 ps-4 pt-3 pb-3">
                                 <div v-if="!isActive" class="row mb-3">
@@ -112,28 +96,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <argon-badge class="me-3" size="md" color="info" variant="gradient">题目</argon-badge>
-                    <select v-model="qId">
-                        <option v-for="(q, index) in questions" :key="index" :value="q.id">{{ q.id }}</option>
-                    </select>
-
-                    <argon-badge class="me-3 ms-3" size="md" color="info" variant="gradient">分数</argon-badge>
-                    <input v-model="qScore" placeholder="分数" class="text-end" style="width:80px;" type="number">
-                </div>
-                <div class="mt-3">
-                    <argon-button @click="addQuestion" class="col-12" color="info" variant="gradient">新增问题</argon-button>
-                </div>
-                <div class="mt-3">
-                    <argon-button @click="postPaper" class="col-12" color="success" variant="gradient">提交</argon-button>
+                <div class="me-3 ms-3">
+                    <argon-button @click="postResult" color="success" variant="gradient" class="col-12">提交</argon-button>
                 </div>
             </div>
         </div>
-        <div class="col-1"></div>
-
+        <div class="col-1">
+        </div>
     </div>
     <div>
-        <pre>{{ paper }}</pre>
+        <pre v-if="showTest">{{ exam }}</pre>
     </div>
 </template>
 
@@ -142,26 +114,24 @@
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 
-const API_URL = `/api/paper`
+const API_URL = `/api/exam`
 
 export default {
     data() {
         return {
-            hours: [],
-            mins: [],
-            questions: [],//所有可选的题目信息
-            qId: '',//选择题目
-            qScore: '',//设置分数
-            paper: {
-                name: '',
-                time: {
-                    hours: null,
-                    mins: null,
-                },
-                permission: '',
-                userId: '',
-                questions: []
-            },
+            exam: {},
+            examId: '',
+            // paper: {
+            //     id: '',
+            //     name: '',
+            //     time: {
+            //         hours: null,
+            //         mins: null,
+            //     },
+            //     permission: '',
+            //     userId: '',
+            //     questions: []
+            // },
             //status: 'undo',//完成考试状态'undo','todo','done'
             isActive: false,//如果是交互的则为true，否则为false.[只有学生操作是true,老师编辑试卷、批改试卷，学生查看试卷都是false]
             isResult: false,//用来展示题目的正状态：正确、错误、待评审
@@ -178,117 +148,147 @@ export default {
 
     },
     methods: {
-        async getQuestions() {
-            const url = `${API_URL}/`
+        async getExam() {
+            this.examId = this.$route.params ? this.$route.params.id : "e01";//exam
+            console.log("params: ", this.$route.params);//打印结果为{user:'david'}
+            const url = `${API_URL}?examId=${this.examId}`
 
             if (!this.showTest) {
-                this.questions = await (await fetch(url)).json()
-                console.log("questions", this.questions)
+                this.exam = await (await fetch(url)).json()
+                console.log("exam", this.exam)
             }
             /* mock */
             if (this.showTest) {
-                this.questions = [
-                    {
-                        "id": "q01",
-                        "stem": "1+1=",
-                        "options": [
+                this.exam = {
+                    id: this.examId,
+                    name: "第一次考试",
+                    status: "undo",
+                    ddl: "2023/05/01 23:59:00",
+                    paper: {
+                        "id": "p01",
+                        "name": "数学考试1",
+                        "time": {
+                            "hours": "2",
+                            "mins": "10"
+                        },
+                        "permission": "public",
+                        "userId": "",
+                        "questions": [
                             {
-                                "id": 1,
-                                "content": "1"
+                                "id": "q01",
+                                "stem": "1+1=",
+                                "options": [
+                                    {
+                                        "id": 1,
+                                        "content": "1"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "content": "2"
+                                    },
+                                    {
+                                        "id": 3,
+                                        "content": "3"
+                                    }
+                                ],
+                                "answer": 2,
+                                "type": "single",
+                                "category": "A",
+                                "disease": "A1",
+                                "analysis": "1+1=2",
+                                "score": 5
                             },
                             {
-                                "id": 2,
-                                "content": "2"
+                                "id": "q02",
+                                "stem": "1+2=",
+                                "options": [
+                                    {
+                                        "id": 1,
+                                        "content": "1"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "content": "three"
+                                    },
+                                    {
+                                        "id": 3,
+                                        "content": "3"
+                                    },
+                                    {
+                                        "id": 4,
+                                        "content": "4"
+                                    }
+                                ],
+                                "answer": [
+                                    2,
+                                    3
+                                ],
+                                "type": "multiple",
+                                "category": "B",
+                                "disease": "B2",
+                                "analysis": "1+2=3",
+                                "score": 10
                             },
                             {
-                                "id": 3,
-                                "content": "3"
+                                "id": "q05",
+                                "stem": "1+4=",
+                                "options": [],
+                                "answer": [
+                                    "5",
+                                    "五"
+                                ],
+                                "type": "short",
+                                "category": "C",
+                                "disease": "C1",
+                                "analysis": "1+4=5",
+                                "score": 5
+                            },
+                            {
+                                "id": "q04",
+                                "stem": "1+23=",
+                                "options": [],
+                                "answer": "",
+                                "type": "long",
+                                "category": "D",
+                                "disease": "D2",
+                                "analysis": "1+23=24",
+                                "score": 10
                             }
-                        ],
-                        "answer": 2,
-                        "type": "single",
-                        "category": "A",
-                        "disease": "A1",
-                        "analysis": "1+1=2"
+                        ]
                     },
-                    {
-                        id: 'q02',
-                        "stem": "1+2=",
-                        "options": [
-                            {
-                                "id": 1,
-                                "content": "1"
-                            },
-                            {
-                                "id": 2,
-                                "content": "three"
-                            },
-                            {
-                                "id": 3,
-                                "content": "3"
-                            },
-                            {
-                                "id": 4,
-                                "content": "4"
-                            }
-                        ],
-                        "answer": [
-                            2,
-                            3
-                        ],
-                        "type": "multiple",
-                        "category": "B",
-                        "disease": "B2",
-                        "analysis": "1+2=3"
-                    },
-                    {
-                        'id': 'q05',
-                        "stem": "1+4=",
-                        "options": [],
-                        "answer": [
-                            "5",
-                            "五"
-                        ],
-                        "type": "short",
-                        "category": "C",
-                        "disease": "C1",
-                        "analysis": "1+4=5"
-                    },
-                    {
-                        id: 'q04',
-                        "stem": "1+23=",
-                        "options": [],
-                        "answer": "",
-                        "type": "long",
-                        "category": "D",
-                        "disease": "D2",
-                        "analysis": "1+23=24"
-                    }
-                ]
+                    student: ""//todo:userId
+                }
+                console.log(this.exam)
             }
-            console.log(this.questions)
+
+            for(let i=0;i<this.exam.paper.questions.length;i++){
+                if(this.exam.paper.questions[i].type=='multiple'){
+                    this.exam.paper.questions[i].uAnswer = []
+                }
+            }
         },
-        async postPaper() {
+        async postResult() {
             /*todo:HTTP POST Test*/
-            //是不是应该给我返回paperId
-            const url = `${API_URL}`
+            //是不是应该给我返回resultId
+            const url = `${API_URL}/question` //URL不对
+            this.exam.student = "s01"//to change，从全局拿id
             let result = await fetch(url, {
                 method: 'post',
-                body: JSON.stringify(this.paper),
+                body: JSON.stringify(this.exam),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(this.paper)
-            console.log(result)
+            console.log("POST, exam:", this.exam)
+            console.log("POST result:", result)
 
             /* showTest=true，默认HTTP请求都成功了 */
             if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，试卷ID: ${this.getPaperId(result)}`, {
+                this.$toast.success(`提交成功，答卷ID: ${this.getResultId(result)}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
-                this.$router.push('/my-papers')
+                this.$router.push('/my-exams-student')
             } else {
                 this.$toast.error("提交失败", {
                     duration: 4000,
@@ -296,13 +296,12 @@ export default {
                 })
             }
         },
-        addQuestion() {//新增试题
-            //选择题目
-            //设置分数
-            //本地记录
-            let question = this.questions.filter((q)=>q.id==this.qId)[0]
-            question.score = this.qScore
-            this.paper.questions.push(question)
+        getResultId(result){//todo
+            if(this.showTest){
+                return "e01"
+            }else{
+                return result.id
+            }
         },
         init(mode) {
             switch (mode) {
@@ -311,7 +310,7 @@ export default {
                     break;
                 case 'p'://teacher paper 老师组卷
                     // this.question.uAnswer = []//used
-                    this.editScore = true
+                    this.editScore = false
                     break;
                 case 'e'://student exam  学生考试
                     this.isActive = true
@@ -330,33 +329,19 @@ export default {
                     this.isResult = false
                     break;
             }
-            for (let i = 0; i < 24; i++) {
-                this.hours.push(i)
-            }
-            for (let i = 0; i < 60; i++) {
-                this.mins.push(i)
-            }
-        },
-        getPaperId(result) {
-            //todo：需要修改
-            if (result.ok) {
-                return result.json().id
-            } else {
-                return "Q01_test"
-            }
         },
         showHidden(idx) {
             if (this.isActive) {
-                this.paper.questions[idx].hidden = false
+                this.exam.paper.questions[idx].hidden = false
             } else {
-                this.paper.questions[idx].hidden = !this.paper.questions[idx].hidden
+                this.exam.paper.questions[idx].hidden = !this.exam.paper.questions[idx].hidden
             }
         },
-        isRightAnswer(id,idx) {
-            if (this.questions[idx].type == 'single') {
-                return id == this.questions[idx].answer
-            } else if (this.questions[idx].type == 'multiple' || this.questions[idx].type == 'short') {
-                return this.questions[idx].answer.indexOf(id) >= 0
+        isRightAnswer(id, idx) {
+            if (this.exam.paper.questions[idx].type == 'single') {
+                return id == this.exam.paper.questions[idx].answer
+            } else if (this.exam.paper.questions[idx].type == 'multiple' || this.exam.paper.questions[idx].type == 'short') {
+                return this.exam.paper.questions[idx].answer.indexOf(id) >= 0
             } else {
                 return false
             }
@@ -365,66 +350,64 @@ export default {
             if (l1.length != l2.length) {
                 return false
             } else {
-                l1 = l1.sort
-                l2 = l2.sort
-                return l1 == l2
+                return l1.sort().join() == l2.sort().join()
             }
         },
         getUScore(idx) {//提交试卷的时候调用//used
             //todo:还没调用
-            this.questions[idx].status = 'done'
-            if (this.questions[idx].type == 'single') {
-                this.questions[idx].uScore = this.questions[idx].uAnswer == this.questions[idx].answer ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'multiple') {
-                this.questions[idx].uScore = this.isEqual(this.questions[idx].answer, this.questions[idx].uAnswer) ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'short') {
-                this.questions[idx].uScore = this.questions[idx].answer.indexOf(this.questions[idx].uAnswer) >= 0 ? this.questions[idx].score : 0
+            this.exam.paper.questions[idx].status = 'done'
+            if (this.exam.paper.questions[idx].type == 'single') {
+                this.exam.paper.questions[idx].uScore = this.exam.paper.questions[idx].uAnswer == this.exam.paper.questions[idx].answer ? this.exam.paper.questions[idx].score : 0
+            } else if (this.exam.paper.questions[idx].type == 'multiple') {
+                this.exam.paper.questions[idx].uScore = this.isEqual(this.exam.paper.questions[idx].answer, this.exam.paper.questions[idx].uAnswer) ? this.exam.paper.questions[idx].score : 0
+            } else if (this.exam.paper.questions[idx].type == 'short') {
+                this.exam.paper.questions[idx].uScore = this.exam.paper.questions[idx].answer.indexOf(this.exam.paper.questions[idx].uAnswer) >= 0 ? this.exam.paper.questions[idx].score : 0
             } else {
-                this.questions[idx].uScore = ''
-                this.questions[idx].status = 'todo'
+                this.exam.paper.questions[idx].uScore = ''
+                this.exam.paper.questions[idx].status = 'todo'
             }
         },
         correct(idx) {
-            if(this.questions[idx].status == 'done'){
-                return this.questions[idx].uScore == this.questions[idx].score
+            if (this.exam.paper.questions[idx].status == 'done') {
+                return this.exam.paper.questions[idx].uScore == this.exam.paper.questions[idx].score
             }
             return false
         },
         wrong(idx) {
-            if (this.questions[idx].status == 'done') {
-                return this.questions[idx].uScore != this.questions[idx].score
-                
+            if (this.exam.paper.questions[idx].status == 'done') {
+                return this.exam.paper.questions[idx].uScore != this.exam.paper.questions[idx].score
+
             }
             return false
         },
         waiting(idx) {
-            return this.questions[idx].status == 'todo'
+            return this.exam.paper.questions[idx].status == 'todo'
         },
         select(idx) {
-            return this.questions[idx].type == 'single' || this.questions[idx].type == 'multiple'
+            return this.exam.paper.questions[idx].type == 'single' || this.exam.paper.questions[idx].type == 'multiple'
         },
         multiple(idx) {
-            return this.questions[idx].type == 'multiple'
+            return this.exam.paper.questions[idx].type == 'multiple'
         },
         single(idx) {
-            return this.questions[idx].type == 'single'
+            return this.exam.paper.questions[idx].type == 'single'
         },
         short(idx) {
-            return this.questions[idx].type == 'short'
+            return this.exam.paper.questions[idx].type == 'short'
         },
         long(idx) {
-            return this.questions[idx].type == 'long'
+            return this.exam.paper.questions[idx].type == 'long'
         },
         undo(idx) {
-            return this.questions[idx].status == 'undo'
+            return this.exam.paper.questions[idx].status == 'undo'
         },
         todo(idx) {
-            return this.questions[idx].status == 'todo'
+            return this.exam.paper.questions[idx].status == 'todo'
         },
     },
-    mounted() {
-        this.init('p')
-        this.getQuestions()
+    created() {
+        this.getExam()
+        this.init('e')
     }
 }
 

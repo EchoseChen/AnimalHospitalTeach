@@ -126,6 +126,7 @@
                 </div>
                 <div class="mt-3">
                     <argon-button @click="postPaper" class="col-12" color="success" variant="gradient">提交</argon-button>
+                    <argon-button @click="goBack" class="col-12 mt-3" color="info" variant="gradient">返回</argon-button>
                 </div>
             </div>
         </div>
@@ -178,6 +179,111 @@ export default {
 
     },
     methods: {
+        async getPaper() {
+            const id=this.$route.params.id;
+            console.log(this.$route.params);//打印结果为{user:'david'}
+            const url = `${API_URL}?paperId=${id}`
+
+            if (!this.showTest) {
+                this.paper = await (await fetch(url)).json()
+                console.log("paper", this.paper)
+            }
+            /* mock */
+            if (this.showTest) {
+                this.paper = {
+                    "id":id,
+                    "name": "数学考试1",
+                    "time": {
+                        "hours": "2",
+                        "mins": "10"
+                    },
+                    "permission": "public",
+                    "userId": "",
+                    "questions": [
+                        {
+                            "id": "q01",
+                            "stem": "1+1=",
+                            "options": [
+                                {
+                                    "id": 1,
+                                    "content": "1"
+                                },
+                                {
+                                    "id": 2,
+                                    "content": "2"
+                                },
+                                {
+                                    "id": 3,
+                                    "content": "3"
+                                }
+                            ],
+                            "answer": 2,
+                            "type": "single",
+                            "category": "A",
+                            "disease": "A1",
+                            "analysis": "1+1=2",
+                            "score": 5
+                        },
+                        {
+                            "id": "q02",
+                            "stem": "1+2=",
+                            "options": [
+                                {
+                                    "id": 1,
+                                    "content": "1"
+                                },
+                                {
+                                    "id": 2,
+                                    "content": "three"
+                                },
+                                {
+                                    "id": 3,
+                                    "content": "3"
+                                },
+                                {
+                                    "id": 4,
+                                    "content": "4"
+                                }
+                            ],
+                            "answer": [
+                                2,
+                                3
+                            ],
+                            "type": "multiple",
+                            "category": "B",
+                            "disease": "B2",
+                            "analysis": "1+2=3",
+                            "score": 10
+                        },
+                        {
+                            "id": "q05",
+                            "stem": "1+4=",
+                            "options": [],
+                            "answer": [
+                                "5",
+                                "五"
+                            ],
+                            "type": "short",
+                            "category": "C",
+                            "disease": "C1",
+                            "analysis": "1+4=5",
+                            "score": 5
+                        },
+                        {
+                            "id": "q04",
+                            "stem": "1+23=",
+                            "options": [],
+                            "answer": "",
+                            "type": "long",
+                            "category": "D",
+                            "disease": "D2",
+                            "analysis": "1+23=24",
+                            "score": 10
+                        }
+                    ]
+                }
+            }
+        },
         async getQuestions() {
             const url = `${API_URL}/`
 
@@ -300,7 +406,7 @@ export default {
             //选择题目
             //设置分数
             //本地记录
-            let question = this.questions.filter((q)=>q.id==this.qId)[0]
+            let question = this.questions.filter((q) => q.id == this.qId)[0]
             question.score = this.qScore
             this.paper.questions.push(question)
         },
@@ -345,6 +451,9 @@ export default {
                 return "Q01_test"
             }
         },
+        goBack(){
+            this.$router.go(-1)
+        },
         showHidden(idx) {
             if (this.isActive) {
                 this.paper.questions[idx].hidden = false
@@ -352,7 +461,7 @@ export default {
                 this.paper.questions[idx].hidden = !this.paper.questions[idx].hidden
             }
         },
-        isRightAnswer(id,idx) {
+        isRightAnswer(id, idx) {
             if (this.questions[idx].type == 'single') {
                 return id == this.questions[idx].answer
             } else if (this.questions[idx].type == 'multiple' || this.questions[idx].type == 'short') {
@@ -385,7 +494,7 @@ export default {
             }
         },
         correct(idx) {
-            if(this.questions[idx].status == 'done'){
+            if (this.questions[idx].status == 'done') {
                 return this.questions[idx].uScore == this.questions[idx].score
             }
             return false
@@ -393,7 +502,7 @@ export default {
         wrong(idx) {
             if (this.questions[idx].status == 'done') {
                 return this.questions[idx].uScore != this.questions[idx].score
-                
+
             }
             return false
         },
@@ -423,6 +532,7 @@ export default {
         },
     },
     mounted() {
+        this.getPaper()
         this.init('p')
         this.getQuestions()
     }
