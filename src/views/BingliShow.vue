@@ -65,56 +65,114 @@
   </div>
   </div>
   </div>
-</div>
- 
-  </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'BingliShow',
-    data(){
-      return{
-          Bingli:[],
-          Case:{
-              caseId:'',
-              caseName:'',
-              diseaseName:this.$route.query.diseaseName,
-              categoryName:'',
-              medicineId:'',
-              admissionDescription: {
-          word: '',
-          picture: '',
-          video: ''
-       },
-      checkDescription: {
-          word: '',
-          picture: '',
-          video: ''
+</div>  
+    </div>
+    </template>
+    
+    <script>
+    export default {
+      name: 'BingliShow',
+      data(){
+        return{
+            Bingli:[],
+            Case:{
+                caseId:'',
+                caseName:this.$route.query.caseName,
+                diseaseName:'',
+                categoryName:'',
+                medicineId:'',
+                admissionDescription: {
+            word: '',
+            picture: '',
+            video: ''
+         },
+        checkDescription: {
+            word: '',
+            picture: '',
+            video: ''
+        },
+        resultDescription: {
+            word: '',
+            picture: '',
+            video: ''
+        },
+        therapyDescription: {
+            word: '',
+            picture: '',
+            video: ''
+        }
+        },
+        Picture:'',
+        Video:'',
+        };
       },
-      resultDescription: {
-          word: '',
-          picture: '',
-          video: ''
+      methods:{
+        gotoStudy(){
+            this.$router.replace('/ZhinengStudy')
+        },
+        goOff()
+        {
+            this.$router.back();
+        },
+        
+        getPicture(){
+            this.$axios.get('api/file/convertBaidu/'+this.Case.checkDescription.picture+'/')
+      .then((res) => {
+            if(res.status==200)
+            {
+                this.Picture =res.data;
+                //this.Case.checkDescription.picture=this.Picture[0];
+                console.log(res.data);
+                console.log(this.Picture);
+            }
+      }).catch(err => {
+        console.log(err);
+      });
+        },
+        getVideo(){
+            this.$axios.get('api/file/convertBaidu/'+this.Case.checkDescription.video+'/')
+      .then((res) => {
+            if(res.status==200)
+            {
+                this.Video =res.data;
+                //this.Case.checkDescription.picture=this.Picture[0];
+                console.log(res.data);
+                console.log(this.Video);
+            }
+      }).catch(err => {
+        console.log(err);
+      });
+      //this.$ref.videoPlay.src = this.Video;
+      //document.querySelector('video').load();
+        }
       },
-      therapyDescription: {
-          word: '',
-          picture: '',
-          video: ''
-      }
-      },
-      Picture:'',
-      Video:"http://bj.bcebos.com/v1/file-bed/catvideo.mp4?authorization=bce-auth-v1%2F67a3432ef0cf4df6ab78bf82ad3fde88%2F2023-04-21T02%3A06%3A34Z%2F-1%2F%2F28d89a0f5ff70889e75e590a3926d6b0ecdd5b47120791d6d0f92c3a3bb7f270",
-      };
-    },
-    methods:{
-      gotoStudy(){
-          this.$router.replace('/ZhinengStudy')
-      },
-      goOff()
-      {
-          this.$router.back();
-      },
+      mounted(){
+        this.$axios.get('api/case/casen', {
+        params: {
+          caseName: this.Case.caseName,
+        }
+      })
+      .then((res) => {
+            if(res.status == 200){
+                console.log(res);
+                this.Bingli = res.data;
+                console.log(this.Bingli);
+                this.Case.caseId = this.Bingli[0].caseId;
+                this.Case.caseName = this.Bingli[0].caseName;
+                this.Case.categoryName = this.Bingli[0].categoryName;
+                this.Case.medicineId = this.Bingli[0].medicineId;
+                this.Case.admissionDescription = this.Bingli[0].admissionDescription;
+                this.Case.checkDescription = this.Bingli[0].checkDescription;
+                this.Case.resultDescription = this.Bingli[0].resultDescription;
+                this.Case.therapyDescription = this.Bingli[0].therapyDescription;
+             console.log(this.Case.checkDescription.picture);
+             this.getPicture();
+             this.getVideo();
+            }
+          
+      }).catch(err =>{
+          console.log(err);
+      });
       
       getPicture(){
           this.$axios.get('api/file/convertBaidu/'+this.Case.checkDescription.picture+'/')
