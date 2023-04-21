@@ -5,20 +5,20 @@
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="table-responsive p-0">
-          <table class="table align-items-center mb-0">
+          <table class="table mb-0">
             <thead>
               <tr>
-                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">病例ID</th>
+                <th class="text-uppercase  text-s font-weight-bolder opacity-7">病例ID</th>
                 <th
-                  class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 "
+                  class="text-uppercase text-s font-weight-bolder opacity-7 "
                 >病例名</th>
                 <th
-                  class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+                  class=" text-uppercase text-s font-weight-bolder opacity-7"
                 >病名</th>
                 <th
-                  class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+                  class="text-uppercase text-s font-weight-bolder opacity-7"
                 >病种名</th>
-                <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">病例详情</th>
+                <th class="text-uppercase text-s font-weight-bolder opacity-7">病例详情</th>
         
               </tr>
               
@@ -26,7 +26,7 @@
               <tbody>
               <tr v-for = "item in cases" :key="item.caseId">
                 <td>
-                    <p class="text-s font-weight-bold mb-0 ">{{ item.caseId }}</p>
+                    <p class="text-s font-weight-bold mb-0 "> {{ item.caseId }}</p>
                 </td>
                 <td>
                     <p class="text-s font-weight-bold mb-0">{{ item.caseName }}</p>
