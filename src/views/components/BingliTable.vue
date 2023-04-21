@@ -15,12 +15,21 @@
     </ul>
     </nav>
     </div>
-    <div class="col-lg-4">
-        <input type="text" name="" id="" placeholder="搜索" v-model="diseaseName"/> 
-  	<img src="../../assets/img/search.png" @click="caseSearch()" class=" btn bg-muted" style="height: 75%;width: 25%;">
-
-</div>
+    <div class = "col-lg-2">
+        <div class="input-group mb-3">
+            <span class="input-group-text">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+            <input type="text" class="form-control" placeholder="搜索" v-model="diseaseName" @keyup.enter="caseSearch">
+            <!-- <button class="btn btn-primary" type="button">搜索</button> -->
+            <span class="input-group-text" style="color: #ffffff; background-color: #428bca; border-color: #357ebd;" v-on:click=caseSearch()>搜索</span>
+            <!-- <div class="input-group-append">
+        <span class="input-group-text">@runoob.com</span>
+      </div> -->
+        </div>
+    </div>
     <!-- 内容 -->
+    <!-- <img src="../../assets/img/search.png" @click="caseSearch()" class=" btn bg-muted" style="height: 75%;width: 25%;"> -->
     <div id="section1" class="row bg-muted" style="padding-top:70px;width:100%;">
     <div class="col-lg-12 col-md-4 card">
     <div class="card-header top-0">
@@ -209,8 +218,10 @@
         methods:{
             caseSearch(){
                 this.$router.replace('/caselist?diseaseName='+this.diseaseName);
-            }
-        }
+            },
+            
+        },
+       
     
     }
     
@@ -230,6 +241,10 @@
         margin-right:10px;
         display: block;
       }
-    
+      .my-bg-class {
+        background-color: #ca4853; /* 设置背景颜色 */
+        color: #721c24; /* 设置文本颜色 */
+        }
+
     </style>
     
