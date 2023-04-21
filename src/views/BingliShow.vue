@@ -2,16 +2,23 @@
     <div class="py-4 container-fluid">
     <div class="row">
     <!-- {{this.$route}}拿到index.js路由对象 -->
-    <div class="card">
-    <div class="card-header pb-0">
-        <div class="row">
-            <div class="col-lg-2"><img  src="../assets/img/return.png"  style="width:35%" @click="gotoStudy" ></div>
-        <div class="col-lg-4"><h5>{{this.$route.query.diseaseName}}病例详情页面</h5></div>
-        </div>
-       
-        
-    </div>
     
+    <div class="card">
+    <div class="card-header pb-0"> 
+        <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group ">
+                <button class="btn btn-success" @click="gotoStudy()">
+                返回职能学习页面
+            </button>
+            <button class="btn btn-success" @click="goOff()">
+                返回搜索结果页面
+            </button>
+            </div>
+        </div> 
+        <div class="col-md-4"><h5>{{this.Case.diseaseName}}病例详情页面</h5></div>
+    </div>
+</div> 
     <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-4  mh-100">
     
@@ -72,8 +79,8 @@
             Bingli:[],
             Case:{
                 caseId:'',
-                caseName:'',
-                diseaseName:this.$route.query.diseaseName,
+                caseName:this.$route.query.caseName,
+                diseaseName:'',
                 categoryName:'',
                 medicineId:'',
                 admissionDescription: {
@@ -105,6 +112,11 @@
         gotoStudy(){
             this.$router.replace('/ZhinengStudy')
         },
+        goOff()
+        {
+            this.$router.back();
+        },
+        
         getPicture(){
             this.$axios.get('api/file/convertBaidu/'+this.Case.checkDescription.picture+'/')
       .then((res) => {
@@ -137,9 +149,9 @@
         }
       },
       mounted(){
-        this.$axios.get('api/case/disease', {
+        this.$axios.get('api/case/casen', {
         params: {
-          diseaseName: this.Case.diseaseName,
+          caseName: this.Case.caseName,
         }
       })
       .then((res) => {

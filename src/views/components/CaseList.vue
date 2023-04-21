@@ -39,7 +39,7 @@
                 </td>
                 <td>
                     <button class="btn btn-success">
-                        <router-link :to="`/case?diseaseName=${item.diseaseName}`">详情页面</router-link></button>
+                        <router-link :to="`/case?caseName=${item.caseName}`">详情页面</router-link></button>
                 </td>
               </tr>
               </tbody>
