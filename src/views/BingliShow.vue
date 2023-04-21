@@ -29,6 +29,69 @@
     </video>
   </div>
 
+<<<<<<< HEAD
+  <div class="py-4 container-fluid">
+  <div class="row">
+  <!-- {{this.$route}}拿到index.js路由对象 -->
+  
+  <div class="card">
+  <div class="card-header pb-0"> 
+      <div class="row">
+      <div class="col-md-6">
+          <div class="btn-group ">
+              <button class="btn btn-success" @click="gotoStudy()">
+              返回职能学习页面
+          </button>
+          <button class="btn btn-success" @click="goOff()">
+              返回搜索结果页面
+          </button>
+          </div>
+      </div> 
+      <div class="col-md-4"><h5>{{this.$route.query.diseaseName}}病例详情页面</h5></div>
+  </div>
+</div> 
+  <div class="row">
+  <div class="col-lg-4 col-md-4 col-sm-4  mh-100">
+  
+      <img class="card-img" v-bind:src= "Picture" alt="Card image" style="width:100%">
+      <div class="card-tittle text-center">宠物病情图片</div>
+      <video controls style="width:100%">
+       <source src = "https://bj.bcebos.com/v1/file-bed/catvideo.mp4" type="video/mp4" >
+    </video>
+  </div>
+=======
+    <div class="py-4 container-fluid">
+    <div class="row">
+    <!-- {{this.$route}}拿到index.js路由对象 -->
+    
+    <div class="card">
+    <div class="card-header pb-0"> 
+        <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group ">
+                <button class="btn btn-success" @click="gotoStudy()">
+                返回职能学习页面
+            </button>
+            <button class="btn btn-success" @click="goOff()">
+                返回搜索结果页面
+            </button>
+            </div>
+        </div> 
+        <div class="col-md-4"><h5>{{this.Case.diseaseName}}病例详情页面</h5></div>
+    </div>
+</div> 
+    <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4  mh-100">
+    
+        <img class="card-img" v-bind:src= "Picture" alt="Card image" style="width:100%">
+        <div class="card-tittle text-center">宠物病情图片</div>
+        <video controls style="width:100%">
+    <source src="../assets/catvideo.mp4" type="video/mp4" >
+    
+  </video>
+    </div>
+>>>>>>> master
+
   <div class="col-lg-8 col-md-4 col-sm-4  mh-100">
   <div class="row">
       <div class="col-md-12">
@@ -65,10 +128,11 @@
   </div>
   </div>
   </div>
-</div>  
-    </div>
-    </template>
-    
+</div>
+ 
+  </div>
+  </template>
+      
     <script>
     export default {
       name: 'BingliShow',
@@ -173,6 +237,21 @@
       }).catch(err =>{
           console.log(err);
       });
+      
+      }
+      },
+      Picture:'',
+      Video:"http://bj.bcebos.com/v1/file-bed/catvideo.mp4?authorization=bce-auth-v1%2F67a3432ef0cf4df6ab78bf82ad3fde88%2F2023-04-21T02%3A06%3A34Z%2F-1%2F%2F28d89a0f5ff70889e75e590a3926d6b0ecdd5b47120791d6d0f92c3a3bb7f270",
+      };
+    },
+    methods:{
+      gotoStudy(){
+          this.$router.replace('/ZhinengStudy')
+      },
+      goOff()
+      {
+          this.$router.back();
+      },
       
       getPicture(){
           this.$axios.get('api/file/convertBaidu/'+this.Case.checkDescription.picture+'/')
