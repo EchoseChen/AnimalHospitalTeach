@@ -38,7 +38,7 @@
     <div class="sc-list">
         <div v-for="item in disease1 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="sc-list">
         <div v-for="item in disease2 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     </div>
@@ -71,7 +71,7 @@
     <div class="sc-list">
         <div v-for="item in disease3 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100 ">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     </div>
@@ -87,7 +87,7 @@
     <div class="sc-list">
         <div v-for="item in disease4 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100 ">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     </div>
@@ -102,7 +102,7 @@
     <div class="sc-list">
         <div v-for="item in disease5 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100 ">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     
@@ -118,7 +118,7 @@
     <div class="sc-list">
         <div v-for="item in disease6 " :key="item.diseaseName" class="sc-item">
         <div class=" col-md-12 col-sm-4 text-center mh-100 ">
-            <button class="btn btn-success block-center"><router-link :to="`/case?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
+            <button class="btn btn-success block-center"><router-link :to="`/caselist?diseaseName=${item.diseaseName}`">{{ item.diseaseName }}</router-link>
     </button>
     </div>
     

@@ -6,9 +6,9 @@ module.exports = {
           changeOrigin: true,
           pathRewrite: {
             '^/api': '', // 将 "/api" 重写为空字符串
-          
           },
         },
+        // host: 'localhost'
       },
     },
   };
