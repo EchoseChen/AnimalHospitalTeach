@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="card">
     <div class="card-header pb-0">
       <h6>Authors table</h6>
@@ -243,4 +243,4 @@
 export default {
   name: "authors-table",
 };
-</script>
+</script> -->

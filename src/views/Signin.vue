@@ -138,7 +138,7 @@ export default {
               VueElement.prototype.password = res.data.password;
               VueElement.prototype.username = res.data.username;
               console.log(VueElement.prototype.Identity);
-              this.$router.push("/dashboard-default");
+              this.$router.push("/HospitalGuide");
           }
           }
           
@@ -164,14 +164,12 @@ export default {
     this.$store.state.hideConfigButton = true;
     this.$store.state.showNavbar = false;
     this.$store.state.showSidenav = false;
-    this.$store.state.showFooter = false;
     body.classList.remove("bg-gray-100");
   },
   beforeUnmount() {
-    this.$store.state.hideConfigButton = false;
-    this.$store.state.showNavbar = false;
+    this.$store.state.hideConfigButton = true;
+    this.$store.state.showNavbar = true;
     this.$store.state.showSidenav = true;
-    this.$store.state.showFooter = false;
     body.classList.add("bg-gray-100");
   },
   

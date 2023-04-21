@@ -25,9 +25,8 @@
       <img class="card-img" v-bind:src= "Picture" alt="Card image" style="width:100%">
       <div class="card-tittle text-center">宠物病情图片</div>
       <video controls style="width:100%">
-  <source src="../assets/catvideo.mp4" type="video/mp4" >
-  
-</video>
+       <source src = "https://bj.bcebos.com/v1/file-bed/catvideo.mp4" type="video/mp4" >
+    </video>
   </div>
 
   <div class="col-lg-8 col-md-4 col-sm-4  mh-100">
@@ -105,7 +104,7 @@
       }
       },
       Picture:'',
-      Video:'',
+      Video:"http://bj.bcebos.com/v1/file-bed/catvideo.mp4?authorization=bce-auth-v1%2F67a3432ef0cf4df6ab78bf82ad3fde88%2F2023-04-21T02%3A06%3A34Z%2F-1%2F%2F28d89a0f5ff70889e75e590a3926d6b0ecdd5b47120791d6d0f92c3a3bb7f270",
       };
     },
     methods:{
@@ -124,8 +123,8 @@
           {
               this.Picture =res.data;
               //this.Case.checkDescription.picture=this.Picture[0];
-              console.log(res.data);
-              console.log(this.Picture);
+              // console.log(res.data);
+              // console.log(this.Picture);
           }
     }).catch(err => {
       console.log(err);
@@ -167,9 +166,10 @@
               this.Case.checkDescription = this.Bingli[0].checkDescription;
               this.Case.resultDescription = this.Bingli[0].resultDescription;
               this.Case.therapyDescription = this.Bingli[0].therapyDescription;
-           console.log(this.Case.checkDescription.picture);
-           this.getPicture();
-           this.getVideo();
+              console.log(this.Case.checkDescription.picture);
+              console.log(this.Case.checkDescription.video);
+              this.getPicture();
+              // this.getVideo();
           }
         
     }).catch(err =>{
