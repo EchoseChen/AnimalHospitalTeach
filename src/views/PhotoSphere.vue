@@ -1,23 +1,65 @@
 <template>
   <div id="viewer" style="position:absolute;top:8%; left:2%; width:100%; height: 80%;"></div>
-  <img src="../assets/image/doctor.png" style="position:absolute;top:72%; left:2%; width:10%; height: 12%;">
-  <div style = "z-index:10;position:absolute;top:80%;left:12.5%;"><h2 style="color: white">{{ this. doctor}}</h2></div>
+  <img src="../assets/image/doctor.png" style="position:absolute;bottom:18%; left:2%; width:10%; height: 12%;">
+  <div style = "z-index:10;position:absolute;bottom:18%;left:12.5%;"><h2 style="color: white">{{ this. doctor}}</h2></div>
   <div class="trapezoid" style="position:absolute;top:11%;left:2%;"><h2 style="color: white; text-align: center;">{{ this.room }}</h2></div>
   <router-link to="/HospitalGuide">
   <div class="trapezoid" style="position:absolute;top:11%;right:3%;z-index:5555"><h3 style="color: white; text-align: center;">退出</h3></div>
   </router-link>
-  <div id = "show">
-    <div class="itemfunc" style="position:absolute;top:71%;left:53.25%;z-index: 10;"><h3 style="color: white; text-align: center;">{{ this.item }}</h3></div>
+  <div id = "show" style="z-index:55; position:absolute;bottom:18%;right:3%">
+    <!-- <div class="itemfunc" style="position:absolute;top:71%;left:53.25%;z-index: 10;"><h3 style="color: white; text-align: center;">{{ this.item }}</h3></div>
     <div style="background-color: rgba(255, 150, 0, 0.8); width: 43.72%; height: 9%;position:absolute;top:75%;right:3%;z-index: 10;"></div>
     <div class="box" style="position:absolute;top:77.5%;left:55%;z-index: 10;" v-on:click="toggleFunc()"><h3 style="color: white; text-align: center;" >功能说明</h3></div>
     <div class="box" style="position:absolute;top:77.5%;left:70%;z-index: 10;" v-on:click="toggleOperator()"><h3 style="color: white; text-align: center;">操作流程</h3></div>
-    <div class="box" style="position:absolute;top:77.5%;left:85%;z-index: 10;" ><h3 style="color: white; text-align: center;" v-on:click="toggleVideo()">演示动画</h3></div>
+    <div class="box" style="position:absolute;top:77.5%;left:85%;z-index: 10;" ><h3 style="color: white; text-align: center;" v-on:click="toggleVideo()">演示动画</h3></div> -->
+    <div class="card " style="background-color: coral;">
+    <!-- <div class="card-header pb-0 p-3">  -->
+      <div class="row">
+        <!-- <div class="col-6 d-flex align-items-center">
+          <h6 class="mb-0">Payment Method</h6>
+        </div> -->
+        <div class="col-6 text-start">
+          <argon-button color="danger" variant="gradient">
+            <!-- <i class="fas fa-plus me-2"></i> -->
+            {{ this.item }}
+          </argon-button>
+        <!-- </div> -->
+      </div>
+    </div>
+    <div class="card-body p-3">
+      <div class="row">
+        <div class="col-4 ">
+          <div
+            class="card bg-warning card-body border card-plain border-radius-lg d-flex align-items-center flex-row" v-on:click="toggleFunc()">
+            <h5 class="mb-0 text-white">功能说明</h5>
+          </div>
+        </div>
+
+        <div class="col-4">
+           <div
+            class="card bg-warning card-body border card-plain border-radius-lg d-flex align-items-center flex-row" v-on:click="toggleOperator()">
+            <h5 class="mb-0 text-white">操作流程</h5>
+          </div>
+        </div>
+
+        <div class="col-4">
+           <div
+            class="card bg-warning card-body border card-plain border-radius-lg d-flex align-items-center flex-row" v-on:click="toggleVideo()">
+            <h5 class="mb-0 text-white">演示动画</h5>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div id = "show-video" style="display: inline-block;  position:absolute;left:60%; top:30%;z-index: 5555; width:50%">
-  <video controls >
+  </div>
+  <div id = "show-video" style="display: inline-block;  position:absolute;left:5%; top:25%;z-index: 5555; max-height:30%;"  class="card  bg-gradient-dark move-on-hover align-items-start mt-4 col-lg-4 col-md-4 mt-sm-0">
+    <div class="card-body">
+        <h5 class="mb-0 text-white">演示动画</h5>
+    <video controls >
     <source src="https://www.w3school.com.cn/example/html5/mov_bbb.mp4" type="video/mp4" >
     Your browser does not support the video tag.image.png
   </video>
+  </div>
   
   <!-- <div id = "show-operator" class="showfunc">
     <h2>操作流程:</h2>
@@ -27,22 +69,33 @@
 
  </div>
 
- <div id = "show-func" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
-  <h2>功能说明:</h2>
+ <!-- <div id = "show-func" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
+  <h2>功能说明:</h2> -->
   <!-- <h3>{{ this.func }}</h3> -->
-<p>{{ this.func }}</p>
-  </div>
+<!-- <p>{{ this.func }}</p>
+  </div> -->
 
-  <div id = "show-operator" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
-  <h2>操作流程:</h2>
+  <!-- <div id = "show-operator" class="showfunc" style="z-index:55; position:absolute;left:60%; top:30%;">
+  <h2>操作流程:</h2> -->
   <!-- <h3>{{ this.func }}</h3> -->
-<p>{{ this.operator }}</p>
-  </div>
+<!-- <p>{{ this.operator }}</p>
+  </div> -->
 
-
-
-
-  
+  <div id = "show-card" class="card  bg-gradient-dark move-on-hover align-items-start mt-4 col-lg-4 col-md-4 mt-sm-0" style="z-index:55; position:absolute;left:5%; top:25%;
+  max-height:30%; overflow-y: scroll;" >0
+    <!-- <div class="cursor-pointer"> -->
+      <!-- <div
+        class="full-background"
+        style="background-image: url('https://images.unsplash.com/photo-1518609878373-06d740f60d8b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2370&q=80');"
+      ></div> -->
+      <div class="card-body">
+        <h5 class="mb-0 text-white">{{ this.cardTitle }}</h5>
+        <p class="text-sm text-white">{{ this.cardContent }}</p>
+        <div class="mt-5 d-flex">
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
 
 
 
@@ -52,7 +105,11 @@
     import MarkersPlugin from 'photo-sphere-viewer/dist/plugins/markers'
     import 'photo-sphere-viewer/dist/photo-sphere-viewer.css'
     import 'photo-sphere-viewer/dist/plugins/markers.css';
+    import ArgonButton from "@/components/ArgonButton.vue";
     export default {
+        components: {
+            ArgonButton,
+        },
         data(){
             return{
                 viewer:'',
@@ -65,8 +122,11 @@
                 doctors: ["助理 兽医", "助理 兽医", "前台","兽医","助理 兽医","兽医","兽医","助理 兽医","助理 兽医","兽医","助理 兽医","助理 兽医","前台","住院兽医或助理兽医"],
                 show:'',
                 showVideo:'',
-                showFunc:'',
-                showOperator:'',
+                cardTitle:'',
+                cardContent:'',
+                // showFunc:'',
+                // showOperator:'',
+                showCard:'',
                 func:"bbb",
                 operator:"aaa",
                 video:"https://www.w3school.com.cn/example/html5/mov_bbb.mp4",
@@ -625,30 +685,38 @@
             this.markersPlugin.on('unselect-marker', (e, marker) => {
                 this.show.style.display = "none";
                 this.showVideo.style.display = "none";
-                this.showFunc.style.display = "none";
-                this.showOperator.style.display= "none";
+                this.showCard.style.display = "none";
+                // this.showFunc.style.display = "none";
+                // this.showOperator.style.display= "none";
                 console.log(`unClicked on marker ${marker.config.id}`);
             });
             },
 
             toggleVideo(){
               this.showVideo.style.display = "block";
-              this.showFunc.style.display = "none";
-              this.showOperator.style.display = "none";
+              this.showCard.style.display = "none";
+            //   this.showFunc.style.display = "none";
+            //   this.showOperator.style.display = "none";
               console.log('video');
             },
 
             toggleFunc(){
+              this.cardTitle="功能说明";
+              this.cardContent = this.func;
               this.showVideo.style.display = "none";
-              this.showFunc.style.display = "block";
-              this.showOperator.style.display = "none";
+              this.showCard.style.display = "block";
+            //   this.showFunc.style.display = "block";
+            //   this.showOperator.style.display = "none";
               console.log('func');
             },
 
             toggleOperator(){
+              this.cardTitle="操作流程";
+              this.cardContent = this.operator;
               this.showVideo.style.display = "none";
-              this.showFunc.style.display = "none";
-              this.showOperator.style.display = "block";
+              this.showCard.style.display = "block";
+            //   this.showFunc.style.display = "none";
+            //   this.showOperator.style.display = "block";
               console.log('operator');
             },
         },
@@ -656,12 +724,14 @@
         mounted(){
             this.show = document.getElementById("show"),
             this.showVideo = document.getElementById("show-video"),
-            this.showFunc = document.getElementById("show-func"),
-            this.showOperator = document.getElementById("show-operator"),
+            // this.showFunc = document.getElementById("show-func"),
+            // this.showOperator = document.getElementById("show-operator"),
+            this.showCard = document.getElementById("show-card"),
+            this.showCard.style.display = "none";
             this.show.style.display = "none";
             this.showVideo.style.display = "none";
-            this.showFunc.style.display = "none";
-            this.showOperator.style.display= "none";
+            // this.showFunc.style.display = "none";
+            // this.showOperator.style.display= "none";
             this.setViewer(this.imageArr[this.index].img);
             this.room = this.rooms[this.index];
             this.doctor = this.doctors[this.index];   
