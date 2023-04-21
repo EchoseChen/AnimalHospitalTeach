@@ -1,4 +1,34 @@
 <template>
+  <div class="py-4 container-fluid">
+  <div class="row">
+  <!-- {{this.$route}}拿到index.js路由对象 -->
+  
+  <div class="card">
+  <div class="card-header pb-0"> 
+      <div class="row">
+      <div class="col-md-6">
+          <div class="btn-group ">
+              <button class="btn btn-success" @click="gotoStudy()">
+              返回职能学习页面
+          </button>
+          <button class="btn btn-success" @click="goOff()">
+              返回搜索结果页面
+          </button>
+          </div>
+      </div> 
+      <div class="col-md-4"><h5>{{this.$route.query.diseaseName}}病例详情页面</h5></div>
+  </div>
+</div> 
+  <div class="row">
+  <div class="col-lg-4 col-md-4 col-sm-4  mh-100">
+  
+      <img class="card-img" v-bind:src= "Picture" alt="Card image" style="width:100%">
+      <div class="card-tittle text-center">宠物病情图片</div>
+      <video controls style="width:100%">
+       <source src = "https://bj.bcebos.com/v1/file-bed/catvideo.mp4" type="video/mp4" >
+    </video>
+  </div>
+
 <<<<<<< HEAD
   <div class="py-4 container-fluid">
   <div class="row">
@@ -99,47 +129,10 @@
   </div>
   </div>
 </div>
-<<<<<<< HEAD
  
   </div>
   </template>
-  
-  <script>
-  export default {
-    name: 'BingliShow',
-    data(){
-      return{
-          Bingli:[],
-          Case:{
-              caseId:'',
-              caseName:'',
-              diseaseName:this.$route.query.diseaseName,
-              categoryName:'',
-              medicineId:'',
-              admissionDescription: {
-          word: '',
-          picture: '',
-          video: ''
-       },
-      checkDescription: {
-          word: '',
-          picture: '',
-          video: ''
-      },
-      resultDescription: {
-          word: '',
-          picture: '',
-          video: ''
-      },
-      therapyDescription: {
-          word: '',
-          picture: '',
-          video: ''
-=======
-   
-    </div>
-    </template>
-    
+      
     <script>
     export default {
       name: 'BingliShow',
@@ -245,7 +238,6 @@
           console.log(err);
       });
       
->>>>>>> master
       }
       },
       Picture:'',
