@@ -16,7 +16,7 @@
             </button>
             </div>
         </div> 
-        <div class="col-md-4"><h5>{{this.$route.query.diseaseName}}病例详情页面</h5></div>
+        <div class="col-md-4"><h5>{{this.Case.diseaseName}}病例详情页面</h5></div>
     </div>
 </div> 
     <div class="row">
@@ -79,8 +79,8 @@
             Bingli:[],
             Case:{
                 caseId:'',
-                caseName:'',
-                diseaseName:this.$route.query.diseaseName,
+                caseName:this.$route.query.caseName,
+                diseaseName:'',
                 categoryName:'',
                 medicineId:'',
                 admissionDescription: {
@@ -149,9 +149,9 @@
         }
       },
       mounted(){
-        this.$axios.get('api/case/disease', {
+        this.$axios.get('api/case/casen', {
         params: {
-          diseaseName: this.Case.diseaseName,
+          caseName: this.Case.caseName,
         }
       })
       .then((res) => {

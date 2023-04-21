@@ -23,7 +23,7 @@
           :navText="'角色扮演'"
         >
           <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            <i class="ni ni-badge text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -34,7 +34,7 @@
           :navText="'职能学习'"
         >
           <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            <i class="ni ni-book-bookmark text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
