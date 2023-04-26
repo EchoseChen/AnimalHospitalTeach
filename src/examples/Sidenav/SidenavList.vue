@@ -4,7 +4,7 @@
       <li class="nav-item">
         <sidenav-item url="/HospitalGuide" :class="getRoute() === 'HospitalGuide' ? 'active' : ''" :navText="'医院导览'">
           <template v-slot:icon>
-            <i class="ni ni-tag text-success text-sm opacity-10"></i>
+            <i class="ni ni-app text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -22,21 +22,21 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <li v-if="Identity!='student'" class="nav-item">
         <sidenav-item url="/my-questions" :class="getRoute() === 'my-questions' ? 'active' : ''" :navText="'我的问题'">
           <template v-slot:icon>
             <i class="ni ni-tag text-success text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <li v-if="Identity1='student'" class="nav-item">
         <sidenav-item url="/my-papers" :class="getRoute() === 'my-papers' ? 'active' : ''" :navText="'我的试卷'">
           <template v-slot:icon>
             <i class="ni ni-badge text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <li v-if="Identity!='student'" class="nav-item">
         <sidenav-item url="/my-exams-teacher" :class="getRoute() === 'my-exams-teacher' ? 'active' : ''"
           :navText="'老师|我的考试'">
           <template v-slot:icon>
@@ -44,7 +44,7 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <li v-else-if="Identity!='teacher'" class="nav-item">
         <sidenav-item url="/my-exams-student" :class="getRoute() === 'my-exams-student' ? 'active' : ''"
           :navText="'学生|我的考试'">
           <template v-slot:icon>
@@ -53,11 +53,7 @@
         </sidenav-item>
       </li>
       <li class="mt-3 nav-item">
-        <h6 v-if="this.$store.state.isRTL" class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
-          :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'">
-          صفحات المرافق
-        </h6>
-        <h6 v-else class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
+        <h6 class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'">
           用户页面
         </h6>
@@ -73,7 +69,7 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <sidenav-item url="/signin" :class="getRoute() === 'signin' ? 'active' : ''" :navText="'Sign In'">
           <template v-slot:icon>
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
@@ -90,8 +86,8 @@
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
-      <li class="nav-item" id = "admincare">
+      </li> -->
+      <li v-if="Identity=='admin'" class="nav-item" id = "admincare">
         <sidenav-item
           url="/admin"
           :class="getRoute() === 'admin' ? 'active' : ''"
@@ -104,7 +100,7 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item" id = "adminmanage">
+      <li v-if="Identity=='admin'" class="nav-item" id = "adminmanage">
         <sidenav-item
           url="/main.html"
           :navText="'后台管理'"
@@ -129,7 +125,8 @@ export default {
     return {
       title: "虚拟宠物医院学习软件",
       controls: "dashboardsExamples",
-      isActive: "active"
+      isActive: "active",
+      Identity: "admin",
     };
   },
   components: {
@@ -140,6 +137,10 @@ export default {
       const routeArr = this.$route.path.split("/");
       return routeArr[1];
     }
-  }
+  },
+  created() {
+    this.Identity = localStorage.getItem("Identity")
+  },
+
 };
 </script>

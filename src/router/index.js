@@ -173,7 +173,7 @@ const routes = [
     component: CaseList,
   },
   {
-    path:"/main",
+    path:"/main.html",
     name: "后台管理",
     component: adminManagement,
   }
