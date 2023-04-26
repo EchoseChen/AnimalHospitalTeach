@@ -92,7 +92,7 @@
 <script>
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { VueElement } from "vue";
+// import { VueElement } from "vue";
 
 const body = document.getElementsByTagName("body")[0];
 
@@ -102,10 +102,10 @@ export default {
   data() {
     return {
       showMenu: false,
-      Name: VueElement.prototype.username,
-      Email:"",
-      Password:VueElement.prototype.password,
-      Identity:"",
+      Name: localStorage.getItem("username"),
+      Email: localStorage.getItem("Email"),
+      Identity: localStorage.getItem("Identity"),
+      Password: localStorage.getItem("password"),
       newPassword:"",
       newName:"",
     };
@@ -116,21 +116,23 @@ export default {
             var inputPassword = document.getElementById("password");
             inputName.placeholder = this.Name;
             inputPassword.placeholder = this.Password;
+            
       },
 
       getInformation(){
-          this.Email = VueElement.prototype.Email;
-          if( VueElement.prototype.Identity == "admin"){
+          this.Email = localStorage.getItem("Email")
+          console.log(this.Email)
+          if( localStorage.getItem("Identity") == "admin"){
             this.Identity = "管理员";
-          }else if(VueElement.prototype.Identity == "student"){
+          }else if(localStorage.getItem("Identity") == "student"){
             this.Identity = "学生";
           }else{
             console.log("yes");
             this.Identity = "老师";
           }
           
-          this.Name = VueElement.prototype.username;
-          this.Password = VueElement.prototype.password;
+          this.Name = localStorage.getItem("username"),
+          this.Password =localStorage.getItem("password"),
           this.getPlaceholder();
       },
       updateInformation(){
@@ -143,7 +145,7 @@ export default {
         this.$axios.put('/api/user', {
           userId: this.Email,
           password: this.newPassword,
-          identity: VueElement.prototype.Identity,
+          identity: localStorage.getItem("Identity"),
           username: this.newName,
       })
       .then((res) => {
@@ -152,8 +154,10 @@ export default {
             alert("修改成功！");
             this.Name = this.newName;
             this.Password = this.newPassword;
-            VueElement.prototype.username = this.Name;
-            VueElement.prototype.password = this.Password;
+            // VueElement.prototype.username = this.Name;
+            localStorage.setItem("username", this.Name);
+            // VueElement.prototype.password = this.Password;
+            localStorage.setItem("password", this.Password);
             this.getPlaceholder();
             
           }
@@ -169,6 +173,7 @@ export default {
     this.getInformation();
   },
   beforeMount() {
+    // this.getInformation();
     this.$store.state.imageLayout = "profile-overview";
     this.$store.state.showNavbar = false;
     this.$store.state.showFooter = true;
@@ -177,6 +182,7 @@ export default {
     
   },
   beforeUnmount() {
+    // this.getInformation();
     this.$store.state.isAbsolute = false;
     this.$store.state.imageLayout = "default";
     this.$store.state.showNavbar = true;

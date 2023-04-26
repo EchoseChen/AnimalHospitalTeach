@@ -22,7 +22,7 @@
             </span>
             <input type="text" class="form-control" placeholder="搜索" v-model="diseaseName" @keyup.enter="caseSearch">
             <!-- <button class="btn btn-primary" type="button">搜索</button> -->
-            <span class="input-group-text" style="color: #ffffff; background-color: #428bca; border-color: #357ebd;" v-on:click=caseSearch()>搜索</span>
+            <span class="input-group-text" style="color: #ffffff; background-color: #428bca; border-color: #357ebd;" v-on:click=caseSearch() id="seach">搜索</span>
             <!-- <div class="input-group-append">
         <span class="input-group-text">@runoob.com</span>
       </div> -->

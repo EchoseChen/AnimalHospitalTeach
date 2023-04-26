@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理系统</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+    <script src="layui/layui.js"></script>
+    <script src="javascripts/func.js"></script>
+    <script src="javascripts/echarts.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">
+            <h2 id="jump">
+                Vphls
+            </h2>
+        </div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item layui-this">
+                <a href="case.html">病例管理</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="data.html">数据管理</a>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;"><img src="images/instructor.png" class="layui-nav-img"> 管理员</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="/admin">退出</a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item layui-this">
+                    <a href="case.html">
+                        病例管理
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="data.html">
+                        数据管理
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" style="padding-top: 55px;padding-left: 20px;padding-right: 20px">
+        <!-- 内容主体区域 -->
+        <form class="layui-form" onsubmit="return false">
+            <div class="layui-form-item">
+                <label class="gard layui-form-label">病例名</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="seek" lay-verify="required" id="casename"/>
+                </div>
+                <label class="gard layui-form-label">病名</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="index" lay-verify="required" id="disease"/>
+                </div>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit">查询病例库</button>
+                </div>
+                <div class="layui-input-inline">
+                    <button class="layui-btn" id="uploadCase" style="float: left">上传病例</button>
+                </div>
+            </div>
+        </form>
+        <table id="demo" lay-filter="test"></table>
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+                <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+            </div>
+        </script>
+        <script type="text/html" id="barDemo">
+             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © vphls.com - 虚拟宠物医院后台数据管理系统
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use('element',function () {
+        var element=layui.element;
+    })
+    document.getElementById("uploadCase").onclick=function (){
+        layer.confirm('上传',{
+            type: 1
+            ,title: false //不显示标题栏
+            ,closeBtn: true
+            ,area: ['800px','450px']
+            ,shade: 0.8
+            ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            ,btn: ['提交', '取消']
+            ,btnAlign: 'c'
+            ,moveType: 1 //拖拽模式，0或者1
+            ,content:
+                '<div style="padding: 50px;line-height: 100px; background-color: #393D49; color: #fff; font-weight: 300;" xmlns="http://www.w3.org/1999/html">' +
+                '<div class="layui-upload-list" style="max-width: 1280px;height: auto;min-height: 600px;">' +
+
+                '<div class="layui-form-item">'+
+                '<label class="layui-form-label">病例名</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="caseName" lay-verify="required" id="caseName"/>' +
+                '</div>'+
+                '<label class="gard layui-form-label">病名</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="diseaseName" lay-verify="required" id="diseaseName"/>' +
+                '</div></div>'+
+
+                '<div class="layui-form-item">'+
+                '<label class="gard layui-form-label">病种名</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="diseaseName" lay-verify="required" id="diseaseName"/>' +
+                '</div>'+
+                '<label class="gard layui-form-label">药品ID</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="medicineId" lay-verify="required" id="medicineId"/>' +
+                '</div></div>'+
+
+                '<div class="layui-form-item">'+
+                '<label class="gard layui-form-label">接诊</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="admissionDescription" lay-verify="required" id="admissionDescription"/>' +
+                '</div>'+
+                '<label class="gard layui-form-label">病例检查</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="checkDescription" lay-verify="required" id="checkDescription"/>' +
+                '</div></div>'+
+
+                '<div class="layui-form-item">'+
+                '<label class="gard layui-form-label">诊断结果</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="resultDescription" lay-verify="required" id="resultDescription"/>' +
+                '</div>'+
+                '<label class="gard layui-form-label">治疗方案</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="therapyDescription" lay-verify="required" id="therapyDescription"/>' +
+                '</div></div>'+
+
+                '<div class="layui-form-item">'+
+                '<label class="gard layui-form-label">图片</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="picture" lay-verify="required" id="picture"/>' +
+                '</div>'+
+                '<label class="gard layui-form-label">视频</label>' +
+                '<div class="layui-input-inline">' +
+                '<input class="layui-input" name="video" lay-verify="required" id="video"/>' +
+                '</div></div>'+
+
+                // '<button type="button" style="margin-left: 160px;margin-right: 10px" class="layui-btn layui-btn-primary layui-border-blue" id="uploadPicture"><i class="layui-icon layui-icon-file"></i>上传图片</button>'+
+                // '<button type="button" style="margin-left: 20px;margin-right: 10px" class="layui-btn layui-btn-primary layui-border-blue" id="uploadVideo"><i class="layui-icon layui-icon-file"></i>上传视频</button>'+
+                // '<button type="submit" style="margin-left: 20px;margin-right: 10px" class="layui-btn layui-btn-primary layui-border-green"  id="submitCase"><i class="layui-icon layui-icon-file"></i>提交</button>'+
+
+                '</div>' +
+                '</div>'
+            ,btn: ['提交','取消'] //按钮
+        }, function(){
+                    let caseName = $('#caseName').val()
+                    let diseaseName = $('#diseaseName').val()
+                    let categoryName = $('#categoryName').val()
+                    let medicineId = $('#medicineId').val()
+                    let therapyDescription = $('#therapyDescription').val()
+                    let checkDescription = $('#checkDescription').val()
+                    let admissionDescription = $('#admissionDescription').val()
+                    let resultDescription = $('#resultDescription').val()
+                    let picture = $('#picture').val()
+                    let video = $('#video').val()
+                    // console.log(data.caseId)
+                $.ajax({
+                    type: 'post',
+                    url: 'http://123.60.184.136:8092/api/case',  
+                    data: JSON.stringify({
+                        "admissionDescription": {
+                        "picture": picture,
+                        "video": video,
+                        "word": admissionDescription
+                        },
+                        "caseId": "3",
+                        "caseName": caseName,
+                        "categoryName": categoryName,
+                        "checkDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": checkDescription
+                        },
+                        "diseaseName": diseaseName,
+                        "medicineId": 
+                        [
+                            "30",
+                            "11",
+                            "75",
+                            "51",
+                            "77"
+                        ],
+                        "resultDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": resultDescription
+                        },
+                        "therapyDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": therapyDescription
+                        }
+                        
+                    }),
+                    // dataType: "json",
+                    contentType: 'application/json;',
+                    success: function (data) {//res为相应体,function为回调函数
+                        layer.msg("上传成功");
+                        window.location.reload()
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        layer.msg("上传失败");
+                        // window.location.reload()
+                    }
+                    });
+                // }, function(){
+                // layer.msg('取消成功！');
+                });
+    }
+
+    layui.use('table', function(){
+        var table = layui.table;
+        $ = layui.jquery
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,size: 'lg'
+            ,height:  'full-270'
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }]
+            ,url: 'http://123.60.184.136:8092/api/case/wrap?caseName=&disease=' //数据接口
+            ,cols: [[ //表头
+                {type:'checkbox',fixed: 'left'}
+                ,{field: 'index', type: 'numbers',sort: true,fixed: 'left'}
+                ,{field: 'caseId', title: 'ID',sort:true}
+                ,{field: 'caseName', title: '病例名'}
+                ,{field: 'diseaseName', title: '病名'}
+                ,{field: 'categoryName', title: '病种名'}
+                ,{field: 'medicineId', title: '药品ID'}
+                ,{field: 'therapyDescription', title: '病例描述', templet: function(d){ return d.therapyDescription.word; }}
+                ,{field: 'checkDescription', title: '检查描述',templet: function(d){ return d.checkDescription.word; }}
+                ,{field: 'admissionDescription', title: '诊断描述',templet: function(d){ return d.admissionDescription.word; }}
+                ,{field: 'resultDescription', title: '结果描述',templet: function(d){ return d.resultDescription.word; }}
+                ,{field: 'picture', title: '图片',templet: function(d){ return d.checkDescription.picture; }}
+                ,{field: 'video', title: '视频',templet: function(d){ return d.checkDescription.video; }}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:170}
+            ]]
+            ,page: true
+            ,limits: [3,5,10]  //一页选择显示3,5或10条数据
+            ,limit: 10  //一页显示10条数据
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if(this.page.curr){
+                    result = res.data.slice(this.limit*(this.page.curr-1),this.limit*this.page.curr);
+                }
+                else{
+                    result=res.data.slice(0,this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+        });
+        $(document).on('click','#submit',function (data) {
+            var disease=$('#disease');
+            var casename=$('#casename');
+            table.reload('demo',{
+                where:{
+                    caseName:casename.val(),
+                    disease:disease.val()
+                },
+                page:{
+                    curr:1
+                }
+            })
+        })
+
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
+        table.on('tool(test)', function(obj) {
+            var data = obj.data;
+            // console.log(obj)
+            // console.log(data.caseId)
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                    $.ajax({
+                        type: 'delete',   
+                        url: 'http://123.60.184.136:8092/api/case?caseId='+data.caseId,   //请求接口数据
+                        success: function (data) {//res为相应体,function为回调函数
+                            layer.msg("删除成功");
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            layer.msg("删除失败");
+                        }
+                    });
+                    // layer.msg("删除成功");
+                });
+            }
+            else if(obj.event === 'detail'){
+                var data = obj.data;
+
+                layer.alert(JSON.stringify(data), {
+                    title: '当前行数据：'
+                });
+
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            }
+            else if(obj.event === 'edit'){
+                let html = '<div class="layui-form-item"><label class="layui-form-label">病例名</label><div class="layui-input-block"><input type="text" id="caseName" name="caseName" lay-verify="title" autocomplete="off" value="'
+                html += data.caseName
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">病名</label><div class="layui-input-block"><input type="text" id="diseaseName" name="diseaseName" lay-verify="title" autocomplete="off" value="'
+                html += data.diseaseName
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">病种名</label><div class="layui-input-block"><input type="text" id="categoryName" name="categoryName" lay-verify="title" autocomplete="off" value="'
+                html += data.categoryName
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">药品ID</label><div class="layui-input-block"><input type="text" id="medicineId" name="medicineId" lay-verify="title" autocomplete="off" value="'
+                html += data.medicineId
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">病例描述</label><div class="layui-input-block"><input type="text" id="therapyDescription" name="therapyDescription" lay-verify="title" autocomplete="off" value="'
+                html += data.therapyDescription.word
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">检查描述</label><div class="layui-input-block"><input type="text" id="checkDescription" name="checkDescription" lay-verify="title" autocomplete="off" value="'
+                html += data.checkDescription.word
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">诊断描述</label><div class="layui-input-block"><input type="text" id="admissionDescription" name="admissionDescription" lay-verify="title" autocomplete="off" value="'
+                html += data.admissionDescription.word
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">结果描述</label><div class="layui-input-block"><input type="text" id="resultDescription" name="resultDescription" lay-verify="title" autocomplete="off" value="'
+                html += data.resultDescription.word
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">图片</label><div class="layui-input-block"><input type="text" id="picture" name="picture" lay-verify="title" autocomplete="off" value="'
+                html += data.checkDescription.picture
+                html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">视频</label><div class="layui-input-block"><input type="text" id="video" name="video" lay-verify="title" autocomplete="off" value="'
+                html += data.checkDescription.video
+                html += '" class="layui-input"></div></div>'
+
+                layer.confirm('修改', {
+                content: html,
+                btn: ['提交','取消'] //按钮
+                }, function(){
+                    let caseName = $('#caseName').val()
+                    let diseaseName = $('#diseaseName').val()
+                    let categoryName = $('#categoryName').val()
+                    let medicineId = $('#medicineId').val()
+                    let therapyDescription = $('#therapyDescription').val()
+                    let checkDescription = $('#checkDescription').val()
+                    let admissionDescription = $('#admissionDescription').val()
+                    let resultDescription = $('#resultDescription').val()
+                    let picture = $('#picture').val()
+                    let video = $('#video').val()
+                    console.log(data.caseId)
+                $.ajax({
+                    type: 'put',
+                    url: 'http://123.60.184.136:8092/api/case?caseId='+data.caseId,  
+                    data: JSON.stringify({
+                        "admissionDescription": {
+                        "picture": picture,
+                        "video": video,
+                        "word": admissionDescription
+                        },
+                        "caseId": data.caseId,
+                        "caseName": caseName,
+                        "categoryName": categoryName,
+                        "checkDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": checkDescription
+                        },
+                        "diseaseName": diseaseName,
+                        "medicineId": 
+                        [
+                            "30",
+                            "11",
+                            "75",
+                            "51",
+                            "77"
+                        ],
+                        "resultDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": resultDescription
+                        },
+                        "therapyDescription": {
+                            "picture": picture,
+                            "video": video,
+                            "word": therapyDescription
+                        }
+                        
+                    }),
+                    // dataType: "json",
+                    contentType: 'application/json;',
+                    success: function (data) {//res为相应体,function为回调函数
+                        layer.msg("修改成功");
+                        window.location.reload()
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        layer.msg("修改失败");
+                        // window.location.reload()
+                    }
+                    });
+                // }, function(){
+                // layer.msg('取消成功！');
+                });
+
+            }
+        });
+        
+    
+    });
+
+    
+</script>
+<script src="javascripts/func.js"></script>
+</body>
+</html>
