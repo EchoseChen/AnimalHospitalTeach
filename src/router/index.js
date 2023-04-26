@@ -104,7 +104,6 @@ const routes = [
   {
     path: "/",
     name: "/",
-<<<<<<< HEAD
     redirect: "/signin",
   },
   {
@@ -112,40 +111,6 @@ const routes = [
     name: "Profile",
     component: Profile,
   },
-=======
-    redirect: "/dashboard-default",
-  },
-  {
-    path: "/dashboard-default",
-    name: "Dashboard",
-    component: Dashboard,
-  },
-  // {
-  //   path: "/tables",
-  //   name: "Tables",
-  //   component: Tables,
-  // },
-  // {
-  //   path: "/billing",
-  //   name: "Billing",
-  //   component: Billing,
-  // },
-  // {
-  //   path: "/virtual-reality",
-  //   name: "Virtual Reality",
-  //   component: VirtualReality,
-  // },
-  // {
-  //   path: "/rtl-page",
-  //   name: "RTL",
-  //   component: RTL,
-  // },
-  // {
-  //   path: "/profile",
-  //   name: "Profile",
-  //   component: Profile,
-  // },
->>>>>>> lyra
   {
     path: "/signin",
     name: "Signin",
