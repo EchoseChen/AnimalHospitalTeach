@@ -10,7 +10,7 @@
                     <button @click="gotoqiantai" class="btn btn-success">前台工作</button>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center h-100" >
+            <div class="col-lg-4 col-md-4 col-sm-4 text-center mh-100" >
             <img class="card-img" src="../../assets/img/yizhu.jpg" alt="Card image" style="width:100%">
                 <div class="card-body">
                     <h2 class="card-title">医助模式</h2>

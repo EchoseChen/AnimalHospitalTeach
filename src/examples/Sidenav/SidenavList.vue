@@ -62,8 +62,12 @@
           用户页面
         </h6>
       </li>
-      <li class="nav-item">
-        <sidenav-item url="/profile" :class="getRoute() === 'profile' ? 'active' : ''" :navText="'用户管理'">
+      <li class="nav-item" id = "selfcare">
+        <sidenav-item
+          url="/profile"
+          :class="getRoute() === 'profile' ? 'active' : ''"
+          :navText="'个人管理'"
+        >
           <template v-slot:icon>
             <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
           </template>
@@ -76,15 +80,35 @@
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
-        <sidenav-item url="/signup" :class="getRoute() === 'signup' ? 'active' : ''" :navText="'Sign Up'">
+      <li class="nav-item" >
+        <sidenav-item
+          url="/signup"
+          :class="getRoute() === 'signup' ? 'active' : ''"
+          :navText="'Sign Up'"
+        >
           <template v-slot:icon>
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
-      <li class="nav-item">
-        <sidenav-item url="/admin" :class="getRoute() === 'admin' ? 'active' : ''" :navText="'管理员'">
+      <li class="nav-item" id = "admincare">
+        <sidenav-item
+          url="/admin"
+          :class="getRoute() === 'admin' ? 'active' : ''"
+          :navText="'用户管理'"
+        >
+          <template v-slot:icon>
+            <i
+              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
+            ></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item" id = "adminmanage">
+        <sidenav-item
+          url="/main.html"
+          :navText="'后台管理'"
+        >
           <template v-slot:icon>
             <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
           </template>

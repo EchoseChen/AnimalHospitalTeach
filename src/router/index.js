@@ -13,6 +13,7 @@ import ZhinengStudy from "../views/ZhinengStudy.vue";
 import BingliShow from "../views/BingliShow.vue";
 import Admin from "../views/Admin.vue";
 import CaseList from "../views/components/CaseList.vue";
+import adminManagement from "../views/AdminManagement.vue";
 
 import MyQuestions from "../views3/MyQuestions.vue";
 import MyPapers from "../views3/MyPapers.vue";
@@ -171,6 +172,12 @@ const routes = [
     name: "搜索结果",
     component: CaseList,
   },
+  {
+    path:"/main",
+    name: "后台管理",
+    component: adminManagement,
+  }
+  
 
 ];
 

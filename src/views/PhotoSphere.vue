@@ -2,7 +2,7 @@
   <div id="viewer" style="position:absolute;top:8%; left:2%; width:100%; height: 80%;"></div>
   <img src="../assets/image/doctor.png" style="position:absolute;bottom:18%; left:2%; width:10%; height: 12%;">
   <div style = "z-index:10;position:absolute;bottom:18%;left:12.5%;"><h2 style="color: white">{{ this. doctor}}</h2></div>
-  <div class="trapezoid" style="position:absolute;top:11%;left:2%;"><h2 style="color: white; text-align: center;">{{ this.room }}</h2></div>
+  <div class="trapezoid" style="position:absolute;top:11%;left:2%;z-index:5555 " id="name"><h2 style="color: white; text-align: center;">{{ this.room }}</h2></div>
   <router-link to="/HospitalGuide">
   <div class="trapezoid" style="position:absolute;top:11%;right:3%;z-index:5555"><h3 style="color: white; text-align: center;">退出</h3></div>
   </router-link>
@@ -676,8 +676,8 @@
                       this.operator = marker.config.operator;
                       this.show.style.display = "block";
                       this.showVideo.style.display = "none";
-                      this.showFunc.style.display = "none";
-                      this.showOperator.style.display= "none";
+                      // this.showFunc.style.display = "none";
+                      // this.showOperator.style.display= "none";
                     }
                   }
                 )
