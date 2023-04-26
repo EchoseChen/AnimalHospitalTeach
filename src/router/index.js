@@ -87,22 +87,22 @@ const routes = [
     component:NewExam,
   },
   {
-    path:"/watch-exam",
+    path:"/watch-exam/:id",
     name:"Watch Exam",
     component:WatchExam,
   },
   {
-    path:"/edit-exam",
+    path:"/edit-exam/:id",
     name:"Edit Exam",
     component:EditExam,
   },
   {
-    path:"/watch-result-student",
+    path:"/watch-result-student/:id",
     name:"Watch Result Student",
     component:WatchResultStudent,
   },
   {
-    path:"/watch-result-teacher",
+    path:"/watch-result-teacher/:eId/:sId",
     name:"Watch Result Teacher",
     component:WatchResultTeacher,
   },
@@ -127,17 +127,17 @@ const routes = [
     component:NewPaper,
   },
   {
-    path:"/edit-paper",
+    path:"/edit-paper/:id",
     name:"Edit Paper",
     component:EditPaper,
   },
   {
-    path:"/watch-paper",
+    path:"/watch-paper/:id",
     name:"Watch Paper",
     component:WatchPaper,
   },
   {
-    path:"/take-exam",
+    path:"/take-exam/:id",
     name:"Take Exam",
     component:TakeExam,
   },

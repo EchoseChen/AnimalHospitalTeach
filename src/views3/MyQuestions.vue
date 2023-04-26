@@ -193,12 +193,14 @@ import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 // import ArgonAlert from "@/components/ArgonAlert.vue";
 import Modal from "@/components/Modal.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/question`
 
 export default {
     data() {
         return {
+            userId:'',
             categories: '',
             diseases: '',
             types: [{
@@ -218,7 +220,7 @@ export default {
             category: '',
             disease: '',
             type: '',
-            mock: true,//模拟HTTP调用
+            mock: false,//模拟HTTP调用
             toDeleteIndex: -1,//用来存想要删除的index
             //list
             showModal: false,
@@ -478,6 +480,9 @@ export default {
             let num = this.questions[index].options.length
             this.questions[index].options.push({ id: num + 1, content: '' })
         },
+        getQuestionInfo(index){
+            this.questions[index].userId = this.userId
+        },
         async myEdit(index) {
             this.questions[index].hidden = true
             if (!this.questions[index].modify) {
@@ -485,6 +490,7 @@ export default {
             } else {
                 //todo:HTTP Put Test
                 const url = `${API_URL}?questionId=${this.questions[index].id}`
+                this.getQuestionInfo(index)
                 let result = await fetch(url, {
                     method: 'put',
                     body: JSON.stringify(this.questions[index]),
@@ -495,13 +501,15 @@ export default {
                 console.log("PUT: ", url)
                 console.log("PUT body:", this.questions[index])
                 console.log("PUT result:", result)
-                if (this.showTest || result.ok) { //showTest状态默认都是成功的
+                // if (this.showTest || result.ok) { //showTest状态默认都是成功的 //THIS
+                if(result.ok){ //DELETE
                     // this.questions[index].showAlert = 1
                     this.questions[index].modify = false
                     this.$toast.success(`修改成功，问题ID: ${this.questions[index].id}`, {
                         duration: 4000,
                         // position:"bottom"
                     })
+                    this.$router.go(0)
                 } else {
                     // this.questions[index].showAlert = -1
                     this.$toast.error("提交失败！请重试！", {
@@ -531,7 +539,8 @@ export default {
                 method: 'delete',
             })
             console.log("DELETE", result)
-            if (this.showTest || result.ok) { //showTest状态默认都是成功的
+            // if (this.showTest || result.ok) { //showTest状态默认都是成功的 THIS
+            if (result.ok) { //showTest状态默认都是成功的 DELETE
                 // this.questions[index].showAlert = 1
                 // this.questions[index].modify = false
                 this.$toast.success(`删除成功，问题ID: ${this.questions[index].id}`, {
@@ -541,6 +550,8 @@ export default {
                 if(this.showTest){
                     this.questions = this.questions.filter((q)=> q.id!=this.questions[index].id)
                 }
+                // location.href="";
+                this.$router.go(0)
             } else {
                 // this.questions[index].showAlert = -1
                 this.$toast.error("删除失败，请重试！", {
@@ -548,12 +559,17 @@ export default {
                     // position:"top"
                 })
             }
-        }
-    },
-    watch: {
-
+        },
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "testUser"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
     },
     created() {
+        this.getUserInfo()
         this.fetchCategories()
         this.fetchDiseases(this.category)
         this.getQuestions()

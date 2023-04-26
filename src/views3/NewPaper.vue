@@ -132,7 +132,7 @@
         <div class="col-1"></div>
 
     </div>
-    <div>
+    <div v-if="showTest">
         <pre>{{ paper }}</pre>
     </div>
 </template>
@@ -141,24 +141,26 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/paper`
 
 export default {
     data() {
         return {
+            userId:'',
             hours: [],
             mins: [],
             questions: [],//所有可选的题目信息
             qId: '',//选择题目
             qScore: '',//设置分数
             paper: {
-                name: '',
+                name: '试卷1',
                 time: {
-                    hours: null,
-                    mins: null,
+                    hours: 2,
+                    mins: 30,
                 },
-                permission: '',
+                permission: 'public',
                 userId: '',
                 questions: []
             },
@@ -169,7 +171,8 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            showTest: false,//打印测试信息
+            mock:false //模拟HTTP请求
         }
     },
     components: {
@@ -179,14 +182,14 @@ export default {
     },
     methods: {
         async getQuestions() {
-            const url = `${API_URL}/`
+            const url = `/api/question/`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.questions = await (await fetch(url)).json()
                 console.log("questions", this.questions)
             }
             /* mock */
-            if (this.showTest) {
+            if (this.mock) {
                 this.questions = [
                     {
                         "id": "q01",
@@ -268,10 +271,21 @@ export default {
             }
             console.log(this.questions)
         },
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "testUser"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
+        getPaperInfo(){
+            this.paper.userId = this.userId
+        },
         async postPaper() {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回paperId
-            const url = `${API_URL}`
+            const url = `${API_URL}`   
+            this.getPaperInfo()         
             let result = await fetch(url, {
                 method: 'post',
                 body: JSON.stringify(this.paper),
@@ -279,12 +293,13 @@ export default {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(this.paper)
-            console.log(result)
+            console.log("paper: ",this.paper)
+            console.log("result: ",  result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，试卷ID: ${this.getPaperId(result)}`, {
+            // if (this.showTest || result.ok) {//THIS
+            if(result.ok){//DELETE
+                this.$toast.success(`提交成功，试卷ID: ${this.getPaperId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
@@ -339,8 +354,9 @@ export default {
         },
         getPaperId(result) {
             //todo：需要修改
-            if (result.ok) {
-                return result.json().id
+            // console.log("result: ",result.json())
+            if (!this.mock) {
+                return result.id
             } else {
                 return "Q01_test"
             }
@@ -423,8 +439,9 @@ export default {
         },
     },
     mounted() {
-        this.init('p')
+        this.getUserInfo()
         this.getQuestions()
+        this.init('p')
     }
 }
 

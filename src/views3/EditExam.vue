@@ -39,8 +39,8 @@
                                 </div>
                             </div>
                             <div class="col-7 text-end">
-                                <argon-button class="me-4" @click="myWatch(exam.paper.id)" color='success'
-                                    variant="gradient" size="sm">查看</argon-button>
+                                <!-- <argon-button class="me-4" @click="myWatch(exam.paper.id)" color='success'
+                                    variant="gradient" size="sm">查看</argon-button> --> <!--可以有-->
                                 <argon-button class="me-4" @click="checkDelete({ type: 'p',id:exam.paper.id })" color='danger'
                                     variant="gradient" size="sm">删除</argon-button>
                             </div>
@@ -76,8 +76,8 @@
                                     <h6>{{ student.username }}</h6>
                                 </div>
                                 <div class="col-7 text-end">
-                                    <argon-button class="me-4" @click="watchExam(student.userId)" color='info'
-                                        variant="gradient" size="sm">批改</argon-button>
+                                    <!-- <argon-button class="me-4" @click="watchExam(student.userId)" color='info'
+                                        variant="gradient" size="sm">批改</argon-button> --> <!--可以有-->
                                     <!-- <argon-button class="me-4" @click="watchResult(student.userId)" color='primary' variant="gradient"
                                         size="sm">查看</argon-button> -->
                                     <argon-button class="me-4" @click="checkDelete({ type: 's', id: student.userId })"
@@ -96,7 +96,7 @@
         <div class="col-1"></div>
 
     </div>
-    <div>
+    <div v-if="showTest">
         <pre>{{ exam }}</pre>
     </div>
     <div>
@@ -147,6 +147,7 @@ import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import Modal from "@/components/Modal.vue";
 import ArgonAvatar from "@/components/ArgonAvatar.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -171,7 +172,9 @@ export default {
             showModal: false,
             showPaper: false,
 
-            showTest: true,//打印测试信息
+            userId:'',
+            showTest: false,//打印测试信息
+            mock:false,//HTTP TEST
         }
     },
     components: {
@@ -186,12 +189,10 @@ export default {
             console.log(this.$route.params);//打印结果为{user:'david'}
             const url = `${API_URL}?examId=${id}`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.exam = await (await fetch(url)).json()
                 console.log("exam", this.exam)
-            }
-            /* mock */
-            if (this.showTest) {
+            }else{/* mock */
                 this.exam = {
                     "name": "第一次考试",
                     "begin": {
@@ -236,12 +237,10 @@ export default {
         async getPapers() {
             const url = `/api/paper/`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.papers = await (await fetch(url)).json()
                 console.log("papers", this.papers)
-            }
-            /* mock */
-            if (this.showTest) {
+            }else{ /* mock */
                 this.papers = [{
                     id: 'p1',
                     name: '数学试卷',
@@ -282,7 +281,7 @@ export default {
         async getStudents() {
             const url = `/api/user/identity?identity=student`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.students = await (await fetch(url)).json()
             } else {
                 this.students = [
@@ -325,8 +324,8 @@ export default {
         },
         getExamId(result) {
             //todo：需要修改
-            if (result.ok) {
-                return result.json().id
+            if (!this.mock) {
+                return result.id
             } else {
                 return "Q01_test"
             }
@@ -334,20 +333,22 @@ export default {
         async postExam() {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回paperId
-            const url = `${API_URL}`
+            const url = `${API_URL}?examId=${this.exam.id}`
+            this.getExamInfo()
             let result = await fetch(url, {
-                method: 'post',
-                body: JSON.stringify(this.paper),
+                method: 'put',
+                body: JSON.stringify(this.exam),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(this.paper)
+            console.log(this.exam)
             console.log(result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，试卷ID: ${this.getExamId(result)}`, {
+            // if (this.showTest || result.ok) { //THIS
+            if(result.ok){//DELETE
+                this.$toast.success(`提交成功，试卷ID: ${this.getExamId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
@@ -358,6 +359,9 @@ export default {
                     // position:"bottom"
                 })
             }
+        },
+        getExamInfo(){
+            this.exam.userId = this.userId
         },
         goBack(){
             this.$router.go(-1)
@@ -410,11 +414,21 @@ export default {
         // watchResult(stuId) {// to change
         //     this.$router.push({ name: 'Watch Result Student', params: { eId: this.exam.id, sId: stuId} })
         // }
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "testUser"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
     },
     mounted() {
         this.getExam()
         this.getPapers()
         this.getStudents()
+    },
+    created(){
+        this.getUserInfo()
     }
 }
 

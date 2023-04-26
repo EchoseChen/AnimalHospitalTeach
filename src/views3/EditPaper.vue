@@ -133,7 +133,7 @@
         <div class="col-1"></div>
 
     </div>
-    <div>
+    <div v-if="showTest">
         <pre>{{ paper }}</pre>
     </div>
 </template>
@@ -142,12 +142,14 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/paper`
 
 export default {
     data() {
         return {
+            userId:'',
             hours: [],
             mins: [],
             questions: [],//所有可选的题目信息
@@ -170,7 +172,8 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            showTest: false,//打印测试信息
+            mock:false,//模拟HTTP
         }
     },
     components: {
@@ -184,12 +187,12 @@ export default {
             console.log(this.$route.params);//打印结果为{user:'david'}
             const url = `${API_URL}?paperId=${id}`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.paper = await (await fetch(url)).json()
                 console.log("paper", this.paper)
             }
             /* mock */
-            if (this.showTest) {
+            if (this.mock) {
                 this.paper = {
                     "id":id,
                     "name": "数学考试1",
@@ -285,14 +288,14 @@ export default {
             }
         },
         async getQuestions() {
-            const url = `${API_URL}/`
+            const url = `/api/question/`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.questions = await (await fetch(url)).json()
                 console.log("questions", this.questions)
             }
             /* mock */
-            if (this.showTest) {
+            if (this.mock) {
                 this.questions = [
                     {
                         "id": "q01",
@@ -374,12 +377,16 @@ export default {
             }
             console.log(this.questions)
         },
+        getPaperInfo(){
+            this.paper.userId = this.userId
+        },
         async postPaper() {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回paperId
-            const url = `${API_URL}`
+            const url = `${API_URL}?paperId=${this.paper.id}`
+            this.getPaperInfo()
             let result = await fetch(url, {
-                method: 'post',
+                method: 'put',
                 body: JSON.stringify(this.paper),
                 headers: {
                     'Content-Type': 'application/json'
@@ -389,8 +396,9 @@ export default {
             console.log(result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，试卷ID: ${this.getPaperId(result)}`, {
+            // if (this.showTest || result.ok) { //THIS
+            if(result.ok){ //DELETE
+                this.$toast.success(`提交成功，试卷ID: ${this.getPaperId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
@@ -400,6 +408,13 @@ export default {
                     duration: 4000,
                     // position:"bottom"
                 })
+            }
+        },
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "testUser"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
             }
         },
         addQuestion() {//新增试题
@@ -445,8 +460,8 @@ export default {
         },
         getPaperId(result) {
             //todo：需要修改
-            if (result.ok) {
-                return result.json().id
+            if (!this.mock) {
+                return result.id
             } else {
                 return "Q01_test"
             }
@@ -462,10 +477,10 @@ export default {
             }
         },
         isRightAnswer(id, idx) {
-            if (this.questions[idx].type == 'single') {
-                return id == this.questions[idx].answer
-            } else if (this.questions[idx].type == 'multiple' || this.questions[idx].type == 'short') {
-                return this.questions[idx].answer.indexOf(id) >= 0
+            if (this.paper.questions[idx].type == 'single') {
+                return id == this.paper.questions[idx].answer
+            } else if (this.paper.questions[idx].type == 'multiple' || this.paper.questions[idx].type == 'short') {
+                return this.paper.questions[idx].answer.indexOf(id) >= 0
             } else {
                 return false
             }
@@ -481,59 +496,62 @@ export default {
         },
         getUScore(idx) {//提交试卷的时候调用//used
             //todo:还没调用
-            this.questions[idx].status = 'done'
-            if (this.questions[idx].type == 'single') {
-                this.questions[idx].uScore = this.questions[idx].uAnswer == this.questions[idx].answer ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'multiple') {
-                this.questions[idx].uScore = this.isEqual(this.questions[idx].answer, this.questions[idx].uAnswer) ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'short') {
-                this.questions[idx].uScore = this.questions[idx].answer.indexOf(this.questions[idx].uAnswer) >= 0 ? this.questions[idx].score : 0
+            this.paper.questions[idx].status = 'done'
+            if (this.paper.questions[idx].type == 'single') {
+                this.paper.questions[idx].uScore = this.paper.questions[idx].uAnswer == this.paper.questions[idx].answer ? this.paper.questions[idx].score : 0
+            } else if (this.paper.questions[idx].type == 'multiple') {
+                this.paper.questions[idx].uScore = this.isEqual(this.paper.questions[idx].answer, this.paper.questions[idx].uAnswer) ? this.paper.questions[idx].score : 0
+            } else if (this.paper.questions[idx].type == 'short') {
+                this.paper.questions[idx].uScore = this.paper.questions[idx].answer.indexOf(this.paper.questions[idx].uAnswer) >= 0 ? this.paper.questions[idx].score : 0
             } else {
-                this.questions[idx].uScore = ''
-                this.questions[idx].status = 'todo'
+                this.paper.questions[idx].uScore = ''
+                this.paper.questions[idx].status = 'todo'
             }
         },
         correct(idx) {
-            if (this.questions[idx].status == 'done') {
-                return this.questions[idx].uScore == this.questions[idx].score
+            if (this.paper.questions[idx].status == 'done') {
+                return this.paper.questions[idx].uScore == this.paper.questions[idx].score
             }
             return false
         },
         wrong(idx) {
-            if (this.questions[idx].status == 'done') {
-                return this.questions[idx].uScore != this.questions[idx].score
+            if (this.paper.questions[idx].status == 'done') {
+                return this.paper.questions[idx].uScore != this.paper.questions[idx].score
 
             }
             return false
         },
         waiting(idx) {
-            return this.questions[idx].status == 'todo'
+            return this.paper.questions[idx].status == 'todo'
         },
         select(idx) {
-            return this.questions[idx].type == 'single' || this.questions[idx].type == 'multiple'
+            return this.paper.questions[idx].type == 'single' || this.paper.questions[idx].type == 'multiple'
         },
         multiple(idx) {
-            return this.questions[idx].type == 'multiple'
+            return this.paper.questions[idx].type == 'multiple'
         },
         single(idx) {
-            return this.questions[idx].type == 'single'
+            return this.paper.questions[idx].type == 'single'
         },
         short(idx) {
-            return this.questions[idx].type == 'short'
+            return this.paper.questions[idx].type == 'short'
         },
         long(idx) {
-            return this.questions[idx].type == 'long'
+            return this.paper.questions[idx].type == 'long'
         },
         undo(idx) {
-            return this.questions[idx].status == 'undo'
+            return this.paper.questions[idx].status == 'undo'
         },
         todo(idx) {
             return this.questions[idx].status == 'todo'
         },
     },
     mounted() {
-        this.getPaper()
         this.init('p')
+    },
+    created(){
+        this.getUserInfo()
+        this.getPaper()
         this.getQuestions()
     }
 }

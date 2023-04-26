@@ -25,9 +25,10 @@
                     <h6>{{ paper.name }}</h6>
                     <div class="col">
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.id }}</argon-badge>
-                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.num }}道题</argon-badge>
-                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.time.hours }} 小时 {{
+                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.questions.length }}道题</argon-badge>
+                        <argon-badge v-if="paper.time.mins>0" color='success me-1' size="sm" variant='gradient'>{{ paper.time.hours }} 小时 {{
                             paper.time.mins }} 分钟</argon-badge>
+                        <argon-badge v-else color='success me-1' size="sm" variant='gradient'>{{ paper.time.hours }} 小时 0 分钟</argon-badge>
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ paper.permission }}</argon-badge>
                     </div>
                 </div>
@@ -98,14 +99,15 @@ export default {
             paper: {
                 id: 'e1',
                 name: '数学试卷',
-                num: 4,
+                // num: 4,
                 permission: 'public',
                 checked: false
             },
             papers: [
             ],
             forCheck: false,//选试卷用的
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            mock:false,//模拟HTTP请求
         }
     },
     components: {
@@ -116,15 +118,16 @@ export default {
     },
     methods: {
         async getPapers() {
-            if (!this.showTest) {
+            if (!this.mock) {
                 const url = `${API_URL}/`
                 this.papers = await (await fetch(url)).json()
             }
-            if (this.showTest) {
+            if (this.mock) {
                 this.papers = [{
                     id: 'p1',
                     name: '数学试卷',
-                    num: 3,//可能要改
+                    // num: 3,//可能要改
+                    questions:[{},{},{}],
                     permission: 'public',
                     time: {
                         hours: 2,
@@ -135,7 +138,8 @@ export default {
                 {
                     id: 'p2',
                     name: '语文试卷',
-                    num: 5,//可能要改
+                    // num: 5,//可能要改
+                    questions:[{},{},{},{},{}],
                     permission: 'public',
                     time: {
                         hours: 1,
@@ -146,7 +150,8 @@ export default {
                 {
                     id: 'p3',
                     name: '英语试卷',
-                    num: 7,//可能要改
+                    // num: 7,//可能要改
+                    questions:[{},{},{},{},{},{},{}],
                     permission: 'public',
                     time: {
                         hours: 3,
@@ -163,7 +168,12 @@ export default {
         },
         myWatch(index) {
             //todo: 跳转到试卷详细信息页
-            this.$router.push({ name: 'Watch Paper', params: { id: this.papers[index].id } })
+            // this.$router.push({ name: 'Watch Paper', params: { id: this.papers[index].id } })
+            let id = this.papers[index].id
+            // this.$router.push({
+            //     path:(`/watch-paper/${id}`)
+            // })
+            this.$router.push(`/watch-paper/${id}`)
         },
         async myDelete() {
             //todo:HTTP Delete Test
@@ -175,12 +185,14 @@ export default {
                 method: 'delete',
             })
             console.log(result)
-            if (this.showTest || result.ok) { //showTest状态默认都是成功的
+            // if (this.showTest || result.ok) { //showTest状态默认都是成功的 //THIS
+            if(result.ok){//DELETE
                 // this.showAlert = 1
                 this.$toast.success(`${p.id}删除成功`, {
                     duration: 4000,
                     // position:"top",
                 })
+                this.$router.go(0)
                 if(this.showTest){
                     this.papers = this.papers.filter((paper)=>paper.id!=p.id)
                 }
@@ -195,7 +207,9 @@ export default {
         },
         myEdit(index) {
             //todo：跳转到试卷信息修改页
-            this.$router.push({ name: 'Edit Paper', params: { id: this.papers[index].id } })
+            // this.$router.push({ name: 'Edit Paper', params: { id: this.papers[index].id } })
+            let id = this.papers[index].id
+            this.$router.push(`/edit-paper/${id}`)
         },
         checkPaper() {
             //todo: 选择paper

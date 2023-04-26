@@ -21,7 +21,7 @@
                     <h6>{{ exam.name }}</h6>
                     <div class="col">
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.id }}</argon-badge>
-                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.ddl }} DDL</argon-badge>
+                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.ddl.date }} {{exam.ddl.time}} DDL</argon-badge>
                         <argon-badge v-if="exam.status == 'done'" color='primary me-1' size="sm"
                             variant='gradient'>已结束</argon-badge>
                         <argon-badge v-if="exam.status == 'todo'" color='success me-1' size="sm"
@@ -92,7 +92,8 @@ export default {
             },
             exams: [
             ],
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            mock:false,//HTTP TEST
         }
     },
     components: {
@@ -102,11 +103,10 @@ export default {
     },
     methods: {
         async getExams() {
-            if (!this.showTest) {
+            if (!this.mock) {
                 const url = `${API_URL}/`
                 this.exams = await (await fetch(url)).json()
-            }
-            if (this.showTest) {
+            }else{
                 this.exams = [
                     {
                         id: 'e1',
@@ -135,7 +135,8 @@ export default {
         },
         myWatch(id) {
             //todo: 跳转到试卷详细信息页
-            this.$router.push({ name: 'Watch Exam', params: { id: id } })
+            // this.$router.push({ name: 'Watch Exam', params: { id: id } })
+            this.$router.push(`/watch-exam/${id}`)
         },
         async myDelete(id) {
             //todo:HTTP Delete Test
@@ -146,11 +147,13 @@ export default {
                 method: 'delete',
             })
             console.log(result)
-            if (this.showTest || result.ok) { //showTest状态默认都是成功的
+            // if (this.showTest || result.ok) { //showTest状态默认都是成功的 //THIS
+            if(result.ok){//DELETE
                 this.$toast.success(`${id}删除成功`, {
                     duration: 4000,
                     // position:"top",
                 })
+                this.$router.go(0)
                 if(this.showTest){
                     this.exams = this.exams.filter((e)=>e.id!=id)
                 }      
@@ -165,6 +168,7 @@ export default {
         myEdit(id) {
             //todo：跳转到试卷信息修改页
             this.$router.push({ name: 'Edit Exam', params: { id: id } })
+            this.$router.push(`/edit-exam/${id}`)
         },
         checkDelete(id) {
             this.showModal = true

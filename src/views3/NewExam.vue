@@ -29,7 +29,7 @@
                                 <div class="col">
                                     <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.paper.id
                                     }}</argon-badge>
-                                    <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.paper.num
+                                    <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.paper.questions.length
                                     }}道题</argon-badge>
                                     <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.paper.time.hours
                                     }} 小时
@@ -148,6 +148,7 @@ import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import Modal from "@/components/Modal.vue";
 import ArgonAvatar from "@/components/ArgonAvatar.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -164,15 +165,24 @@ export default {
             students: [],//用来选考生的
             exam: {
                 name: '第一次考试',
-                begin: {},
-                ddl: {},
+                begin: {
+                    date: '2023-01-01',
+                    time:'08:00'
+                },
+                ddl: {
+                    date: '2023-02-01',
+                    time:'23:00'
+                },
                 paper: {},
                 students: [],
+                userId:''
             },
             showModal: false,
             showPaper: false,
 
-            showTest: true,//打印测试信息
+            userId:'',
+            showTest: false,//打印测试信息
+            mock:false,//HTTP test
         }
     },
     components: {
@@ -185,12 +195,12 @@ export default {
         async getPapers() {
             const url = `/api/paper/`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.papers = await (await fetch(url)).json()
                 console.log("papers", this.papers)
             }
             /* mock */
-            if (this.showTest) {
+            if (this.mock) {
                 this.papers = [{
                     id: 'p1',
                     name: '数学试卷',
@@ -226,12 +236,11 @@ export default {
                 }
                 ]
             }
-            console.log(this.questions)
         },
         async getStudents() {
-            const url = `/api/user/identity?identity=student`
+            const url = `/api/user/identity?identity=student` //THIS
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.students = await (await fetch(url)).json()
             } else {
                 this.students = [
@@ -274,29 +283,34 @@ export default {
         },
         getExamId(result) {
             //todo：需要修改
-            if (result.ok) {
-                return result.json().id
+            if (!this.mock) {
+                return result.id
             } else {
                 return "Q01_test"
             }
+        },
+        getExamInfo(){
+            this.exam.userId = this.userId
         },
         async postExam() {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回paperId
             const url = `${API_URL}`
+            this.getExamInfo()
             let result = await fetch(url, {
                 method: 'post',
-                body: JSON.stringify(this.paper),
+                body: JSON.stringify(this.exam),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log(this.paper)
+            console.log("exam:",this.exam)
             console.log(result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，试卷ID: ${this.getExamId(result)}`, {
+            // if (this.showTest || result.ok) {
+            if(result.ok){
+                this.$toast.success(`提交成功，试卷ID: ${this.getExamId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
@@ -353,11 +367,22 @@ export default {
         watchExam(stuId) {//to change
             this.$router.push({ name: 'Watch Exam', params: { eId: this.exam.id, sId: stuId } })
         },
-
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "testUser"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
     },
     mounted() {
+        // this.getPapers()
+        // this.getStudents()
+    },
+    created(){
         this.getPapers()
         this.getStudents()
+        this.getUserInfo()
     }
 }
 

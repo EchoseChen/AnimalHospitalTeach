@@ -113,6 +113,7 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -139,7 +140,9 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            userId:'',
+            showTest: false,//打印测试信息
+            mock:false,//HTTP Test
         }
     },
     components: {
@@ -151,19 +154,17 @@ export default {
         async getExam() {
             this.examId = this.$route.params ? this.$route.params.id : "e01";//exam
             console.log("params: ", this.$route.params);//打印结果为{user:'david'}
-            const url = `${API_URL}?examId=${this.examId}`
+            const url = `${API_URL}/paper?examId=${this.examId}`
 
-            if (!this.showTest) {
+            if (!this.mock) {
                 this.exam = await (await fetch(url)).json()
                 console.log("exam", this.exam)
-            }
-            /* mock */
-            if (this.showTest) {
+            }else{
                 this.exam = {
                     id: this.examId,
                     name: "第一次考试",
-                    status: "undo",
-                    ddl: "2023/05/01 23:59:00",
+                    // status: "undo",
+                    // ddl: "2023/05/01 23:59:00",
                     paper: {
                         "id": "p01",
                         "name": "数学考试1",
@@ -270,8 +271,8 @@ export default {
         async postResult() {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回resultId
-            const url = `${API_URL}/question` //URL不对
-            this.exam.student = "s01"//to change，从全局拿id
+            const url = `/api/result`
+            this.getExamResult()
             let result = await fetch(url, {
                 method: 'post',
                 body: JSON.stringify(this.exam),
@@ -283,12 +284,13 @@ export default {
             console.log("POST result:", result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
-                this.$toast.success(`提交成功，答卷ID: ${this.getResultId(result)}`, {
+            // if (this.showTest || result.ok) { //THIS
+            if(result.ok){//DELETE
+                this.$toast.success(`提交成功，答卷ID: ${this.getResultId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
                 })
-                this.$router.push('/my-exams-student')
+                this.$router.push(`/watch-result-student/${this.examId}`)
             } else {
                 this.$toast.error("提交失败", {
                     duration: 4000,
@@ -296,8 +298,48 @@ export default {
                 })
             }
         },
+        getExamStatus(){
+            if(this.exam.paper.questions.filter((q)=> q.status=='done').length!=this.exam.paper.questions.length){
+                return 'todo'
+            }else{
+                return 'done'
+            }
+        },
+        getExamScore(){
+            // let sum = 0
+            // for(let i=0;i<this.exam.paper.questions.length;i++){
+            //     if(this.exam.paper.questions[i].uScore){
+            //         sum+=this.exam.paper.questions[i].uScore
+            //     }
+            // }
+            // return sum
+
+            return this.exam.paper.questions.reduce((total,q) => q.uScore ? total += q.uScore : total+=0, 0)
+        },
+        getExamResult(){
+            for(let i=0;i<this.exam.paper.questions.length;i++){
+                if(this.exam.paper.questions[i].status==null){
+                    if(this.exam.paper.questions[i].type == 'long'){
+                        this.exam.paper.questions[i].status = 'todo'
+                    }else{
+                        this.exam.paper.questions[i].status = 'done'
+                    }
+                    this.exam.paper.questions[i].uScore = 0
+                }
+            }
+            this.exam.examId = this.examId
+            this.exam.studentId = this.userId
+            this.exam.status = this.getExamStatus()
+            this.exam.score = this.getExamScore()
+            let now = this.timeFormate(new Date()).split(" ")
+            this.exam.submitTime = {
+                date: now[0],
+                time: now[1]
+            }
+            this.exam.current = this.timeFormate(new Date())
+        },
         getResultId(result){//todo
-            if(this.showTest){
+            if(this.mock){
                 return "e01"
             }else{
                 return result.id
@@ -404,8 +446,25 @@ export default {
         todo(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
         },
+        getUserInfo(){
+            if(this.showTest){
+                this.userId = "321@163.com"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
+        timeFormate(timeStamp) {
+            let year = new Date(timeStamp).getFullYear();
+            let month = new Date(timeStamp).getMonth() + 1 < 10 ? "0" + (new Date(timeStamp).getMonth() + 1) : new Date(timeStamp).getMonth() + 1;
+            let day = new Date(timeStamp).getDate() < 10 ? "0" + new Date(timeStamp).getDate() : new Date(timeStamp).getDate();
+            let hh = new Date(timeStamp).getHours() < 10 ? "0" + new Date(timeStamp).getHours() : new Date(timeStamp).getHours();
+            let mm = new Date(timeStamp).getMinutes() < 10 ? "0" + new Date(timeStamp).getMinutes() : new Date(timeStamp).getMinutes();
+            let ss = new Date(timeStamp).getSeconds() < 10 ? "0" + new Date(timeStamp).getSeconds() : new Date(timeStamp).getSeconds();
+            return year + "-" + month + "-" + day + " "+ hh + ":" + mm + ':' + ss;
+        },
     },
     created() {
+        this.getUserInfo()
         this.getExam()
         this.init('e')
     }

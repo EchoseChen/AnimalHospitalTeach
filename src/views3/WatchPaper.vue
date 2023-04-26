@@ -1,4 +1,5 @@
 <template>
+    <!-- <div v-for="(paper, index) in papers" :key="index" class="row"> -->
     <div class="row">
         <div class="col-1"></div>
         <div class="col">
@@ -7,11 +8,13 @@
                 <div class="row mt-3 ms-2">
                     <div class="col-6 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">时长</argon-badge>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{paper.time.hours}} 小时 {{paper.time.mins}} 分钟</argon-badge>
+                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{ paper.time.hours }} 小时
+                            {{ paper.time.mins }} 分钟</argon-badge>
                     </div>
                     <div class="col-6">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">权限</argon-badge>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{paper.permission}}</argon-badge>
+                        <argon-badge class="ms-1 me-3" size="md" color="success"
+                            variant="gradient">{{ paper.permission }}</argon-badge>
                     </div>
                 </div>
                 <div class="mt-3">
@@ -114,6 +117,7 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+// import { toRaw  } from "vue";
 
 const API_URL = `/api/paper`
 
@@ -126,14 +130,19 @@ export default {
             qId: '',//选择题目
             qScore: '',//设置分数
             paper: {
-                name: '',
-                time: {
-                    hours: null,
-                    mins: null,
-                },
-                permission: '',
-                userId: '',
-                questions: []
+                // name: '',
+                // time: {
+                //     hours: '',
+                //     mins: '',
+                // },
+                // permission: '',
+                // userId: '',
+                // questions: [{
+                //     id:'',
+                //     type:'',
+                //     category:'',
+                //     disease:'',
+                // }]
             },
             //status: 'undo',//完成考试状态'undo','todo','done'
             isActive: false,//如果是交互的则为true，否则为false.[只有学生操作是true,老师编辑试卷、批改试卷，学生查看试卷都是false]
@@ -142,7 +151,8 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            showTest: false,//打印测试信息
+            mock: false,//用来HTTP测试
         }
     },
     components: {
@@ -152,18 +162,19 @@ export default {
     },
     methods: {
         async getPaper() {
-            const id=this.$route.params.id;
+            const id = this.$route.params.id;
             console.log(this.$route.params);//打印结果为{user:'david'}
             const url = `${API_URL}?paperId=${id}`
+            // const url = `${API_URL}/`
 
-            if (!this.showTest) {
-                this.questions = await (await fetch(url)).json()
-                console.log("paper", this.paper)
+            if (!this.mock) {
+                this.paper =  await (await fetch(url)).json()
+                console.log(this.paper)                
             }
             /* mock */
-            if (this.showTest) {
+            if (this.mock) {
                 this.paper = {
-                    "id":id,
+                    "id": id,
                     "name": "数学考试1",
                     "time": {
                         "hours": "2",
@@ -256,96 +267,6 @@ export default {
                 }
             }
         },
-        async getQuestions() {
-            const url = `${API_URL}/`
-
-            if (!this.showTest) {
-                this.questions = await (await fetch(url)).json()
-                console.log("questions", this.questions)
-            }
-            /* mock */
-            if (this.showTest) {
-                this.questions = [
-                    {
-                        "id": "q01",
-                        "stem": "1+1=",
-                        "options": [
-                            {
-                                "id": 1,
-                                "content": "1"
-                            },
-                            {
-                                "id": 2,
-                                "content": "2"
-                            },
-                            {
-                                "id": 3,
-                                "content": "3"
-                            }
-                        ],
-                        "answer": 2,
-                        "type": "single",
-                        "category": "A",
-                        "disease": "A1",
-                        "analysis": "1+1=2"
-                    },
-                    {
-                        id: 'q02',
-                        "stem": "1+2=",
-                        "options": [
-                            {
-                                "id": 1,
-                                "content": "1"
-                            },
-                            {
-                                "id": 2,
-                                "content": "three"
-                            },
-                            {
-                                "id": 3,
-                                "content": "3"
-                            },
-                            {
-                                "id": 4,
-                                "content": "4"
-                            }
-                        ],
-                        "answer": [
-                            2,
-                            3
-                        ],
-                        "type": "multiple",
-                        "category": "B",
-                        "disease": "B2",
-                        "analysis": "1+2=3"
-                    },
-                    {
-                        'id': 'q05',
-                        "stem": "1+4=",
-                        "options": [],
-                        "answer": [
-                            "5",
-                            "五"
-                        ],
-                        "type": "short",
-                        "category": "C",
-                        "disease": "C1",
-                        "analysis": "1+4=5"
-                    },
-                    {
-                        id: 'q04',
-                        "stem": "1+23=",
-                        "options": [],
-                        "answer": "",
-                        "type": "long",
-                        "category": "D",
-                        "disease": "D2",
-                        "analysis": "1+23=24"
-                    }
-                ]
-            }
-            console.log(this.questions)
-        },
         init(mode) {
             switch (mode) {
                 case 't'://test 测试
@@ -387,7 +308,7 @@ export default {
                 return "Q01_test"
             }
         },
-        goBack(){
+        goBack() {
             this.$router.back()
         },
         showHidden(idx) {
@@ -398,10 +319,10 @@ export default {
             }
         },
         isRightAnswer(id, idx) {
-            if (this.questions[idx].type == 'single') {
-                return id == this.questions[idx].answer
-            } else if (this.questions[idx].type == 'multiple' || this.questions[idx].type == 'short') {
-                return this.questions[idx].answer.indexOf(id) >= 0
+            if (this.paper.questions[idx].type == 'single') {
+                return id == this.paper.questions[idx].answer
+            } else if (this.paper.questions[idx].type == 'multiple' || this.paper.questions[idx].type == 'short') {
+                return this.paper.questions[idx].answer.indexOf(id) >= 0
             } else {
                 return false
             }
@@ -417,60 +338,62 @@ export default {
         },
         getUScore(idx) {//提交试卷的时候调用//used
             //todo:还没调用
-            this.questions[idx].status = 'done'
-            if (this.questions[idx].type == 'single') {
-                this.questions[idx].uScore = this.questions[idx].uAnswer == this.questions[idx].answer ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'multiple') {
-                this.questions[idx].uScore = this.isEqual(this.questions[idx].answer, this.questions[idx].uAnswer) ? this.questions[idx].score : 0
-            } else if (this.questions[idx].type == 'short') {
-                this.questions[idx].uScore = this.questions[idx].answer.indexOf(this.questions[idx].uAnswer) >= 0 ? this.questions[idx].score : 0
+            this.paper.questions[idx].status = 'done'
+            if (this.paper.questions[idx].type == 'single') {
+                this.paper.questions[idx].uScore = this.paper.questions[idx].uAnswer == this.paper.questions[idx].answer ? this.paper.questions[idx].score : 0
+            } else if (this.paper.questions[idx].type == 'multiple') {
+                this.paper.questions[idx].uScore = this.isEqual(this.paper.questions[idx].answer, this.paper.questions[idx].uAnswer) ? this.paper.questions[idx].score : 0
+            } else if (this.paper.questions[idx].type == 'short') {
+                this.paper.questions[idx].uScore = this.paper.questions[idx].answer.indexOf(this.paper.questions[idx].uAnswer) >= 0 ? this.paper.questions[idx].score : 0
             } else {
-                this.questions[idx].uScore = ''
-                this.questions[idx].status = 'todo'
+                this.paper.questions[idx].uScore = ''
+                this.paper.questions[idx].status = 'todo'
             }
         },
         correct(idx) {
-            if (this.questions[idx].status == 'done') {
-                return this.questions[idx].uScore == this.questions[idx].score
+            if (this.paper.questions[idx].status == 'done') {
+                return this.paper.questions[idx].uScore == this.paper.questions[idx].score
             }
             return false
         },
         wrong(idx) {
-            if (this.questions[idx].status == 'done') {
-                return this.questions[idx].uScore != this.questions[idx].score
+            if (this.paper.questions[idx].status == 'done') {
+                return this.paper.questions[idx].uScore != this.paper.questions[idx].score
 
             }
             return false
         },
         waiting(idx) {
-            return this.questions[idx].status == 'todo'
+            return this.paper.questions[idx].status == 'todo'
         },
         select(idx) {
-            return this.questions[idx].type == 'single' || this.questions[idx].type == 'multiple'
+            return this.paper.questions[idx].type == 'single' || this.paper.questions[idx].type == 'multiple'
         },
         multiple(idx) {
-            return this.questions[idx].type == 'multiple'
+            return this.paper.questions[idx].type == 'multiple'
         },
         single(idx) {
-            return this.questions[idx].type == 'single'
+            return this.paper.questions[idx].type == 'single'
         },
         short(idx) {
-            return this.questions[idx].type == 'short'
+            return this.paper.questions[idx].type == 'short'
         },
         long(idx) {
-            return this.questions[idx].type == 'long'
+            return this.paper.questions[idx].type == 'long'
         },
         undo(idx) {
-            return this.questions[idx].status == 'undo'
+            return this.paper.questions[idx].status == 'undo'
         },
         todo(idx) {
-            return this.questions[idx].status == 'todo'
+            return this.paper.questions[idx].status == 'todo'
         },
     },
     mounted() {
-        this.getPaper()
+        // this.getPaper()
         this.init('p')
-        this.getQuestions()
+    },
+    created(){
+        this.getPaper()
     }
 }
 

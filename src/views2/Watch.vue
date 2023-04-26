@@ -94,7 +94,7 @@ export default {
             // forCheck: false,//是否支持选择；可能需要改checkbox绑定
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            showTest: false, //用来看Test结果的，正式发布的时候设置为false
         }
     },
     components: {

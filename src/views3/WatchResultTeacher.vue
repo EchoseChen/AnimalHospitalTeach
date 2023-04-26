@@ -5,16 +5,12 @@
             <div class="card p-4">
                 <h2 class="ms-3">{{ exam.name }}</h2>
                 <div class="row mt-3 ms-2">
-                    <div class="col-3 align-items-center">
+                    <!-- <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">考生</argon-badge>
                         <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">
-                            {{ exam.student.username }}</argon-badge>
-                    </div>
-                    <div class="col-3 align-items-center">
-                        <argon-badge class="me-3" size="md" color="info" variant="gradient">分数</argon-badge>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">
-                            {{ getTotalUScore() }}分</argon-badge>
-                    </div>
+                            {{ exam.studentname }}</argon-badge>
+                    </div> -->
+
                     <!-- <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">时长</argon-badge>
                         <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{
@@ -22,13 +18,23 @@
                     </div> -->
                     <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">状态</argon-badge>
-                        <argon-badge v-if="exam.status == 'todo'" class="ms-1 me-3" size="md" color="warning"
+                        <argon-badge v-if="getExamStatus() == 'todo'" class="ms-1 me-3" size="md" color="warning"
                             variant="gradient">待审批</argon-badge>
-                        <argon-badge v-if="exam.status == 'done'" class="ms-1 me-3" size="md" color="success"
+                        <argon-badge v-if="getExamStatus() == 'done'" class="ms-1 me-3" size="md" color="success"
                             variant="gradient">已完成</argon-badge>
-                        <argon-badge v-if="exam.status == 'undo'" class="ms-1 me-3" size="md" color="danger"
+                        <argon-badge v-if="getExamStatus() == 'undo'" class="ms-1 me-3" size="md" color="danger"
                             variant="gradient">未完成</argon-badge>
-
+                    </div>
+                    <div class="col-3 align-items-center">
+                        <argon-badge class="me-3" size="md" color="info" variant="gradient">分数</argon-badge>
+                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">
+                            {{ getTotalUScore() }}分</argon-badge>
+                    </div>
+                    <div class="col align-items-center">
+                        <argon-badge class="me-3" size="md" color="info" variant="gradient">提交时间</argon-badge>
+                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.submitTime.date
+                        }}
+                            {{ exam.submitTime.time }}</argon-badge>
                     </div>
                 </div>
                 <div class="mt-3">
@@ -43,6 +49,8 @@
                                             variant="gradient">正确</argon-badge>
                                         <argon-badge v-if="wrong(idx)" class="col-12" color="danger"
                                             variant="gradient">错误</argon-badge>
+                                        <argon-badge v-if="unfinished(idx)" class="col-12" color="danger"
+                                            variant="gradient">未作答</argon-badge>
                                     </div>
                                     <div class="col"></div>
                                     <div v-if="editUScore" class="col-4 text-end">
@@ -134,20 +142,22 @@
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 
-const API_URL = `/api/exam`
+const API_URL = `/api/result`
 
 export default {
     data() {
         return {
             exam: {},
             examId: '',
+            studentId: '',
             //status: 'undo',//完成考试状态'undo','todo','done'
             isActive: false,//如果是交互的则为true，否则为false.[只有学生操作是true,老师编辑试卷、批改试卷，学生查看试卷都是false]
             isResult: false,//用来展示题目的正状态：正确、错误、待评审
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            showTest: false,//打印测试信息
+            mock: false,//HTTP TEST
         }
     },
     components: {
@@ -157,21 +167,40 @@ export default {
     },
     methods: {
         async getExam() {
-            this.examId = this.$route.params ? this.$route.params.eId : "e01";//exam
+            this.examId = this.$route.params ? this.$route.params.eId : "e01" //exam
+            this.studentId = this.$route.params ? this.$route.params.sId : "s01" //student
             console.log("params: ", this.$route.params);//打印结果为{user:'david'}
-            const url = `${API_URL}?examId=${this.examId}`
+            console.log("examId:", this.examId)
+            console.log("studentId:", this.studentId)
+            const url = `${API_URL}/latest?examId=${this.examId}&studentId=${this.studentId}`
+            if (!this.mock) {
 
-            if (!this.showTest) {
-                this.exam = await (await fetch(url)).json()
-                console.log("exam", this.exam)
-            }
-            /* mock */
-            if (this.showTest) {
+                let result = await fetch(url)
+                console.log(result.status)
+                if (result.status == '404') {
+                    console.log("true")
+                    this.$toast.error(`学生尚未参与考试`, {
+                        duration: 4000,
+                        // position:"bottom"
+                    })
+                    this.$nextTick(()=>{
+                        // this.$router.push('/my-exams-teacher')
+                        this.$router.go(-1) 
+                        this.$router.go(0)
+
+                    })
+                } else {
+                    this.exam = await (result).json()
+                    console.log("exam", this.exam)
+                }
+
+
+            } else {
                 this.exam = {
                     "id": "e1",
                     "name": "第一次考试",
                     "status": "todo",
-                    "score":10,
+                    "score": 10,
                     "ddl": {
                         date: '2023-09-02',
                         time: '23:00'
@@ -288,8 +317,8 @@ export default {
                         ]
                     },
                     "student": {
-                        username:"Tom",
-                        userId:"s09"
+                        username: "Tom",
+                        userId: "s09"
                     }
                 }
                 console.log(this.exam)
@@ -299,21 +328,23 @@ export default {
             /*todo:HTTP POST Test*/
             //是不是应该给我返回resultId
             const url = `${API_URL}` //URL不对
-            this.exam.student = "s01"//to change，从全局拿id
-            this.exam.score = this.getTotalUScore()
-            this.exam.status = this.exam.paper.questions.filter((q)=>q.status=='todo').length ? 'todo' : 'done'
+            // this.exam.student = "s01"//to change，从全局拿id
+            // this.exam.score = this.getTotalUScore()
+            // this.exam.status = this.exam.paper.questions.filter((q)=>q.status=='todo').length ? 'todo' : 'done'
+            this.getExamResult()
             let result = await fetch(url, {
-                method: 'post',
+                method: 'put',
                 body: JSON.stringify(this.exam),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            console.log("POST, exam:", this.exam)
-            console.log("POST result:", result)
+            console.log("PUT exam:", this.exam)
+            console.log("PUT result:", result)
 
             /* showTest=true，默认HTTP请求都成功了 */
-            if (this.showTest || result.ok) {
+            // if (this.showTest || result.ok) {//THIS
+            if (result.ok) {//DELETE
                 this.$toast.success(`提交成功`, {
                     duration: 4000,
                     // position:"bottom"
@@ -325,6 +356,43 @@ export default {
                     // position:"bottom"
                 })
             }
+        },
+        getExamResult() {
+            for (let i = 0; i < this.exam.paper.questions.length; i++) {
+                if (!this.exam.paper.questions[i].status) {
+                    this.exam.paper.questions[i].status = 'undo'
+                    this.exam.paper.questions[i].uScore = 0
+                }
+            }
+            this.exam.examId = this.examId
+            this.exam.studentId = this.studentId
+            this.exam.status = this.getExamStatus()
+            this.exam.score = this.getExamScore()
+            // this.exam.score = this.getTotalUScore()
+            // let now = this.timeFormate(new Date()).split(" ")
+            // this.exam.submitTime = {
+            //     date: now[0],
+            //     time: now[1]
+            // }
+            this.exam.current = this.timeFormate(new Date())
+        },
+        getExamStatus() {
+            if (this.exam.paper.questions.filter((q) => q.status == 'done').length != this.exam.paper.questions.length) {
+                return 'todo'
+            } else {
+                return 'done'
+            }
+        },
+        getExamScore() {//可以改
+            let sum = 0
+            for (let i = 0; i < this.exam.paper.questions.length; i++) {
+                if (this.exam.paper.questions[i].uScore * 1) {
+                    sum += this.exam.paper.questions[i].uScore * 1
+                }
+            }
+            return sum
+            // return this.exam.paper.questions.reduce((total,q) => q.uScore ? total += q.uScore : total+=0, 0)
+            // return this.exam.paper.questions.reduce((total,q) => total += q.uScore*1, 0)
         },
         init(mode) {
             switch (mode) {
@@ -393,8 +461,8 @@ export default {
                 this.exam.paper.questions[idx].status = 'todo'
             }
         },
-        getTotalUScore(){
-            return this.exam.paper.questions.reduce((total,q)=>total+=q.uScore*1,0)
+        getTotalUScore() {
+            return this.exam.paper.questions.reduce((total, q) => total += q.uScore * 1, 0)
         },
         correct(idx) {
             if (this.exam.paper.questions[idx].status == 'done') {
@@ -411,6 +479,9 @@ export default {
         },
         waiting(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
+        },
+        unfinished(idx) {
+            return !(this.correct(idx) || this.wrong(idx) || this.waiting(idx))
         },
         select(idx) {
             return this.exam.paper.questions[idx].type == 'single' || this.exam.paper.questions[idx].type == 'multiple'
@@ -432,6 +503,15 @@ export default {
         },
         todo(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
+        },
+        timeFormate(timeStamp) {
+            let year = new Date(timeStamp).getFullYear();
+            let month = new Date(timeStamp).getMonth() + 1 < 10 ? "0" + (new Date(timeStamp).getMonth() + 1) : new Date(timeStamp).getMonth() + 1;
+            let day = new Date(timeStamp).getDate() < 10 ? "0" + new Date(timeStamp).getDate() : new Date(timeStamp).getDate();
+            let hh = new Date(timeStamp).getHours() < 10 ? "0" + new Date(timeStamp).getHours() : new Date(timeStamp).getHours();
+            let mm = new Date(timeStamp).getMinutes() < 10 ? "0" + new Date(timeStamp).getMinutes() : new Date(timeStamp).getMinutes();
+            let ss = new Date(timeStamp).getSeconds() < 10 ? "0" + new Date(timeStamp).getSeconds() : new Date(timeStamp).getSeconds();
+            return year + "-" + month + "-" + day + " " + hh + ":" + mm + ':' + ss;
         },
     },
     created() {

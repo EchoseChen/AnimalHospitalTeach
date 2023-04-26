@@ -5,14 +5,30 @@
             <div class="card p-4">
                 <h2 class="ms-3">{{ exam.name }}</h2>
                 <div class="row mt-3 ms-2">
-                    <div class="col-6 align-items-center">
+                    <!-- <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">时长</argon-badge>
                         <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.paper.time.hours}} 小时 {{ exam.paper.time.mins }} 分钟</argon-badge>
-                    </div>
-                    <div class="col-6 align-items-center">
+                    </div> -->
+                    <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">状态</argon-badge>
-                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{exam.status}}</argon-badge>
+                        <argon-badge v-if="exam.status == 'done'" class="ms-1 me-3" size="md" color="success"
+                            variant="gradient">已完成</argon-badge>
+                        <argon-badge v-if="exam.status == 'todo'" class="ms-1 me-3" size="md" color="warning"
+                            variant="gradient">待审核</argon-badge>
                     </div>
+                    <div class="col-3 align-items-center">
+                        <argon-badge class="me-3" size="md" color="info" variant="gradient">分数</argon-badge>
+                        <argon-badge v-if="exam.score" class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.score
+                        }}分</argon-badge>
+                        <argon-badge v-else class="ms-1 me-3" size="md" color="success" variant="gradient">0 分</argon-badge>
+                    </div>
+                    <div class="col align-items-center">
+                        <argon-badge class="me-3" size="md" color="info" variant="gradient">提交时间</argon-badge>
+                        <argon-badge class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.submitTime.date
+                        }}
+                            {{ exam.submitTime.time }}</argon-badge>
+                    </div>
+
                 </div>
                 <div class="mt-3">
                     <div v-for="(question, idx) in exam.paper.questions" :key="idx">
@@ -26,6 +42,8 @@
                                             variant="gradient">正确</argon-badge>
                                         <argon-badge v-if="wrong(idx)" class="col-12" color="danger"
                                             variant="gradient">错误</argon-badge>
+                                        <argon-badge v-if ="unfinished(idx)" class="col-12" color="danger"
+                                            variant="gradient">未作答</argon-badge>
                                     </div>
                                     <div class="col"></div>
                                     <div v-if="editUScore" class="col-4 text-end">
@@ -114,13 +132,22 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import { VueElement } from "vue";
 
-const API_URL = `/api/exam`
+const API_URL = `/api/result`
 
 export default {
     data() {
         return {
-            exam: {},
+            exam: {
+                // paper:{
+                //     questions:[
+                //         {
+                //             uAnswer:[]
+                //         }
+                //     ]
+                // }
+            },
             examId: '',
             //status: 'undo',//完成考试状态'undo','todo','done'
             isActive: false,//如果是交互的则为true，否则为false.[只有学生操作是true,老师编辑试卷、批改试卷，学生查看试卷都是false]
@@ -128,7 +155,9 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            showTest: true,//打印测试信息
+            userId: '',
+            showTest: false,//打印测试信息
+            mock: false,
         }
     },
     components: {
@@ -138,16 +167,38 @@ export default {
     },
     methods: {
         async getExam() {
-            this.examId = this.$route.params ? this.$route.params.id : "e01";//exam
+            let examId = this.$route.params ? this.$route.params.id : "e01";//exam
             console.log("params: ", this.$route.params);//打印结果为{user:'david'}
-            const url = `${API_URL}?examId=${this.examId}`
+            let studentId = this.userId
+            console.log("examId:", examId)
+            console.log("studentId:", studentId)
+            const url = `${API_URL}/latest?examId=${examId}&studentId=${studentId}`
 
-            if (!this.showTest) {
-                this.exam = await (await fetch(url)).json()
-                console.log("exam", this.exam)
-            }
-            /* mock */
-            if (this.showTest) {
+            if (!this.mock) {
+                let result = await fetch(url)
+                console.log(result)
+                if (!result.ok) {
+                    this.$toast.error(`尚未参加考试！`, {
+                        duration: 4000,
+                        // position:"bottom"
+                    })
+                    // this.$router.push('/watch-result-student')
+                } else {
+                    let data = await (result).json()
+                    console.log("data", data)
+
+                    // this.exam = await (await fetch(url)).json()
+                    this.exam = data
+                    for (let i = 0; i < data.paper.questions.length; i++) {
+                        if (data.paper.questions[i].type == 'multiple') {
+                            for (let j = 0; j < data.paper.questions[i].uAnswer.length; j++) {
+                                this.exam.paper.questions.uAnswer[j] = data.paper.questions.uAnswer[j]
+                            }
+                        }
+                    }
+                    console.log("exam", this.exam)
+                }
+            } else {
                 this.exam = {
                     "id": "e1",
                     "name": "第一次考试",
@@ -302,8 +353,9 @@ export default {
                     break;
             }
         },
-        goBack(){
-            this.$router.go(-1)
+        goBack() {
+            // this.$router.go(-1)
+            this.$router.push(`/my-exams-student`)
         },
         showHidden(idx) {
             if (this.isActive) {
@@ -358,6 +410,9 @@ export default {
         waiting(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
         },
+        unfinished(idx){
+            return !(this.correct(idx) || this.wrong(idx) || this.waiting(idx))
+        },
         select(idx) {
             return this.exam.paper.questions[idx].type == 'single' || this.exam.paper.questions[idx].type == 'multiple'
         },
@@ -379,10 +434,20 @@ export default {
         todo(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
         },
+        getUserInfo() {
+            if (this.showTest) {
+                this.userId = "321@163.com"
+            } else {
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
+    },
+    mounted() {
+        this.init('r')
     },
     created() {
+        this.getUserInfo()
         this.getExam()
-        this.init('r')
     }
 }
 

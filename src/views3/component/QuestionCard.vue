@@ -100,7 +100,7 @@ export default {
                 analysis: ''
             },
             showAlert: false,
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            showTest: false, //用来看Test结果的，正式发布的时候设置为false
         }
     },
     components: {

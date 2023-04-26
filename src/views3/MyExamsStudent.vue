@@ -16,7 +16,7 @@
                     <h6>{{ exam.name }}</h6>
                     <div class="col">
                         <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.id }}</argon-badge>
-                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.ddl }} DDL</argon-badge>
+                        <argon-badge color='success me-1' size="sm" variant='gradient'>{{ exam.ddl.date }} {{ exam.ddl.time }} DDL</argon-badge>
                         <argon-badge v-if="exam.status == 'done'" color='success me-1' size="sm"
                             variant='gradient'>已完成</argon-badge>
                         <argon-badge v-if="exam.status == 'todo'" color='warning me-1' size="sm"
@@ -40,6 +40,7 @@
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Modal from "@/components/Modal.vue";
+import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -57,7 +58,10 @@ export default {
             exams: [
             ],
             // forCheck: false,//选试卷用的
-            showTest: true, //用来看Test结果的，正式发布的时候设置为false
+            userId:'',//用户ID
+            showTest: false, //用来看Test结果的，正式发布的时候设置为false
+            mock:false,//HTTP TEST
+            // mockUser:true,
         }
     },
     components: {
@@ -68,17 +72,23 @@ export default {
     },
     methods: {
         takeExam(index) {
-            this.$router.push({ name: 'Take Exam', params: { id: this.exams[index].id } })
+            // this.$router.push({ name: 'Take Exam', params: { id: this.exams[index].id } })
+            let id = this.exams[index].id
+            this.$router.push(`/take-exam/${id}`)
         },
         watchResult(index) {
             this.$router.push({ name: 'Watch Result Student', params: { id: this.exams[index].id } })
+
+            let id = this.exams[index].id
+            this.$router.push(`/watch-result-student/${id}`)
         },
         async getExams() {
-            if (!this.showTest) {
-                const url = `${API_URL}/`
+            if (!this.mock) {
+                console.log("uId",this.userId)
+                const url = `${API_URL}/student?userId=${this.userId}`
                 this.exams = await (await fetch(url)).json()
-            }
-            if (this.showTest) {
+                console.log(this.exams)
+            }else{
                 this.exams = [
                     {
                         id: 'e1',
@@ -100,10 +110,20 @@ export default {
                     },
                 ]
             }
-        }
+        },
+        getUserInfo(){
+            if(this.mockUser){
+                this.userId = "321@163.com"
+            }else{
+                this.userId = VueElement.prototype.Email //TEST
+            }
+        },
     },
     mounted() {
         this.getExams()
+    },
+    created(){
+        this.getUserInfo()
     }
 }
 </script>
