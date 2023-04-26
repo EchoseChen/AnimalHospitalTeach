@@ -167,7 +167,7 @@ export default {
         },
         myEdit(id) {
             //todo：跳转到试卷信息修改页
-            this.$router.push({ name: 'Edit Exam', params: { id: id } })
+            // this.$router.push({ name: 'Edit Exam', params: { id: id } })
             this.$router.push(`/edit-exam/${id}`)
         },
         checkDelete(id) {

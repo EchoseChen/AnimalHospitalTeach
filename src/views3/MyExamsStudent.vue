@@ -40,7 +40,6 @@
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Modal from "@/components/Modal.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -76,11 +75,22 @@ export default {
             let id = this.exams[index].id
             this.$router.push(`/take-exam/${id}`)
         },
-        watchResult(index) {
-            this.$router.push({ name: 'Watch Result Student', params: { id: this.exams[index].id } })
-
+        async watchResult(index) {
+            // this.$router.push({ name: 'Watch Result Student', params: { id: this.exams[index].id } })
             let id = this.exams[index].id
-            this.$router.push(`/watch-result-student/${id}`)
+            const url = `/api/result/latest?examId=${id}&studentId=${this.userId}`
+            console.log("exam",id)
+            console.log("stuId",this.userId)
+            let result = await fetch(url)
+                console.log(result)
+                if (!result.ok) {
+                    this.$toast.error(`尚未参加考试！`, {
+                        duration: 4000,
+                        // position:"bottom"
+                    })
+                } else{
+                    this.$router.push(`/watch-result-student/${id}`)
+                }      
         },
         async getExams() {
             if (!this.mock) {
@@ -115,7 +125,7 @@ export default {
             if(this.mockUser){
                 this.userId = "321@163.com"
             }else{
-                this.userId = VueElement.prototype.Email //TEST
+                this.userId = localStorage.getItem("Email")
             }
         },
     },
