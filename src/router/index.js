@@ -32,73 +32,73 @@ import EditExam from "../views3/EditExam";
 const routes = [
   {
     path:"/my-questions",
-    name:"My Questions",
+    name:"我的问题",
     component:MyQuestions,
   },
   {
     path:"/my-papers",
-    name:"My Papers",
+    name:"我的试卷",
     component:MyPapers,
   },
   {
     path:"/new-question",
-    name:"New Question",
+    name:"新增问题",
     component:NewQuestion,
   },
   {
     path:"/new-exam",
-    name:"New Exam",
+    name:"新增考试",
     component:NewExam,
   },
   {
     path:"/watch-exam/:id",
-    name:"Watch Exam",
+    name:"查看考试",
     component:WatchExam,
   },
   {
     path:"/edit-exam/:id",
-    name:"Edit Exam",
+    name:"修改考试",
     component:EditExam,
   },
   {
     path:"/watch-result-student/:id",
-    name:"Watch Result Student",
+    name:"查看考试结果",
     component:WatchResultStudent,
   },
   {
     path:"/watch-result-teacher/:eId/:sId",
-    name:"Watch Result Teacher",
+    name:"查看考试结果",
     component:WatchResultTeacher,
   },
   {
     path:"/new-paper",
-    name:"New Paper",
+    name:"新增试卷",
     component:NewPaper,
   },
   {
     path:"/edit-paper/:id",
-    name:"Edit Paper",
+    name:"修改试卷",
     component:EditPaper,
   },
   {
     path:"/watch-paper/:id",
-    name:"Watch Paper",
+    name:"查看试卷",
     component:WatchPaper,
   },
   {
     path:"/take-exam/:id",
-    name:"Take Exam",
+    name:"参与考试",
     component:TakeExam,
   },
 
   {
     path:"/my-exams-student",
-    name:"My Exams Student",
+    name:"我的试卷｜学生",
     component:MyExamsStudent,
   },
   {
     path:"/my-exams-teacher",
-    name:"My Exams Teacher",
+    name:"我的试卷｜老师",
     component:MyExamsTeacher,
   },
   {
