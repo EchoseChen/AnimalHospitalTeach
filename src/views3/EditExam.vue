@@ -52,7 +52,7 @@
                     <select v-model="tmpPaper">
                         <option v-for="(p, index) in papers" :key="index" :value="p">{{ p.id }} | {{ p.name }}</option>
                     </select>
-                    <argon-button @click="addPaper" class="col-12 mt-3" color="info" variant="gradient">新增试卷</argon-button>
+                    <argon-button @click="addPaper" class="col-12 mt-3" color="primary" variant="gradient">新增试卷</argon-button>
                 </div>
                 <div class="mt-3">
                     <argon-badge class="me-3" size="md" color="info" variant="gradient">考生</argon-badge>
@@ -60,7 +60,7 @@
                         <option v-for="(s, index) in students" :key="index" :value="s">{{ s.userId }} | {{ s.username }}
                         </option>
                     </select>
-                    <argon-button @click="addStudent" class="col-12 mt-3" color="info"
+                    <argon-button @click="addStudent" class="col-12 mt-3" color="primary"
                         variant="gradient">新增考生</argon-button>
                 </div>
                 <div class="mt-3">
@@ -147,7 +147,6 @@ import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 import Modal from "@/components/Modal.vue";
 import ArgonAvatar from "@/components/ArgonAvatar.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -418,7 +417,7 @@ export default {
             if(this.showTest){
                 this.userId = "testUser"
             }else{
-                this.userId = VueElement.prototype.Email //TEST
+                this.userId = localStorage.getItem("Email")
             }
         },
     },

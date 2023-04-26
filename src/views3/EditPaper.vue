@@ -107,6 +107,9 @@
                                         <h6 class="text-md">解析：</h6>
                                         <span>{{ question.analysis }}</span>
                                     </div>
+                                    <div class="text-end mt-2">
+                                        <argon-button @click="deleteItem(idx)" class="" color="danger" variant="gradient">删除</argon-button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -122,7 +125,7 @@
                     <input v-model="qScore" placeholder="分数" class="text-end" style="width:80px;" type="number">
                 </div>
                 <div class="mt-3">
-                    <argon-button @click="addQuestion" class="col-12" color="info" variant="gradient">新增问题</argon-button>
+                    <argon-button @click="addQuestion" class="col-12" color="primary" variant="gradient">新增问题</argon-button>
                 </div>
                 <div class="mt-3">
                     <argon-button @click="postPaper" class="col-12" color="success" variant="gradient">提交</argon-button>
@@ -142,7 +145,6 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api/paper`
 
@@ -414,7 +416,7 @@ export default {
             if(this.showTest){
                 this.userId = "testUser"
             }else{
-                this.userId = VueElement.prototype.Email //TEST
+                this.userId = localStorage.getItem("Email")
             }
         },
         addQuestion() {//新增试题
@@ -545,6 +547,10 @@ export default {
         todo(idx) {
             return this.questions[idx].status == 'todo'
         },
+        deleteItem(idx){
+            let qId = this.paper.questions[idx].id
+            this.paper.questions = this.paper.questions.filter((q)=> q.id!=qId)
+        }
     },
     mounted() {
         this.init('p')

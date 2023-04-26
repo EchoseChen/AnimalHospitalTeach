@@ -97,7 +97,9 @@
                     </div>
                 </div>
                 <div class="me-3 ms-3">
-                    <argon-button @click="postResult" color="success" variant="gradient" class="col-12">提交</argon-button>
+                    <argon-button @click="postResult" color="success" variant="gradient"
+                        class="col-12 mt-3">提交</argon-button>
+                    <argon-button @click="goBack" color="info" variant="gradient" class="col-12 mt-3">返回</argon-button>
                 </div>
             </div>
         </div>
@@ -113,7 +115,6 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api/exam`
 
@@ -140,9 +141,9 @@ export default {
             editScore: false,//用来修改分数(新建/修改试卷的时候为true；其他时候为false)
             editUScore: false,//用来修改学生分数（批改时为true；其他时候为false）
 
-            userId:'',
+            userId: '',
             showTest: false,//打印测试信息
-            mock:false,//HTTP Test
+            mock: false,//HTTP Test
         }
     },
     components: {
@@ -159,7 +160,7 @@ export default {
             if (!this.mock) {
                 this.exam = await (await fetch(url)).json()
                 console.log("exam", this.exam)
-            }else{
+            } else {
                 this.exam = {
                     id: this.examId,
                     name: "第一次考试",
@@ -262,8 +263,8 @@ export default {
                 console.log(this.exam)
             }
 
-            for(let i=0;i<this.exam.paper.questions.length;i++){
-                if(this.exam.paper.questions[i].type=='multiple'){
+            for (let i = 0; i < this.exam.paper.questions.length; i++) {
+                if (this.exam.paper.questions[i].type == 'multiple') {
                     this.exam.paper.questions[i].uAnswer = []
                 }
             }
@@ -285,7 +286,7 @@ export default {
 
             /* showTest=true，默认HTTP请求都成功了 */
             // if (this.showTest || result.ok) { //THIS
-            if(result.ok){//DELETE
+            if (result.ok) {//DELETE
                 this.$toast.success(`提交成功，答卷ID: ${this.getResultId(await result.json())}`, {
                     duration: 4000,
                     // position:"bottom"
@@ -298,14 +299,14 @@ export default {
                 })
             }
         },
-        getExamStatus(){
-            if(this.exam.paper.questions.filter((q)=> q.status=='done').length!=this.exam.paper.questions.length){
+        getExamStatus() {
+            if (this.exam.paper.questions.filter((q) => q.status == 'done').length != this.exam.paper.questions.length) {
                 return 'todo'
-            }else{
+            } else {
                 return 'done'
             }
         },
-        getExamScore(){
+        getExamScore() {
             // let sum = 0
             // for(let i=0;i<this.exam.paper.questions.length;i++){
             //     if(this.exam.paper.questions[i].uScore){
@@ -314,14 +315,14 @@ export default {
             // }
             // return sum
 
-            return this.exam.paper.questions.reduce((total,q) => q.uScore ? total += q.uScore : total+=0, 0)
+            return this.exam.paper.questions.reduce((total, q) => q.uScore ? total += q.uScore : total += 0, 0)
         },
-        getExamResult(){
-            for(let i=0;i<this.exam.paper.questions.length;i++){
-                if(this.exam.paper.questions[i].status==null){
-                    if(this.exam.paper.questions[i].type == 'long'){
+        getExamResult() {
+            for (let i = 0; i < this.exam.paper.questions.length; i++) {
+                if (this.exam.paper.questions[i].status == null) {
+                    if (this.exam.paper.questions[i].type == 'long') {
                         this.exam.paper.questions[i].status = 'todo'
-                    }else{
+                    } else {
                         this.exam.paper.questions[i].status = 'done'
                     }
                     this.exam.paper.questions[i].uScore = 0
@@ -338,10 +339,10 @@ export default {
             }
             this.exam.current = this.timeFormate(new Date())
         },
-        getResultId(result){//todo
-            if(this.mock){
+        getResultId(result) {//todo
+            if (this.mock) {
                 return "e01"
-            }else{
+            } else {
                 return result.id
             }
         },
@@ -446,11 +447,11 @@ export default {
         todo(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
         },
-        getUserInfo(){
-            if(this.showTest){
+        getUserInfo() {
+            if (this.showTest) {
                 this.userId = "321@163.com"
-            }else{
-                this.userId = VueElement.prototype.Email //TEST
+            } else {
+                this.userId = localStorage.getItem("Email")
             }
         },
         timeFormate(timeStamp) {
@@ -460,9 +461,20 @@ export default {
             let hh = new Date(timeStamp).getHours() < 10 ? "0" + new Date(timeStamp).getHours() : new Date(timeStamp).getHours();
             let mm = new Date(timeStamp).getMinutes() < 10 ? "0" + new Date(timeStamp).getMinutes() : new Date(timeStamp).getMinutes();
             let ss = new Date(timeStamp).getSeconds() < 10 ? "0" + new Date(timeStamp).getSeconds() : new Date(timeStamp).getSeconds();
-            return year + "-" + month + "-" + day + " "+ hh + ":" + mm + ':' + ss;
+            return year + "-" + month + "-" + day + " " + hh + ":" + mm + ':' + ss;
         },
+        goBack() {
+            this.$router.push(`/my-exams-student`)
+        }
     },
+    // watch: {
+    //     '$route'() {
+    //         // this.initData();//我的初始化方法
+    //         // this.$route.go(0)
+    //         console.log("route changed")
+            
+    //     }
+    // },
     created() {
         this.getUserInfo()
         this.getExam()

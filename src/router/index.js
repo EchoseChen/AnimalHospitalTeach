@@ -63,12 +63,12 @@ const routes = [
   },
   {
     path:"/watch-result-student/:id",
-    name:"查看考试结果",
+    name:"查看考试结果|学生",
     component:WatchResultStudent,
   },
   {
     path:"/watch-result-teacher/:eId/:sId",
-    name:"查看考试结果",
+    name:"查看考试结果|老师",
     component:WatchResultTeacher,
   },
   {

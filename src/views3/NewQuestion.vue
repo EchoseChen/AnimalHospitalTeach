@@ -136,7 +136,6 @@
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Modal from "@/components/Modal.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api`
 
@@ -248,7 +247,7 @@ export default {
             if (this.showTest) {
                 this.userId = "testUser"
             } else {
-                this.userId = VueElement.prototype.Email //TEST
+                this.userId = localStorage.getItem("Email")
             }
         },
         goBack() {

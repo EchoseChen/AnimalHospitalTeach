@@ -73,13 +73,14 @@
                                         <argon-badge v-if="student.result.score" color='success me-1' size="sm"
                                             variant='gradient'>{{ student.result.score }}分</argon-badge>
                                         <argon-badge v-if="student.result.submitTime" color='success me-1' size="sm"
-                                            variant='gradient'>{{ student.result.submitTime.date }} {{ student.result.submitTime.time }}
+                                            variant='gradient'>{{ student.result.submitTime.date }} {{
+                                                student.result.submitTime.time }}
                                             FINISHED</argon-badge>
                                     </div>
                                 </div>
                                 <div class="col-7 text-end">
-                                    <argon-button class="me-4" @click="watchExam(student.userId)" color='info'
-                                        variant="gradient" size="sm">批改</argon-button>
+                                    <argon-button class="me-4" @click="watchExam(student)" color='info' variant="gradient"
+                                        size="sm">批改</argon-button>
                                     <!-- <argon-button class="me-4" @click="watchResult(student.userId)" color='primary' variant="gradient"
                                         size="sm">查看</argon-button> -->
                                     <!-- <argon-button class="me-4" @click="checkDelete({ type: 's', id: student.userId })"
@@ -165,8 +166,8 @@ export default {
             showModal: false,
             showPaper: false,
 
-            showTest:false,//打印测试信息
-            mock:false,
+            showTest: false,//打印测试信息
+            mock: false,
         }
     },
     components: {
@@ -184,7 +185,7 @@ export default {
             if (!this.mock) {
                 this.exam = await (await fetch(url)).json()
                 console.log("exam", this.exam)
-            }else{
+            } else {
                 this.exam = {
                     "name": "第一次考试",
                     "begin": {
@@ -212,26 +213,26 @@ export default {
                             "username": "Max",
                             result: {
                                 status: 'done',
-                                score:20,
-                                submitTime:{
-                                    date:'2023-03-02',
-                                    time:'20:22:22'
+                                score: 20,
+                                submitTime: {
+                                    date: '2023-03-02',
+                                    time: '20:22:22'
                                 }
                             }
                         },
                         {
                             "userId": "s03",
                             "username": "Vivian",
-                            result:{
-                                status:'todo',
-                                score:10
+                            result: {
+                                status: 'todo',
+                                score: 10
                             }
                         },
                         {
                             "userId": "s04",
                             "username": "Black",
-                            result:{
-                                status:'undo'
+                            result: {
+                                status: 'undo'
                             }
                         }
                     ]
@@ -247,7 +248,7 @@ export default {
             if (!this.mock) {
                 this.papers = await (await fetch(url)).json()
                 console.log("papers", this.papers)
-            }else{
+            } else {
                 this.papers = [{
                     id: 'p1',
                     name: '数学试卷',
@@ -353,7 +354,7 @@ export default {
 
             /* showTest=true，默认HTTP请求都成功了 */
             // if (this.showTest || result.ok) {
-            if(result.ok){
+            if (result.ok) {
                 this.$toast.success(`提交成功，试卷ID: ${this.getExamId(result)}`, {
                     duration: 4000,
                     // position:"bottom"
@@ -389,7 +390,7 @@ export default {
         },
         WatchPaper(pid) {
             //todo: 跳转到试卷详细信息页
-            this.$router.push({ name: 'Watch Paper', params: { id: pid } })
+            this.$router.push(`/watch-paper/${pid}`)
         },
         checkDelete(obj) {
             this.showModal = true
@@ -417,11 +418,19 @@ export default {
             }
 
         },
-        watchExam(stuId) {//to change
-            let eId = this.exam.id
-            let sId = stuId
-            // this.$router.push({ name: 'Watch Result Teacher', params: { eId: this.exam.id, sId: stuId } })
-            this.$router.push(`/watch-result-teacher/${eId}/${sId}`)
+        watchExam(stu) {//to change
+            if (stu.result.status == 'todo' || stu.result.status == 'done') {
+                let eId = this.exam.id
+                let sId = stu.userId
+                // this.$router.push({ name: 'Watch Result Teacher', params: { eId: this.exam.id, sId: stuId } })
+                this.$router.push(`/watch-result-teacher/${eId}/${sId}`)
+            } else {
+                this.$toast.error("学生未参与考试", {
+                    duration: 4000,
+                    // position:"bottom"
+                })
+            }
+
         },
         // watchResult(stuId) {// to change
         //     this.$router.push({ name: 'Watch Result Student', params: { eId: this.exam.id, sId: stuId} })

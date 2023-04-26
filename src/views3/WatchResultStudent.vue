@@ -18,7 +18,8 @@
                     </div>
                     <div class="col-3 align-items-center">
                         <argon-badge class="me-3" size="md" color="info" variant="gradient">分数</argon-badge>
-                        <argon-badge v-if="exam.score" class="ms-1 me-3" size="md" color="success" variant="gradient">{{ exam.score
+                        <argon-badge v-if="exam.score" class="ms-1 me-3" size="md" color="success" variant="gradient">{{
+                            exam.score
                         }}分</argon-badge>
                         <argon-badge v-else class="ms-1 me-3" size="md" color="success" variant="gradient">0 分</argon-badge>
                     </div>
@@ -42,7 +43,7 @@
                                             variant="gradient">正确</argon-badge>
                                         <argon-badge v-if="wrong(idx)" class="col-12" color="danger"
                                             variant="gradient">错误</argon-badge>
-                                        <argon-badge v-if ="unfinished(idx)" class="col-12" color="danger"
+                                        <argon-badge v-if="unfinished(idx)" class="col-12" color="danger"
                                             variant="gradient">未作答</argon-badge>
                                     </div>
                                     <div class="col"></div>
@@ -62,7 +63,7 @@
                                         </div>
                                         <div v-else>
                                             <argon-badge class="col-12" color="info" variant="gradient" size="lg">{{
-                                                question.status == 'todo' || !question.uScore
+                                                question.status == 'todo'
                                                 ?
                                                 '' : question.uScore + ` / ` }} {{ question.score }}分</argon-badge>
                                         </div>
@@ -132,7 +133,6 @@
 
 import ArgonBadge from "@/components/ArgonBadge.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-import { VueElement } from "vue";
 
 const API_URL = `/api/result`
 
@@ -175,29 +175,19 @@ export default {
             const url = `${API_URL}/latest?examId=${examId}&studentId=${studentId}`
 
             if (!this.mock) {
-                let result = await fetch(url)
-                console.log(result)
-                if (!result.ok) {
-                    this.$toast.error(`尚未参加考试！`, {
-                        duration: 4000,
-                        // position:"bottom"
-                    })
-                    // this.$router.push('/watch-result-student')
-                } else {
-                    let data = await (result).json()
-                    console.log("data", data)
+                let data = await (await fetch(url)).json()
+                console.log("data", data)
 
-                    // this.exam = await (await fetch(url)).json()
-                    this.exam = data
-                    for (let i = 0; i < data.paper.questions.length; i++) {
-                        if (data.paper.questions[i].type == 'multiple') {
-                            for (let j = 0; j < data.paper.questions[i].uAnswer.length; j++) {
-                                this.exam.paper.questions.uAnswer[j] = data.paper.questions.uAnswer[j]
-                            }
+                // this.exam = await (await fetch(url)).json()
+                this.exam = data
+                for (let i = 0; i < data.paper.questions.length; i++) {
+                    if (data.paper.questions[i].type == 'multiple') {
+                        for (let j = 0; j < data.paper.questions[i].uAnswer.length; j++) {
+                            this.exam.paper.questions.uAnswer[j] = data.paper.questions.uAnswer[j]
                         }
                     }
-                    console.log("exam", this.exam)
                 }
+                console.log("exam", this.exam)
             } else {
                 this.exam = {
                     "id": "e1",
@@ -410,7 +400,7 @@ export default {
         waiting(idx) {
             return this.exam.paper.questions[idx].status == 'todo'
         },
-        unfinished(idx){
+        unfinished(idx) {
             return !(this.correct(idx) || this.wrong(idx) || this.waiting(idx))
         },
         select(idx) {
@@ -438,7 +428,7 @@ export default {
             if (this.showTest) {
                 this.userId = "321@163.com"
             } else {
-                this.userId = VueElement.prototype.Email //TEST
+                this.userId = localStorage.getItem("Email")
             }
         },
     },
@@ -448,7 +438,7 @@ export default {
     created() {
         this.getUserInfo()
         this.getExam()
-    }
+    },
 }
 
 </script>
