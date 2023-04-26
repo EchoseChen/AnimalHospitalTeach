@@ -10,7 +10,10 @@ import axios from 'axios';
 
 // Vue.prototype.$axios = axios
 
+import Toaster from "@meforma/vue-toaster";
+
 const appInstance = createApp(App);
+appInstance.use(Toaster);
 appInstance.use(store);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);
