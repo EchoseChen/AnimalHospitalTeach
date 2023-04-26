@@ -126,7 +126,10 @@ export default {
         }
     },
     signup(){
-      this.$axios.post('/api/user', {
+      if(this.signupRuleForm.userId==""||this.signupRuleForm.password==""||this.signupRuleForm.repassowrd==""||this.signupRuleForm.username==""){
+        alert("输入不为空！")
+      }else{
+        this.$axios.post('/api/user', {
           userId: this.signupRuleForm.userId,
           password: this.signupRuleForm.password,
           username: this.signupRuleForm.username,
@@ -143,6 +146,8 @@ export default {
           console.log(err);
           alert("用户邮箱已经存在，请换一个账号注册！")
       });
+      }
+      
 
       
       // console.log(this.loginRuleForm.userId);

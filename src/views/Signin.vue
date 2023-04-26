@@ -32,7 +32,7 @@
                     <div class="mb-3">
                       <argon-input type="password" placeholder="密码" size="lg" v-model="loginRuleForm.password"/>
                     </div>
-                    <argon-switch id="rememberMe">Remember me</argon-switch>
+                    <!-- <argon-switch id="rememberMe">Remember me</argon-switch> -->
 
                     <!-- <div class="text-center" >
                       <argon-button
@@ -94,7 +94,7 @@
 <script>
 // import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
-import ArgonSwitch from "@/components/ArgonSwitch.vue";
+// import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Vue from 'vue';
 // import { VueElement } from "vue";
@@ -108,7 +108,7 @@ export default {
   components: {
     // Navbar,
     ArgonInput,
-    ArgonSwitch,
+    // ArgonSwitch,
     ArgonButton,
   },
   data(){
@@ -122,8 +122,10 @@ export default {
   },
   methods:{
     login(){
-      
-      this.$axios.post('api/user/judge', {
+      if(this.loginRuleForm.userId==""||this.loginRuleForm.password==""){
+        alert("输入不为空！")
+      }else{
+        this.$axios.post('api/user/judge', {
           userId: this.loginRuleForm.userId,
           password: this.loginRuleForm.password,
       })
@@ -149,6 +151,9 @@ export default {
       }).catch(err =>{
           console.log(err);
       });
+      }
+      
+      
     },
     login1(){
       console.log("你好");

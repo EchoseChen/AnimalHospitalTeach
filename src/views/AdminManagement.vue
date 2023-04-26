@@ -3,7 +3,7 @@
         <div class="row">
             <!-- <meta http-equiv="refresh" content="0;url=/main.html">
             <> -->
-            <a href="/intdex.html"></a>
+          
         </div>
     </div>
     </template>
