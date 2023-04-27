@@ -125,7 +125,7 @@ export default {
             if(this.mockUser){
                 this.userId = "321@163.com"
             }else{
-                this.userId = localStorage.getItem("Email")
+                this.userId = sessionStorage.getItem("Email")
             }
         },
     },

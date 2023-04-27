@@ -109,7 +109,7 @@ const routes = [
   },
   {
     path: "/profile",
-    name: "Profile",
+    name: "个人管理",
     component: Profile,
   },
   {
@@ -164,7 +164,7 @@ const routes = [
   },
   {
     path:"/admin",
-    name: "管理员",
+    name: "用户管理",
     component: Admin,
   },
   {

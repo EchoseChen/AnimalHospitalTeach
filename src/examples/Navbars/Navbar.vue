@@ -25,7 +25,7 @@
               target="_blank"
             > -->
               <!-- <i class="fa fa-user" :class=" 'me-sm-2'"></i> -->
-              <span class="d-sm-inline d-none font-weight-bold text-white">您好, {{ this.userId }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <span class="d-sm-inline d-none font-weight-bold text-white">您好, {{ this.text }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <!-- </router-link>  -->
           </li>
           <!-- <p class="px-0 nav-link font-weight-bold text-white nav-item d-flex align-items-center d-sm-inline d-none">您好, {{ this.userId }}</p> -->
@@ -53,12 +53,23 @@ export default {
     return {
       showMenu: false,
       userId: "",
+      identity:"",
+      text:"",
     };
   },
   props: ["minNav", "textWhite"],
   created() {
     this.minNav;
-    this.userId = localStorage.getItem("Email");
+    this.userId = sessionStorage.getItem("Email");
+    this.identity = sessionStorage.getItem("Identity");
+    if(this.identity=="admin"){
+      this.identity = "管理员";
+    }else if(this.identity=="teacher"){
+      this.identity = "老师";
+    }else{
+      this.identity = "学生";
+    }
+    this.text = this.identity+":"+this.userId;
   },
   components: {
     Breadcrumbs

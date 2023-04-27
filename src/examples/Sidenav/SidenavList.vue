@@ -139,7 +139,7 @@ export default {
     }
   },
   created() {
-    this.Identity = localStorage.getItem("Identity")
+    this.Identity = sessionStorage.getItem("Identity")
   },
 
 };

@@ -16,7 +16,7 @@
           </button>
           </div>
       </div> 
-      <div class="col-md-4"><h5>{{this.$route.query.diseaseName}}病例详情页面</h5></div>
+      <div class="col-md-4"><h5>病例详情页面</h5></div>
   </div>
 </div> 
   <div class="row">
@@ -79,8 +79,8 @@
         return{
             Bingli:[],
             Case:{
-                caseId:'',
-                caseName:this.$route.query.caseName,
+                caseId:this.$route.query.caseId,
+                caseName:'',
                 diseaseName:'',
                 categoryName:'',
                 medicineId:'',
@@ -154,9 +154,9 @@
         }
       },
       mounted(){
-        this.$axios.get('api/case/casen', {
+        this.$axios.get('api/case/id', {
         params: {
-          caseName: this.Case.caseName,
+          caseId: this.Case.caseId,
         }
       })
       .then((res) => {
@@ -164,14 +164,14 @@
                 console.log(res);
                 this.Bingli = res.data;
                 console.log(this.Bingli);
-                this.Case.caseId = this.Bingli[0].caseId;
-                this.Case.caseName = this.Bingli[0].caseName;
-                this.Case.categoryName = this.Bingli[0].categoryName;
-                this.Case.medicineId = this.Bingli[0].medicineId;
-                this.Case.admissionDescription = this.Bingli[0].admissionDescription;
-                this.Case.checkDescription = this.Bingli[0].checkDescription;
-                this.Case.resultDescription = this.Bingli[0].resultDescription;
-                this.Case.therapyDescription = this.Bingli[0].therapyDescription;
+                this.Case.caseId = this.Bingli.caseId;
+                this.Case.caseName = this.Bingli.caseName;
+                this.Case.categoryName = this.Bingli.categoryName;
+                this.Case.medicineId = this.Bingli.medicineId;
+                this.Case.admissionDescription = this.Bingli.admissionDescription;
+                this.Case.checkDescription = this.Bingli.checkDescription;
+                this.Case.resultDescription = this.Bingli.resultDescription;
+                this.Case.therapyDescription = this.Bingli.therapyDescription;
              console.log(this.Case.checkDescription.picture);
              this.getPicture();
              this.getVideo();

@@ -102,10 +102,10 @@ export default {
   data() {
     return {
       showMenu: false,
-      Name: localStorage.getItem("username"),
-      Email: localStorage.getItem("Email"),
-      Identity: localStorage.getItem("Identity"),
-      Password: localStorage.getItem("password"),
+      Name: sessionStorage.getItem("username"),
+      Email: sessionStorage.getItem("Email"),
+      Identity: sessionStorage.getItem("Identity"),
+      Password: sessionStorage.getItem("password"),
       newPassword:"",
       newName:"",
     };
@@ -120,19 +120,19 @@ export default {
       },
 
       getInformation(){
-          this.Email = localStorage.getItem("Email")
+          this.Email = sessionStorage.getItem("Email")
           console.log(this.Email)
-          if( localStorage.getItem("Identity") == "admin"){
+          if( sessionStorage.getItem("Identity") == "admin"){
             this.Identity = "管理员";
-          }else if(localStorage.getItem("Identity") == "student"){
+          }else if(sessionStorage.getItem("Identity") == "student"){
             this.Identity = "学生";
           }else{
             console.log("yes");
             this.Identity = "老师";
           }
           
-          this.Name = localStorage.getItem("username"),
-          this.Password =localStorage.getItem("password"),
+          this.Name = sessionStorage.getItem("username"),
+          this.Password =sessionStorage.getItem("password"),
           this.getPlaceholder();
       },
       updateInformation(){
@@ -145,7 +145,7 @@ export default {
         this.$axios.put('/api/user', {
           userId: this.Email,
           password: this.newPassword,
-          identity: localStorage.getItem("Identity"),
+          identity: sessionStorage.getItem("Identity"),
           username: this.newName,
       })
       .then((res) => {
@@ -155,9 +155,9 @@ export default {
             this.Name = this.newName;
             this.Password = this.newPassword;
             // VueElement.prototype.username = this.Name;
-            localStorage.setItem("username", this.Name);
+            sessionStorage.setItem("username", this.Name);
             // VueElement.prototype.password = this.Password;
-            localStorage.setItem("password", this.Password);
+            sessionStorage.setItem("password", this.Password);
             this.getPlaceholder();
             
           }
@@ -175,7 +175,7 @@ export default {
   beforeMount() {
     // this.getInformation();
     this.$store.state.imageLayout = "profile-overview";
-    this.$store.state.showNavbar = false;
+    this.$store.state.showNavbar = true;
     this.$store.state.showFooter = true;
     this.$store.state.hideConfigButton = true;
     body.classList.add("profile-overview");

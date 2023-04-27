@@ -136,13 +136,13 @@ export default {
             alert("请输入正确的邮箱和密码")
             }else{
               // VueElement.prototype.Identity = res.data.identity;
-              localStorage.setItem("Identity", res.data.identity);
+              sessionStorage.setItem("Identity", res.data.identity);
               // VueElement.prototype.Email = res.data.userId;
-              localStorage.setItem("Email", res.data.userId);
+              sessionStorage.setItem("Email", res.data.userId);
               // VueElement.prototype.password = res.data.password;
-              localStorage.setItem("password", res.data.password);
+              sessionStorage.setItem("password", res.data.password);
               // VueElement.prototype.username = res.data.username;
-              localStorage.setItem("username", res.data.username);
+              sessionStorage.setItem("username", res.data.username);
               // console.log(VueElement.prototype.Identity);
               this.$router.push("/HospitalGuide");
           }

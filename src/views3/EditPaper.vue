@@ -416,7 +416,7 @@ export default {
             if(this.showTest){
                 this.userId = "testUser"
             }else{
-                this.userId = localStorage.getItem("Email")
+                this.userId = sessionStorage.getItem("Email")
             }
         },
         addQuestion() {//新增试题
