@@ -155,7 +155,7 @@
                     var uploadListIns = upload.render({
                         elem: '#testList'
                         ,elemList: $('#demoList')
-                        ,url: 'http://127.0.0.1:8093/api/file/uploadFileBaidu'
+                        ,url: 'http://123.60.184.136:8093/api/file/uploadFileBaidu'
                         ,accept: 'file'
                         ,multiple: true
                         ,number: 5
@@ -214,6 +214,7 @@
                             console.log(obj)
                         }
                         ,error: function(index, upload){ //错误回调
+                            element.progress('progress-demo-'+ index, '100' + '%');
                             var that = this;
                             var tr = that.elemList.find('tr#upload-'+ index)
                                 ,tds = tr.children();

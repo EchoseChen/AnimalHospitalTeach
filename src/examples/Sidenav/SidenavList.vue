@@ -29,7 +29,7 @@
           </template>
         </sidenav-item>
       </li>
-      <li v-if="Identity1='student'" class="nav-item">
+      <li v-if="Identity!='student'" class="nav-item">
         <sidenav-item url="/my-papers" :class="getRoute() === 'my-papers' ? 'active' : ''" :navText="'我的试卷'">
           <template v-slot:icon>
             <i class="ni ni-badge text-info text-sm opacity-10"></i>
@@ -106,7 +106,7 @@
           :navText="'后台管理'"
         >
           <template v-slot:icon>
-            <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+            <i class="ni ni-box-2 text-warning text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>

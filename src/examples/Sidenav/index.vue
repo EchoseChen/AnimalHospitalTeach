@@ -2,8 +2,10 @@
   <div
     v-show="this.$store.state.layout === 'default'"
     class="min-height-300 position-absolute w-100"
-    :class="`${this.$store.state.darkMode ? 'bg-transparent' : 'bg-success'}`"
-  />
+    style="background-image: url('https://www.totopetinsurance.com/sites/default/files/2020-06/your-pet-included.jpg');"
+  >
+  <span class="mask bg-gradient-success opacity-5"></span>
+  </div>
   <aside
     class="my-3 overflow-auto border-0 sidenav navbar navbar-vertical navbar-expand-xs border-radius-xl"
     :class="`${

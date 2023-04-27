@@ -123,36 +123,37 @@
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="diseaseName" lay-verify="required" id="diseaseName"/>' +
                 '</div>'+
-                '<label class="gard layui-form-label">药品ID</label>' +
-                '<div class="layui-input-inline">' +
-                '<input class="layui-input" name="medicineId" lay-verify="required" id="medicineId"/>' +
-                '</div></div>'+
-
-                '<div class="layui-form-item">'+
                 '<label class="gard layui-form-label">接诊</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="admissionDescription" lay-verify="required" id="admissionDescription"/>' +
                 '</div>'+
+                '</div>'+
+
+                '<div class="layui-form-item">'+
+                
                 '<label class="gard layui-form-label">病例检查</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="checkDescription" lay-verify="required" id="checkDescription"/>' +
-                '</div></div>'+
-
-                '<div class="layui-form-item">'+
+                '</div>' +
                 '<label class="gard layui-form-label">诊断结果</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="resultDescription" lay-verify="required" id="resultDescription"/>' +
                 '</div>'+
+                '</div>'+
+
+                '<div class="layui-form-item">'+
                 '<label class="gard layui-form-label">治疗方案</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="therapyDescription" lay-verify="required" id="therapyDescription"/>' +
-                '</div></div>'+
-
-                '<div class="layui-form-item">'+
+                '</div>'+
                 '<label class="gard layui-form-label">图片</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="picture" lay-verify="required" id="picture"/>' +
                 '</div>'+
+                '</div>'+
+
+                '<div class="layui-form-item">'+
+               
                 '<label class="gard layui-form-label">视频</label>' +
                 '<div class="layui-input-inline">' +
                 '<input class="layui-input" name="video" lay-verify="required" id="video"/>' +
@@ -254,7 +255,7 @@
                 ,{field: 'caseName', title: '病例名'}
                 ,{field: 'diseaseName', title: '病名'}
                 ,{field: 'categoryName', title: '病种名'}
-                ,{field: 'medicineId', title: '药品ID'}
+                // ,{field: 'medicineId', title: '药品ID'}
                 ,{field: 'therapyDescription', title: '病例描述', templet: function(d){ return d.therapyDescription.word; }}
                 ,{field: 'checkDescription', title: '检查描述',templet: function(d){ return d.checkDescription.word; }}
                 ,{field: 'admissionDescription', title: '诊断描述',templet: function(d){ return d.admissionDescription.word; }}
@@ -359,9 +360,9 @@
                 html += '<div class="layui-form-item"><label class="layui-form-label">病种名</label><div class="layui-input-block"><input type="text" id="categoryName" name="categoryName" lay-verify="title" autocomplete="off" value="'
                 html += data.categoryName
                 html += '" class="layui-input"></div></div>'
-                html += '<div class="layui-form-item"><label class="layui-form-label">药品ID</label><div class="layui-input-block"><input type="text" id="medicineId" name="medicineId" lay-verify="title" autocomplete="off" value="'
-                html += data.medicineId
-                html += '" class="layui-input"></div></div>'
+                // html += '<div class="layui-form-item"><label class="layui-form-label">药品ID</label><div class="layui-input-block"><input type="text" id="medicineId" name="medicineId" lay-verify="title" autocomplete="off" value="'
+                // html += data.medicineId
+                // html += '" class="layui-input"></div></div>'
                 html += '<div class="layui-form-item"><label class="layui-form-label">病例描述</label><div class="layui-input-block"><input type="text" id="therapyDescription" name="therapyDescription" lay-verify="title" autocomplete="off" value="'
                 html += data.therapyDescription.word
                 html += '" class="layui-input"></div></div>'
@@ -388,7 +389,7 @@
                     let caseName = $('#caseName').val()
                     let diseaseName = $('#diseaseName').val()
                     let categoryName = $('#categoryName').val()
-                    let medicineId = $('#medicineId').val()
+                    // let medicineId = $('#medicineId').val()
                     let therapyDescription = $('#therapyDescription').val()
                     let checkDescription = $('#checkDescription').val()
                     let admissionDescription = $('#admissionDescription').val()
