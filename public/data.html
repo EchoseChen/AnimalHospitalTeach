@@ -56,7 +56,7 @@
             <div class="layui-form-item">
                 <label class="gard layui-form-label">文件名</label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" name="seek" lay-verify="required" id="filename"/>
+                    <input class="layui-input" name="seek" lay-verify="" id="filename"/>
                 </div>
                 <div class="layui-input-inline">
                     <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit">查文件系统</button>
@@ -352,6 +352,12 @@
             };
         });
     });
+    layui.use(['layui-form'], function(){
+    var form = layui.form;
+    form.verify({});
+  });
+
+    
 </script>
 <script src="javascripts/func.js"></script>
 </body>

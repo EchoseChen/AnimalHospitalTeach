@@ -16,7 +16,7 @@
         </sidenav-item>
       </li>
       <li class="nav-item">
-        <sidenav-item url="/ZhinengStudy" :class="getRoute() === 'ZhinengStudy' ? 'active' : ''" :navText="'职能学习'">
+        <sidenav-item url="/ZhinengStudy" :class="getRoute() === 'ZhinengStudy' ? 'active' : ''" :navText="'病例学习'">
           <template v-slot:icon>
             <i class="ni ni-book-bookmark text-primary text-sm opacity-10"></i>
           </template>

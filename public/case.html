@@ -56,11 +56,11 @@
             <div class="layui-form-item">
                 <label class="gard layui-form-label">病例名</label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" name="seek" lay-verify="required" id="casename"/>
+                    <input class="layui-input" name="seek" lay-verify="" id="casename"/>
                 </div>
                 <label class="gard layui-form-label">病名</label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" name="index" lay-verify="required" id="disease"/>
+                    <input class="layui-input" name="index" lay-verify="" id="disease"/>
                 </div>
                 <div class="layui-input-inline">
                     <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit">查询病例库</button>
@@ -396,6 +396,7 @@
         $(document).on('click','#submit',function (data) {
             var disease=$('#disease');
             var casename=$('#casename');
+            
             table.reload('demo',{
                 where:{
                     caseName:casename.val(),
@@ -434,7 +435,7 @@
             // console.log(obj)
             // console.log(data.caseId)
             if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
+                layer.confirm('真的要删除这个病例吗', function(index){
                     obj.del();
                     layer.close(index);
                     $.ajax({
@@ -464,12 +465,13 @@
                 let html = '<div class="layui-form-item"><label class="layui-form-label">病例名</label><div class="layui-input-block"><input type="text" id="caseName" name="caseName" lay-verify="title" autocomplete="off" value="'
                 html += data.caseName
                 html += '" class="layui-input"></div></div>'
-                html += '<div class="layui-form-item"><label class="layui-form-label">病名</label><div class="layui-input-block" id="diseaseController"><input type="text" id="diseaseName" name="diseaseName" lay-verify="title" autocomplete="off" value="'
-                html += data.diseaseName
-                html += '" class="layui-input"></div></div>'
                 html += '<div class="layui-form-item"><label class="layui-form-label">病种名</label><div class="layui-input-block"><input type="text" id="categoryName" name="categoryName" lay-verify="title" autocomplete="off" value="'
                 html += data.categoryName
                 html += '" class="layui-input"></div></div>'
+                html += '<div class="layui-form-item"><label class="layui-form-label">病名</label><div class="layui-input-block" id="diseaseController"><input type="text" id="diseaseName" name="diseaseName" lay-verify="title" autocomplete="off" value="'
+                html += data.diseaseName
+                html += '" class="layui-input"></div></div>'
+                
                 // html += '<div class="layui-form-item"><label class="layui-form-label">药品ID</label><div class="layui-input-block"><input type="text" id="medicineId" name="medicineId" lay-verify="title" autocomplete="off" value="'
                 // html += data.medicineId
                 // html += '" class="layui-input"></div></div>'
@@ -672,6 +674,11 @@
         
     
     });
+
+    layui.use(['layui-form'], function(){
+    var form = layui.form;
+    form.verify({});
+  });
 
     
 </script>
