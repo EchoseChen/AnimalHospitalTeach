@@ -461,7 +461,7 @@
                 let html = '<div class="layui-form-item"><label class="layui-form-label">病例名</label><div class="layui-input-block"><input type="text" id="caseName" name="caseName" lay-verify="title" autocomplete="off" value="'
                 html += data.caseName
                 html += '" class="layui-input"></div></div>'
-                html += '<div class="layui-form-item"><label class="layui-form-label">病名</label><div class="layui-input-block"><input type="text" id="diseaseName" name="diseaseName" lay-verify="title" autocomplete="off" value="'
+                html += '<div class="layui-form-item"><label class="layui-form-label">病名</label><div class="layui-input-block" id="diseaseController"><input type="text" id="diseaseName" name="diseaseName" lay-verify="title" autocomplete="off" value="'
                 html += data.diseaseName
                 html += '" class="layui-input"></div></div>'
                 html += '<div class="layui-form-item"><label class="layui-form-label">病种名</label><div class="layui-input-block"><input type="text" id="categoryName" name="categoryName" lay-verify="title" autocomplete="off" value="'
@@ -492,7 +492,114 @@
                 layer.confirm('修改', {
                 content: html,
                 btn: ['提交','取消'] //按钮
-                }, function(){
+                      ,success: function(layero){
+                          let img =  $.parseJSON($.ajax({
+                              url: "http://123.60.184.136:8093/api/file/wrapPic/",//json文件位置，文件名
+                              dataType: "json", //返回数据格式为json
+                              async: false
+                          }).responseText);
+                          console.log(img);
+                          layui.use(['dropdown', 'util', 'layer', 'table'], function() {
+                              var dropdown = layui.dropdown
+                                , util = layui.util
+                                , layer = layui.layer
+                                , table = layui.table
+                                , $ = layui.jquery;
+                              //高级演示 - 各种组合
+                              dropdown.render({
+                                  elem: '#picture'
+                                  , data: img
+                                  , click: function (item) {
+                                      document.getElementById("picture").value=item["title"]
+                                  }
+                              });
+                          })
+
+                          let video =  $.parseJSON($.ajax({
+                              url: "http://123.60.184.136:8093/api/file/wrapVideo/",//json文件位置，文件名
+                              dataType: "json", //返回数据格式为json
+                              async: false
+                          }).responseText);
+                          console.log(video);
+                          layui.use(['dropdown', 'util', 'layer', 'table'], function() {
+                              var dropdown = layui.dropdown
+                                , util = layui.util
+                                , layer = layui.layer
+                                , table = layui.table
+                                , $ = layui.jquery;
+                              //高级演示 - 各种组合
+                              dropdown.render({
+                                  elem: '#video'
+                                  , data: video
+                                  , click: function (item) {
+                                      document.getElementById("video").value=item["title"]
+                                  }
+                              });
+                          })
+
+
+
+
+
+                          let category =  $.parseJSON($.ajax({
+                              url: "http://123.60.184.136:8092/api/category/wrap/",//json文件位置，文件名
+                              dataType: "json", //返回数据格式为json
+                              async: false
+                          }).responseText);
+                          console.log(category);
+
+
+
+
+
+                          layui.use(['dropdown', 'util', 'layer', 'table'], function() {
+                              var dropdown = layui.dropdown
+                                , util = layui.util
+                                , layer = layui.layer
+                                , table = layui.table
+                                , $ = layui.jquery;
+                              //高级演示 - 各种组合
+                              dropdown.render({
+                                  elem: '#categoryName'
+                                  , data: category
+                                  , click: function (item) {
+                                      document.getElementById("categoryName").value=item["title"]
+                                      let disease =  $.parseJSON($.ajax({
+                                          url: "http://123.60.184.136:8092/api/disease/category/wrap?categoryName="+item["title"],//json文件位置，文件名
+                                          dataType: "json", //返回数据格式为json
+                                          async: false
+                                      }).responseText);
+                                      console.log(disease)
+                                      let control = document.getElementById("diseaseController")
+                                      control.removeChild(control.childNodes[0]);
+                                      control.innerHTML='<input class="layui-input" name="diseaseName" lay-verify="required" id="diseaseName"/>'
+                                      layui.use(['dropdown', 'util', 'layer', 'table'], function() {
+                                          var dropdown = layui.dropdown
+                                            , util = layui.util
+                                            , layer = layui.layer
+                                            , table = layui.table
+                                            , $ = layui.jquery;
+                                          //高级演示 - 各种组合
+                                          dropdown.render({
+                                              elem: '#diseaseName'
+                                              , data: disease
+                                              , click: function (item) {
+                                                  document.getElementById("diseaseName").value=item["title"]
+                                              }
+                                          });
+                                      })
+                                  }
+                              });
+                          })
+
+
+
+
+
+                      }
+                }
+
+                , function(){
                     let caseName = $('#caseName').val()
                     let diseaseName = $('#diseaseName').val()
                     let categoryName = $('#categoryName').val()
